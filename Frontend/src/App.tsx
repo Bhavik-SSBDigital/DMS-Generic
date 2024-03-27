@@ -22,6 +22,10 @@ import RolesList from './pages/Roles/List';
 import NewBranch from './pages/Branches/NewBranch';
 import NewUser from './pages/Users/NewUser';
 import NewRole from './pages/Roles/NewRole';
+import FileSystem from './pages/FileSystem/MenuBar/FileSystem';
+import ShowFolder from './pages/Show Folder/ShowFolder';
+import SignIn from './pages/Authentication/SignIn';
+import SignUp from './pages/Authentication/SignUp';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -55,6 +59,24 @@ function App() {
             <>
               <PageTitle title="Dashboard | Perticular Branch" />
               <PerticularBranch />
+            </>
+          }
+        />
+        <Route
+          path="/files/:projectId"
+          element={
+            <>
+              <PageTitle title="Dashboard | Perticular Branch" />
+              <ShowFolder />
+            </>
+          }
+        />
+        <Route
+          path="/files"
+          element={
+            <>
+              <PageTitle title="Files" />
+              <FileSystem />
             </>
           }
         />
@@ -139,6 +161,24 @@ function App() {
             </>
           }
         />
+        <Route
+          path="/auth/signin"
+          element={
+            <>
+              <PageTitle title="Signin" />
+              <SignIn />
+            </>
+          }
+        />
+        <Route
+          path="/auth/signup"
+          element={
+            <>
+              <PageTitle title="Signup" />
+              <SignUp />
+            </>
+          }
+        />
         {/* <Route
           path="/calendar"
           element={
@@ -199,24 +239,6 @@ function App() {
             <>
               <PageTitle title="Buttons" />
               <Buttons />
-            </>
-          }
-        />
-        <Route
-          path="/auth/signin"
-          element={
-            <>
-              <PageTitle title="Signin" />
-              <SignIn />
-            </>
-          }
-        />
-        <Route
-          path="/auth/signup"
-          element={
-            <>
-              <PageTitle title="Signup" />
-              <SignUp />
             </>
           }
         /> */}

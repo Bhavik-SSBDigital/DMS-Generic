@@ -280,13 +280,13 @@ const Roles = ({ data }) => {
                             }}
                         />
                     </Box>
-                    <Link to="/ManageRoles/AddRoles">
+                    <Link to="/roles/createNew">
                         <Button
                             variant="contained"
                             sx={{ borderRadius: "9px" }}
                         // color="warning"
                         >
-                            ADD ROLES
+                            ADD ROLE
                         </Button>
                     </Link>
                 </Stack>

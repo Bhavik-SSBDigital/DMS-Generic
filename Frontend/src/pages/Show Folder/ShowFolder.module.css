@@ -1,0 +1,36 @@
+.true {
+    position: absolute;
+    top: 130px;
+    z-index: 99;
+}
+
+.modalBg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+}
+
+.responsive {
+    height: 67px;
+    width: 57px;
+    object-fit: cover;
+
+}
+.textResponsive{
+    font-size: 16px;
+    text-align: center;
+    color: #333;
+}
+@media (max-width: 599px) {
+    .responsive {
+        height: 60px;
+        width: 50px;
+    }
+    .textResponsive{
+        font-size: 14px;
+    }
+}
