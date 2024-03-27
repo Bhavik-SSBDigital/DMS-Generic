@@ -150,7 +150,7 @@ export default function ShowFolder(props) {
         localStorage.setItem('path', newPath);
         dispatch(backButtonPath(newPath));
         if (newPath === '..') {
-            navigate('/');
+            navigate('/files');
         }
     }
     const handleDownload = (path, name) => {
@@ -579,71 +579,71 @@ export default function ShowFolder(props) {
         <DefaultLayout>
             <Stack flexDirection='row'>
                 <div style={{ width: "100%" }}>
+                    <Stack flexDirection='row' gap='10px' justifyContent='space-between' sx={{ marginBottom: '5px' }}>
+                        <Box sx={{ display: { xs: 'none', sm: 'block', md: 'block', } }}>
+                            <Button onClick={handleBackPress} sx={{ background: 'orange', height: '30px' }} variant="contained" color='warning'>
+                                <ArrowBackIosIcon sx={{ height: '15px' }}></ArrowBackIosIcon>
+                                Back
+                            </Button>
+                        </Box>
+                        <Box gap={2} display='flex'>
+                            <TextField
+                                label="Search"
+                                sx={{ maxWidth: { lg: "250px", xs: "150px" }, background: "white" }}
+                                disabled={fileFolders.length === 0 || loading}
+                                variant="outlined"
+                                size='small'
+                                value={searchQuery}
+                                onChange={handleSearchQueryChange}
+                            />
+
+                            <FormControl size='small' variant="outlined">
+                                <InputLabel>Sort By</InputLabel>
+                                <Select
+                                    size='small'
+                                    value={sortBy}
+                                    sx={{ background: "white" }}
+                                    disabled={fileFolders.length === 0 || loading}
+                                    onChange={handleSortByChange}
+                                    label="Sort By"
+                                    style={{ minWidth: '150px' }}
+                                >
+                                    {sortOptions.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                    <RadioGroup
+                                        aria-label="sort-order"
+                                        name="sortOrder"
+                                        defaultValue={sortOrder}
+                                        onChange={handleSortOrderChange}
+                                        style={{ display: "flex", flexDirection: "column", padding: '10px' }}
+                                    >
+                                        <FormControlLabel
+                                            value="asc"
+                                            control={<Radio />}
+                                            label="Ascending"
+                                        />
+                                        <FormControlLabel
+                                            value="desc"
+                                            control={<Radio />}
+                                            label="Descending"
+                                        />
+                                    </RadioGroup>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </Stack>
                     <Path />
                     <Stack flexDirection="row">
-                        <Stack flex={showProperties ? "75%" : "100%"} gap={7} sx={{ position: 'relative', padding: '10px' }} onContextMenu={(e) => handleContextMenu(e, 'viraj')}>
+                        <Stack flex={showProperties ? "75%" : "100%"} gap={7} sx={{ position: 'relative' }} onContextMenu={(e) => handleContextMenu(e, 'viraj')}>
                             <Box>
-                                <Stack flexDirection='row' gap='10px' justifyContent='space-between' sx={{ marginBottom: '5px' }}>
-                                    <Box sx={{ display: { xs: 'none', sm: 'block', md: 'block', } }}>
-                                        <Button onClick={handleBackPress} sx={{ background: 'orange', height: '30px' }} variant="contained" color='warning'>
-                                            <ArrowBackIosIcon sx={{ height: '15px' }}></ArrowBackIosIcon>
-                                            Back
-                                        </Button>
-                                    </Box>
-                                    <Box gap={2} display='flex'>
-                                        <TextField
-                                            label="Search"
-                                            sx={{ maxWidth: { lg: "250px", xs: "150px" }, background: "white" }}
-                                            disabled={fileFolders.length === 0 || loading}
-                                            variant="outlined"
-                                            size='small'
-                                            value={searchQuery}
-                                            onChange={handleSearchQueryChange}
-                                        />
-
-                                        <FormControl size='small' variant="outlined">
-                                            <InputLabel>Sort By</InputLabel>
-                                            <Select
-                                                size='small'
-                                                value={sortBy}
-                                                sx={{ background: "white" }}
-                                                disabled={fileFolders.length === 0 || loading}
-                                                onChange={handleSortByChange}
-                                                label="Sort By"
-                                                style={{ minWidth: '150px' }}
-                                            >
-                                                {sortOptions.map((option) => (
-                                                    <MenuItem key={option.value} value={option.value}>
-                                                        {option.label}
-                                                    </MenuItem>
-                                                ))}
-                                                <RadioGroup
-                                                    aria-label="sort-order"
-                                                    name="sortOrder"
-                                                    defaultValue={sortOrder}
-                                                    onChange={handleSortOrderChange}
-                                                    style={{ display: "flex", flexDirection: "column", padding: '10px' }}
-                                                >
-                                                    <FormControlLabel
-                                                        value="asc"
-                                                        control={<Radio />}
-                                                        label="Ascending"
-                                                    />
-                                                    <FormControlLabel
-                                                        value="desc"
-                                                        control={<Radio />}
-                                                        label="Descending"
-                                                    />
-                                                </RadioGroup>
-                                            </Select>
-                                        </FormControl>
-                                    </Box>
-                                </Stack>
-                                <Stack padding='15px 0px' direction="row" gap="40px" flexWrap="wrap" sx={{ justifyContent: { xs: 'flex-start', sm: 'flex-start', md: 'flex-start' } }} overflow="auto" maxHeight="60vh">
+                                <Stack pt="15px" direction="row" gap="10px" flexWrap="wrap" sx={{ justifyContent: { xs: 'flex-start', sm: 'flex-start', md: 'flex-start' } }} overflow="auto" maxHeight="60vh">
                                     {!loading && filteredFileFolders.map((item, index) => (
-                                        <div key={index} style={{ width: '120px' }}>
+                                        <div key={index}>
                                             {item.type === 'folder' ? (
-                                                <Stack flexWrap='wrap' width='100%' position='relative'>
+                                                <Stack flexWrap='wrap' width='100%' position='relative' sx={{ height: '150px', width: '130px' }}>
                                                     <Tooltip title={item.name} enterDelay={1000}>
                                                         <Link to={item.name}>
                                                             <Button
@@ -652,12 +652,12 @@ export default function ShowFolder(props) {
                                                                 onClick={() => handleFolderClick(item.name)}
                                                                 sx={{
                                                                     flexDirection: 'column',
-                                                                    width: '150px',
+                                                                    width: '100%',
+                                                                    height: '100%',
                                                                     textTransform: 'none',
                                                                     backgroundColor: properties?._id === item?._id && showProperties ? "lightblue" : "white !important",
                                                                     borderRadius: '15px',
                                                                     padding: '5px',
-                                                                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
                                                                     textDecoration: 'none',
                                                                     color: 'inherit',
                                                                 }}
@@ -682,19 +682,19 @@ export default function ShowFolder(props) {
                                                     </IconButton>
                                                 </Stack>
                                             ) : (
-                                                <Stack flexWrap='wrap' width='100%' height='100%' position='relative'>
+                                                <Stack flexWrap='wrap' width='150px' height='130px' position='relative'>
                                                     <Tooltip title={item.name} enterDelay={900}>
                                                         <Button
                                                             onMouseOver={() => handleMouseOver(item.name)}
                                                             onMouseOut={handleMouseOut}
                                                             sx={{
                                                                 flexDirection: 'column',
-                                                                width: '150px',
+                                                                width: '100%',
+                                                                height: '100%',
                                                                 textTransform: 'none',
-                                                                backgroundColor: properties?._id === item?._id && showProperties ? "lightblue" : "initialBackgroundColor",
+                                                                backgroundColor: properties?._id === item?._id && showProperties ? "lightblue" : "white",
                                                                 borderRadius: '15px',
                                                                 padding: '5px',
-                                                                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
                                                             }}
                                                             variant='text'
                                                             color='primary'

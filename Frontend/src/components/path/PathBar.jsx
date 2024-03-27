@@ -20,7 +20,7 @@ export default function PathBar() {
       dispatch(backButtonPath(newPath));
       if (newPath === "..") {
         // localStorage.setItem('path', newPath);
-        navigate("/");
+        navigate("/files");
       }
     } else {
       console.error("Invalid index:", index);
@@ -29,7 +29,6 @@ export default function PathBar() {
   return (
     <Stack
       padding="4px"
-      margin="8px"
       sx={{
         backgroundColor: "white",
         borderRadius: "5px",

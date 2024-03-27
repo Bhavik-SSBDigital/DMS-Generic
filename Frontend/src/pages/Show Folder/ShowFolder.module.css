@@ -15,8 +15,8 @@
 }
 
 .responsive {
-    height: 67px;
-    width: 57px;
+    height: 57px;
+    /* width: 47px; */
     object-fit: cover;
 
 }
@@ -26,10 +26,6 @@
     color: #333;
 }
 @media (max-width: 599px) {
-    .responsive {
-        height: 60px;
-        width: 50px;
-    }
     .textResponsive{
         font-size: 14px;
     }
