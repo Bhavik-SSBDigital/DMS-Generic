@@ -595,7 +595,7 @@ const Overall = () => {
       {Object.keys(mainChartOption).length > 0 ? (
         <Stack alignItems="flex-end">
           <Button
-            variant="text"
+            variant="contained"
             size="small"
             onClick={() => setIsFilterOpen(true)}
           >

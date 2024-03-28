@@ -273,6 +273,7 @@ const Roles = ({ setIsLoading, isLoading, roles, setRoles }) => {
                                 {columns.map((column) => (
                                     <TableCell
                                         key={column.id}
+                                        sx={{ fontWeight: 700 }}
                                         sortDirection={orderBy === column.id ? order : false}
                                         className={styles.tableHeader}
                                     >

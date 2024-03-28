@@ -158,7 +158,7 @@ export default function List(props) {
                   justifyContent="space-between"
                   sx={{ width: "100%" }}
                 >
-                  <h3>{i?.department}</h3>
+                  <Typography variant="body1">{i?.department}</Typography>
                   {i.editable && (
                     <div>
                       <IconButton

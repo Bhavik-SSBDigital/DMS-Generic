@@ -16,6 +16,7 @@ import FilesStructure from './FileStructure';
 import Path from '../../../components/path/PathBar';
 import { IconFolder, IconFolderPlus } from '@tabler/icons-react';
 import DefaultLayout from '../../../layout/DefaultLayout';
+import ComponentLoader from '../../../common/Loader/ComponentLoader';
 
 
 const FileSystem = (props) => {
@@ -192,84 +193,84 @@ const FileSystem = (props) => {
     );
     return (
         <DefaultLayout>
-            <Path />
-            <div style={{ display: 'flex', flexDirection: "row" }}>
-                {/* <Stack className='sidebarSize' margin={1} flex="25%" height='100%' gap={12} sx={{ height: '77vh', borderRadius: '3px', backgroundColor: 'white' }}>
+            {isLoading ? <ComponentLoader /> : <>
+                <Path />
+                <div style={{ display: 'flex', flexDirection: "row" }}>
+                    {/* <Stack className='sidebarSize' margin={1} flex="25%" height='100%' gap={12} sx={{ height: '77vh', borderRadius: '3px', backgroundColor: 'white' }}>
                     <FilesStructure fileFolders={fileFolders} isLoading={isLoading} isFetching={isFetching} />
                 </Stack> */}
-                {/* removerd from under stack */}
-                {/* margin={1} height='100%' gap={12} sx={{ padding: '20px', height: '87vh', backgroundColor: '#f5f5f5', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }} */}
-                <Stack margin={1} height='100%' flex="75%" gap={12} sx={{ borderRadius: '3px', position: 'relative' }}>
-                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: "translate(-50%, -50%)" }}>
-                        {isLoading || isFetching ? (
-                            <CircularProgress color="inherit" size={30} />
-                        ) : (
-                            error ? error : (fileFolders.length === 0 ? "There is no files or folders in the current directory" : null)
-                        )}
-                    </div>
-                    <Box>
-                        {!error && <Stack spacing={{ xs: 2, sm: 4 }} direction='row' useFlexGap flexWrap='wrap' overflow="auto" maxHeight="65vh">
-                            <Stack flexWrap='wrap' alignContent='center' width='100%' flexDirection="row" gap={1}>
-                                {fileFolders.map((item, index) => (
-                                    <Link to={item.name} style={{ width: '130px', height: "130px" }}> {/* Adjust width based on the number of items you want to display horizontally */}
-                                        <Button
-                                            onClick={() => handleFolderClick(item.name)}
-                                            sx={{
-                                                flexDirection: 'column',
-                                                backgroundColor: "white",
-                                                borderRadius: "15px",
-                                                width: '100%',
-                                                height: '100%',
-                                                textTransform: 'none',
-                                            }}
-                                            variant='text'
-                                            color='primary'
-                                            size='medium'
-                                        >
-                                            <Box
+                    {/* removerd from under stack */}
+                    {/* margin={1} height='100%' gap={12} sx={{ padding: '20px', height: '87vh', backgroundColor: '#f5f5f5', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }} */}
+                    <Stack mt={2} height='100%' flex="75%" gap={12} sx={{ borderRadius: '3px', position: 'relative' }}>
+                        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: "translate(-50%, -50%)" }}>
+                            {isLoading || isFetching ? (
+                                <CircularProgress color="inherit" size={30} />
+                            ) : (
+                                error ? error : (fileFolders.length === 0 ? "There is no files or folders in the current directory" : null)
+                            )}
+                        </div>
+                        <Box>
+                            {!error && <Stack spacing={{ xs: 2, sm: 4 }} direction='row' useFlexGap flexWrap='wrap' overflow="auto" maxHeight="65vh">
+                                <Stack flexWrap='wrap' alignContent='center' width='100%' flexDirection="row" gap={1}>
+                                    {fileFolders.map((item, index) => (
+                                        <Link to={item.name} style={{ width: '130px', height: "130px" }}> {/* Adjust width based on the number of items you want to display horizontally */}
+                                            <Button
+                                                onClick={() => handleFolderClick(item.name)}
                                                 sx={{
-                                                    height: '60px',
-                                                    width: '60px',
+                                                    flexDirection: 'column',
+                                                    backgroundColor: "white",
+                                                    borderRadius: "15px",
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    textTransform: 'none',
                                                 }}
+                                                variant='text'
+                                                color='primary'
+                                                size='medium'
                                             >
-                                                <img style={{ height: '100%', width: '100%' }} src={imageSrc} alt="im" />
-                                            </Box>
-                                            <p style={{ color: 'black', textAlign: 'center', margin: 0 }}>{item.name}</p>
-                                        </Button>
-                                    </Link>
-                                ))}
-                            </Stack>
-                        </Stack>}
-                        {open && (
-                            <Modal open={open} onClose={closeModal} className='create-folder-modal'>
-                                <div style={{ gap: '10px' }} className='create-folder-modal-content-container'>{ModelContent}</div>
-                            </Modal>
-                        )}
-                    </Box>
-                </Stack>
-            </div>
-            {isAdmin &&
-                <Stack position='relative'>
-                    <Fab color="primary" onClick={handlePlus} aria-label="add" sx={{ position: 'fixed', bottom: '5%', right: '5%' }}>
-                        <AddIcon />
-                        {showButtons && <Box gap='10px' flexDirection='column' display='flex' sx={{ width: '150px', borderRadius: '15px', position: 'absolute', top: '-130%', right: '0%' }}>
-                            <Button
-                                variant='contained'
-                                sx={{
-                                    flexDirection: 'row', marginBottom: '5px', padding: '10px', height: '35px', alignItems: "center"
-                                }}
-                                color='info'
-                                size='small'
-                                onClick={() => openModal('createFolder')}
-                            >
-                                <CreateNewFolderIcon fontSize='small' sx={{ height: '20px', width: '20px', color: 'white', marginRight: '5px' }} />
-                                {/* <img src={imageSrc} alt="image" /> */}
-                                <p style={{ fontSize: '10px', textAlign: 'center', color: 'white' }}>NEW PROJECT</p>
-                            </Button>
-                        </Box>}
-                    </Fab>
-                </Stack>}
-            {/* <Sidedrawer setOpen={props.setOpen} open={props.open} /> */}
+                                                <Box
+                                                    sx={{
+                                                        height: '60px',
+                                                        width: '60px',
+                                                    }}
+                                                >
+                                                    <img style={{ height: '100%', width: '100%' }} src={imageSrc} alt="im" />
+                                                </Box>
+                                                <p style={{ color: 'black', textAlign: 'center', margin: 0 }}>{item.name}</p>
+                                            </Button>
+                                        </Link>
+                                    ))}
+                                </Stack>
+                            </Stack>}
+                            {open && (
+                                <Modal open={open} onClose={closeModal} className='create-folder-modal'>
+                                    <div style={{ gap: '10px' }} className='create-folder-modal-content-container'>{ModelContent}</div>
+                                </Modal>
+                            )}
+                        </Box>
+                    </Stack>
+                </div>
+                {isAdmin &&
+                    <Stack position='relative'>
+                        <Fab color="primary" onClick={handlePlus} aria-label="add" sx={{ position: 'fixed', bottom: '5%', right: '5%' }}>
+                            <AddIcon />
+                            {showButtons && <Box gap='10px' flexDirection='column' display='flex' sx={{ width: '150px', borderRadius: '15px', position: 'absolute', top: '-130%', right: '0%' }}>
+                                <Button
+                                    variant='contained'
+                                    sx={{
+                                        flexDirection: 'row', marginBottom: '5px', padding: '10px', height: '35px', alignItems: "center"
+                                    }}
+                                    color='info'
+                                    size='small'
+                                    onClick={() => openModal('createFolder')}
+                                >
+                                    <CreateNewFolderIcon fontSize='small' sx={{ height: '20px', width: '20px', color: 'white', marginRight: '5px' }} />
+                                    {/* <img src={imageSrc} alt="image" /> */}
+                                    <p style={{ fontSize: '10px', textAlign: 'center', color: 'white' }}>NEW PROJECT</p>
+                                </Button>
+                            </Box>}
+                        </Fab>
+                    </Stack>}</>}
         </DefaultLayout>
     );
 };
