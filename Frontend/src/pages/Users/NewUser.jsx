@@ -177,7 +177,7 @@ export default function NewUser() {
                         maxHeight: "fit-content",
                     }}
                 >
-                    <Stack
+                    {/* <Stack
                         alignItems="center"
                         sx={{
                             // mx: 1,
@@ -202,7 +202,7 @@ export default function NewUser() {
                         >
                             User details
                         </Typography>
-                    </Stack>
+                    </Stack> */}
                     <Grid container spacing={4} mt={1}>
                         <Grid item xs={12} sm={6} md={6}>
                             <Typography variant="body1">User Name :</Typography>

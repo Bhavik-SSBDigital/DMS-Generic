@@ -127,7 +127,7 @@ const NewBranch = () => {
                         maxHeight: "fit-content",
                     }}
                 >
-                    <Stack
+                    {/* <Stack
                         alignItems="center"
                         sx={{
                             // mx: 1,
@@ -152,7 +152,7 @@ const NewBranch = () => {
                         >
                             Branch Details
                         </Typography>
-                    </Stack>
+                    </Stack> */}
                     <Stack alignItems="center" m="20px 0" gap={5}>
                         <Box>
                             <Typography variant="body1">Branch code :</Typography>

@@ -24,9 +24,10 @@ import moment from "moment";
 import { IconTrash, IconEdit } from "@tabler/icons-react";
 import { toast } from "react-toastify";
 import DefaultLayout from "../../layout/DefaultLayout";
+import ComponentLoader from "../../common/Loader/ComponentLoader";
 // import useStoreData, { sessionData } from "../../Store";
 
-const Roles = ({ data }) => {
+const Roles = ({ setIsLoading, isLoading, roles, setRoles }) => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     const styles = {};
@@ -34,30 +35,9 @@ const Roles = ({ data }) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [searchTerm, setSearchTerm] = useState("");
-    const [roles, setRoles] = useState([]);
-
-    const [isLoading, setIsLoading] = useState(true);
     const url = backendUrl + "/getRoles";
 
-    const fetchData = async () => {
-        try {
-            const accessToken = localStorage.getItem("accessToken");
-            const { data, status } = await axios.post(url, null, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
 
-            if (status) {
-                setRoles(data.roles);
-                setIsLoading(false);
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            setIsLoading(false);
-            // alert("Unable to fetch roles. Please try again.");
-        }
-    };
     const [isModalOpen, setModalOpen] = useState(false);
     const [deleteItemId, setDeleteItemId] = useState();
     const deleteModalOpen = () => {
@@ -137,10 +117,6 @@ const Roles = ({ data }) => {
         setDeleteLoading(false);
     };
 
-    useEffect(() => {
-        fetchData();
-        // setEditObject({});
-    }, []);
 
     const navigate = useNavigate();
     const handleEdit = (row) => {
@@ -232,7 +208,7 @@ const Roles = ({ data }) => {
 
     return (
         <>
-            <Stack
+            {/* <Stack
                 alignItems="center"
                 sx={{
                     borderRadius: "10px",
@@ -256,7 +232,7 @@ const Roles = ({ data }) => {
                 >
                     Roles
                 </Typography>
-            </Stack>
+            </Stack> */}
             <Box>
                 <Stack
                     alignContent="flex-end"
@@ -417,28 +393,49 @@ const Roles = ({ data }) => {
 };
 
 function List() {
+    const [roles, setRoles] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    const url = backendUrl + "/getRoles";
+    const fetchData = async () => {
+        try {
+            const accessToken = localStorage.getItem("accessToken");
+            const { data, status } = await axios.post(url, null, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+
+            if (status) {
+                setRoles(data.roles);
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            setIsLoading(false);
+            // alert("Unable to fetch roles. Please try again.");
+        }
+    };
+    useEffect(() => {
+        fetchData();
+        // setEditObject({});
+    }, []);
     const styles = {}
     return (
         <DefaultLayout>
-            <Stack flexDirection="row">
+            {isLoading ? <ComponentLoader /> : <Stack flexDirection="row">
                 <div
                     className={styles.padding}
                     style={{
                         width: "100%",
-
                         maxHeight: "fit-content",
                         position: "relative",
                         overflow: "auto",
                     }}
                 >
-                    {/* <Paper
-          elevation={3}
-          sx={{ margin: "5px", maxHeight: "fit-content", minHeight: "99%" }}
-        > */}
-                    <Roles />
-                    {/* </Paper> */}
+                    <Roles roles={roles} setRoles={setRoles} setIsLoading={setIsLoading} isLoading={isLoading} />
                 </div>
-            </Stack>
+            </Stack>}
         </DefaultLayout>
     );
 }

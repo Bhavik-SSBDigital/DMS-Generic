@@ -14,7 +14,7 @@ import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import { download, getFileSize, upload, uploadFileWithChunks, getContentTypeFromExtension } from './FileUploadDownload';
 
 const DropFileInput = props => {
-
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const wrapperRef = useRef(null);
 
     const [fileList, setFileList] = useState([]);
@@ -58,7 +58,7 @@ const DropFileInput = props => {
     // const getFileSize = async(fileName) => {
     //     let response;
     //     try{
-    //         const url  = process.env.REACT_APP_BACKEND_URL + "/download"
+    //         const url  = backendUrl + "/download"
     //         response = await axios.get(url, {
     //             headers: {
     //               Range: `bytes=0-0`,
@@ -120,7 +120,7 @@ const DropFileInput = props => {
     //           // security => file path expose 
 
     //             while (start < fileSize) {
-    //               const url  = process.env.REACT_APP_BACKEND_URL + "/download"
+    //               const url  = backendUrl + "/download"
     //               const response = await axios.get(url, {
     //                 headers: {
     //                   Range: `bytes=${start}-${end}`,
@@ -193,7 +193,7 @@ const DropFileInput = props => {
     //             const chunk = file.slice(start, end + 1);
 
     //             try {
-    //               const url  = process.env.REACT_APP_BACKEND_URL + "/upload"
+    //               const url  = backendUrl + "/upload"
     //               const response = await fetch(url, {
     //                 method: 'POST',
     //                 body: chunk,
@@ -232,8 +232,8 @@ const DropFileInput = props => {
     //  let chunks = []
     //  let start = 0;
     //  let end = 100 * 1024 * 1024 - 1;
-    const url = process.env.REACT_APP_BACKEND_URL + "/createPermissions";
-    const endpoint = process.env.REACT_APP_BACKEND_URL + "/getUsernames"
+    const url = backendUrl + "/createPermissions";
+    const endpoint = backendUrl + "/getUsernames"
     useEffect(() => {
         const fetchData = async () => {
             const { data } = await axios.post(endpoint, null)

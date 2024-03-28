@@ -10,6 +10,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import { pathSlice } from './Slices/PathSlice';
 import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const store = configureStore({
   reducer: {
@@ -20,6 +22,17 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <QueryClientProvider client={queryClient}>
+    <ToastContainer
+      position="bottom-right"
+      autoClose={2000}
+      hideProgressBar={true}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      draggable
+      pauseOnHover
+      // theme="light"
+    />
     <React.StrictMode>
       <Router>
         <Provider store={store}>

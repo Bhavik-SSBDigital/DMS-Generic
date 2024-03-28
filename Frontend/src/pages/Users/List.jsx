@@ -27,6 +27,7 @@ import moment from "moment";
 import { IconTrash, IconEdit } from "@tabler/icons-react";
 import { toast } from "react-toastify";
 import DefaultLayout from "../../layout/DefaultLayout";
+import ComponentLoader from "../../common/Loader/ComponentLoader";
 // import useStoreData, { sessionData } from "../../Store";
 
 const Users = ({ data, setData, searchTerm, setSearchTerm }) => {
@@ -204,7 +205,7 @@ const Users = ({ data, setData, searchTerm, setSearchTerm }) => {
 
     return (
         <>
-            <Stack
+            {/* <Stack
                 alignItems="center"
                 sx={{
                     // background: "linear-gradient(270deg, #1344ef, #36b3d6)",
@@ -231,7 +232,7 @@ const Users = ({ data, setData, searchTerm, setSearchTerm }) => {
                 >
                     Users
                 </Typography>
-            </Stack>
+            </Stack> */}
             <Box>
                 <Stack
                     alignContent="flex-end"
@@ -412,7 +413,7 @@ function List() {
 
     return (
         <DefaultLayout>
-            <Stack flexDirection="row">
+            {isLoading ? <ComponentLoader /> : <Stack flexDirection="row">
                 <div
                     className={styles.padding}
                     style={{
@@ -449,7 +450,7 @@ function List() {
                         </div>
                     )}
                 </div>
-            </Stack>
+            </Stack>}
         </DefaultLayout>
     );
 }

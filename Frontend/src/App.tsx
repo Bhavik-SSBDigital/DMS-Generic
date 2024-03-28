@@ -19,9 +19,11 @@ import PerticularBranch from './pages/Dashboard/PerticularBranch';
 import BranchList from './pages/Branches/List';
 import UserList from './pages/Users/List';
 import RolesList from './pages/Roles/List';
+import DepartmentList from './pages/Department/List';
 import NewBranch from './pages/Branches/NewBranch';
 import NewUser from './pages/Users/NewUser';
 import NewRole from './pages/Roles/NewRole';
+import NewDepartment from './pages/Department/NewDepartment';
 import FileSystem from './pages/FileSystem/MenuBar/FileSystem';
 import ShowFolder from './pages/Show Folder/ShowFolder';
 import SignIn from './pages/Authentication/SignIn';
@@ -158,6 +160,33 @@ function App() {
             <>
               <PageTitle title="Edit Role" />
               <NewRole />
+            </>
+          }
+        />
+        <Route
+          path="/departments/list"
+          element={
+            <>
+              <PageTitle title="Department List" />
+              <DepartmentList />
+            </>
+          }
+        />
+        <Route
+          path="/departments/createNew"
+          element={
+            <>
+              <PageTitle title="Create Department" />
+              <NewDepartment />
+            </>
+          }
+        />
+        <Route
+          path="/departments/edit/:id"
+          element={
+            <>
+              <PageTitle title="Edit Role" />
+              <NewDepartment />
             </>
           }
         />
