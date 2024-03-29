@@ -155,7 +155,7 @@ export const download = async (fileName, path, view) => {
 
   if (fileSize === undefined) {
     console.log("File does not exist");
-    alert("File does not exist, please check file name");
+    // alert("File does not exist, please check file name");
     return null; // Return null if the file doesn't exist
   }
 

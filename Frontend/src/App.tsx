@@ -19,6 +19,9 @@ import PerticularBranch from './pages/Dashboard/PerticularBranch';
 import BranchList from './pages/Branches/List';
 import UserList from './pages/Users/List';
 import RolesList from './pages/Roles/List';
+import WorkList from './pages/Processes/List';
+import LogsList from './pages/Logs/List';
+import PublishedList from './pages/Published/List';
 import DepartmentList from './pages/Department/List';
 import NewBranch from './pages/Branches/NewBranch';
 import NewUser from './pages/Users/NewUser';
@@ -28,6 +31,7 @@ import FileSystem from './pages/FileSystem/MenuBar/FileSystem';
 import ShowFolder from './pages/Show Folder/ShowFolder';
 import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
+import ViewProcess from './pages/Processes/ViewProcess';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -187,6 +191,42 @@ function App() {
             <>
               <PageTitle title="Edit Role" />
               <NewDepartment />
+            </>
+          }
+        />
+        <Route
+          path="/processes/work"
+          element={
+            <>
+              <PageTitle title="Work List" />
+              <WorkList />
+            </>
+          }
+        />
+        <Route
+          path="/processes/work/view"
+          element={
+            <>
+              <PageTitle title="View Process" />
+              <ViewProcess />
+            </>
+          }
+        />
+        <Route
+          path="/processes/logs"
+          element={
+            <>
+              <PageTitle title="Logs List" />
+              <LogsList />
+            </>
+          }
+        />
+        <Route
+          path="/processes/published"
+          element={
+            <>
+              <PageTitle title="Published List" />
+              <PublishedList />
             </>
           }
         />

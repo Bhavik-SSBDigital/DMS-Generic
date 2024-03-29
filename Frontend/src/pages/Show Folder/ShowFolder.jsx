@@ -655,7 +655,7 @@ export default function ShowFolder(props) {
                                                                     width: '100%',
                                                                     height: '100%',
                                                                     textTransform: 'none',
-                                                                    backgroundColor: properties?._id === item?._id && showProperties ? "lightblue" : "white !important",
+                                                                    backgroundColor: properties?.id === item?.id && showProperties ? "lightblue" : "white !important",
                                                                     borderRadius: '15px',
                                                                     padding: '5px',
                                                                     textDecoration: 'none',
@@ -692,7 +692,7 @@ export default function ShowFolder(props) {
                                                                 width: '100%',
                                                                 height: '100%',
                                                                 textTransform: 'none',
-                                                                backgroundColor: properties?._id === item?._id && showProperties ? "lightblue" : "white",
+                                                                backgroundColor: properties?.id === item?.id && showProperties ? "lightblue" : "white",
                                                                 borderRadius: '15px',
                                                                 padding: '5px',
                                                             }}
