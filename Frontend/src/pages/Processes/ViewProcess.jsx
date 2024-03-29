@@ -1034,6 +1034,7 @@ export default function ViewProcess(props) {
                         width: "100%",
                         maxHeight: "fit-content",
                         position: "relative",
+                        backgroundColor: " white"
                     }}
                 >
                     {processData && (
@@ -1510,7 +1511,7 @@ export default function ViewProcess(props) {
                                                 </Box>
                                                 <TableContainer
                                                     component={Paper}
-                                                    sx={{ boxShadow: 0 }}
+                                                    sx={{ boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px" }}
                                                     elevation={3}
                                                     className={styles.tableContainer}
                                                 >
