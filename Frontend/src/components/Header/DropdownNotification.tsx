@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
+import axios from 'axios';
+import sessionData from '../../Store';
+const username = localStorage.getItem('username');
 
 const DropdownNotification = () => {
+  const { setWork } = sessionData();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [notifying, setNotifying] = useState(true);
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
@@ -32,13 +36,93 @@ const DropdownNotification = () => {
     document.addEventListener('keydown', keyHandler);
     return () => document.removeEventListener('keydown', keyHandler);
   });
+  // -------------------------------------------------------//
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const socketUrl = import.meta.env.VITE_SOCKET_URL;
+  const [notifications, setNotifications] = useState([]);
+  const navigate = useNavigate();
+  const handleViewProcess = (id, workflow, forMonitoring) => {
+    if (forMonitoring) {
+      navigate(
+        `/MonitorProcess/View?data=${encodeURIComponent(
+          id,
+        )}&workflow=${encodeURIComponent(workflow)}`,
+      );
+    } else {
+      navigate(
+        `/processes/work/view?data=${encodeURIComponent(
+          id,
+        )}&workflow=${encodeURIComponent(workflow)}`,
+      );
+    }
+  };
+  const handleRemoveNotification = async (id) => {
+    try {
+      const url = backendUrl + `/removeProcessNotification/${id}`;
+      const res = await axios.post(url, null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+      if (res.status === 200) {
+        const updatedNotifications = notifications.filter(
+          (item) => item.processId !== id,
+        );
+        setNotifications(updatedNotifications);
+      }
+    } catch (error) {
+      console.error('error', error);
+    }
+  };
+  const fetchNotifications = async () => {
+    try {
+      const url = backendUrl + '/getUserProcessNotifications';
+      const res = await axios.post(url, null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+      if (res.status === 200 && res.data.notifications) {
+        setNotifications(res.data.notifications);
+      }
+    } catch (error) {
+      console.error('error', error);
+    }
+  };
 
+  useEffect(() => {
+    setTimeout(() => {
+      fetchNotifications();
+    }, 200);
+  }, []);
+  useEffect(() => {
+    // const socket = io("http://localhost:8000");
+    const socket = io(`${socketUrl}`);
+    socket.on('connect', () => {
+      console.log('Connected to server');
+      // Perform any actions upon successful connection
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+      // Perform any actions upon disconnection
+    });
+
+    socket.on('processesUpdated', (data) => {
+      const check = notifications.find(
+        (item) => item._id === data.newProcess._id,
+      );
+      if (!check) {
+        setNotifications((prev) => [...prev, data.newProcess]);
+      }
+    });
+    socket.emit('login', username);
+  }, []);
   return (
     <li className="relative">
       <Link
         ref={trigger}
         onClick={() => {
-          setNotifying(false);
           setDropdownOpen(!dropdownOpen);
         }}
         to="#"
@@ -46,7 +130,7 @@ const DropdownNotification = () => {
       >
         <span
           className={`absolute -top-0.5 right-0 z-1 h-2 w-2 rounded-full bg-meta-1 ${
-            notifying === false ? 'hidden' : 'inline'
+            notifications.length ? 'inline' : 'hidden'
           }`}
         >
           <span className="absolute -z-1 inline-flex h-full w-full animate-ping rounded-full bg-meta-1 opacity-75"></span>
@@ -78,71 +162,51 @@ const DropdownNotification = () => {
         <div className="px-4.5 py-3">
           <h5 className="text-sm font-medium text-bodydark2">Notification</h5>
         </div>
+        <hr style={{ color: 'lightgray' }} />
 
         <ul className="flex h-auto flex-col overflow-y-auto">
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              to="#"
-            >
-              <p className="text-sm">
-                <span className="text-black dark:text-white">
-                  Edit your information in a swipe
-                </span>{' '}
-                Sint occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim.
-              </p>
+          {notifications.length ? (
+            notifications.map((item) => {
+              return (
+                <li>
+                  <div
+                    style={{ cursor: 'pointer' }}
+                    className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
+                    onClick={() => {
+                      setWork(item.work);
+                      handleRemoveNotification(item.processId);
+                      handleViewProcess(
+                        item?.processId,
+                        item?.workFlowToBeFollowed,
+                        item?.forMonitoring,
+                      );
+                    }}
+                  >
+                    <p className="text-sm">
+                      <span className="text-black dark:text-white">
+                        {item.processName}
+                      </span>
+                    </p>
 
-              <p className="text-xs">12 May, 2025</p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              to="#"
+                    <p className="text-xs">
+                      {new Date(item.receivedAt).toLocaleString()}
+                    </p>
+                  </div>
+                </li>
+              );
+            })
+          ) : (
+            // <li>
+            <h5
+              className="text-sm font-medium text-bodydark2"
+              style={{
+                textAlign: 'center',
+              }}
             >
-              <p className="text-sm">
-                <span className="text-black dark:text-white">
-                  It is a long established fact
-                </span>{' '}
-                that a reader will be distracted by the readable.
-              </p>
-
-              <p className="text-xs">24 Feb, 2025</p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              to="#"
-            >
-              <p className="text-sm">
-                <span className="text-black dark:text-white">
-                  There are many variations
-                </span>{' '}
-                of passages of Lorem Ipsum available, but the majority have
-                suffered
-              </p>
-
-              <p className="text-xs">04 Jan, 2025</p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              to="#"
-            >
-              <p className="text-sm">
-                <span className="text-black dark:text-white">
-                  There are many variations
-                </span>{' '}
-                of passages of Lorem Ipsum available, but the majority have
-                suffered
-              </p>
-
-              <p className="text-xs">01 Dec, 2024</p>
-            </Link>
-          </li>
+              No Notification
+            </h5>
+            // </li>
+          )}
         </ul>
       </div>
     </li>
