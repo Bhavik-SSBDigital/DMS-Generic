@@ -63,7 +63,7 @@ export default function List() {
             throw new Error("Unable to fetch process for user");
         }
     };
-    const { data, error, isLoading, isFetching } = useQuery(
+    const { data, error, isLoading, isFetching, status } = useQuery(
         ["pendingProcesses", page1],
         fetchProcesses,
         {
@@ -119,11 +119,9 @@ export default function List() {
     // initiate process
     const [departments, setDepartments] = useState([]);
     const handlePlus = () => {
-        navigate("/Processes/initiateForm");
+        navigate("/processes/initiate");
         // setShowButtons(true);
     };
-    // paginations
-    const [rowsPerPage, setRowsPerPage] = useState(10);
     const handleChangePage1 = async (event, newPage) => {
         setPage1(newPage);
     };

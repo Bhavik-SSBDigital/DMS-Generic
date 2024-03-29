@@ -1444,8 +1444,8 @@ export default function ViewProcess(props) {
                                                                 setWorkName(inputValue);
                                                             }
                                                         }}
-                                                        helperText="Field must contain only letters, numbers, and spaces."
-                                                        sx={{ mb: 2 }}
+                                                        // helperText="Field must contain only letters, numbers, and spaces."
+                                                        sx={{ mb: 2, backgroundColor: "white" }}
                                                     />
                                                     <TextField
                                                         fullWidth
@@ -1463,7 +1463,7 @@ export default function ViewProcess(props) {
                                                                 e.preventDefault();
                                                         }}
                                                         onChange={(e) => setCabinetNo(e.target.value)}
-                                                        sx={{ mb: 2 }}
+                                                        sx={{ mb: 2, backgroundColor: 'white' }}
                                                     />
                                                     <Box>
                                                         <input
@@ -1510,6 +1510,7 @@ export default function ViewProcess(props) {
                                                 </Box>
                                                 <TableContainer
                                                     component={Paper}
+                                                    sx={{ boxShadow: 0 }}
                                                     elevation={3}
                                                     className={styles.tableContainer}
                                                 >
@@ -2492,6 +2493,7 @@ export default function ViewProcess(props) {
                 position: 'sticky',
                 bottom: 5,
                 right: -10,
+                zIndex: 999,
                 height: "70px",
                 width: '100%',
                 padding: '15px',

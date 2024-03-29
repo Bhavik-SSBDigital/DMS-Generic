@@ -32,6 +32,8 @@ import ShowFolder from './pages/Show Folder/ShowFolder';
 import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
 import ViewProcess from './pages/Processes/ViewProcess';
+import ViewLog from './pages/Logs/ViewLog';
+import InitiateForm from './pages/Processes/InitiateForm';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -213,11 +215,29 @@ function App() {
           }
         />
         <Route
+          path="/processes/initiate"
+          element={
+            <>
+              <PageTitle title="Initiate Process" />
+              <InitiateForm />
+            </>
+          }
+        />
+        <Route
           path="/processes/logs"
           element={
             <>
               <PageTitle title="Logs List" />
               <LogsList />
+            </>
+          }
+        />
+        <Route
+          path="/processes/logs/view"
+          element={
+            <>
+              <PageTitle title="View Process" />
+              <ViewLog />
             </>
           }
         />
