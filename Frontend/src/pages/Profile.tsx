@@ -327,11 +327,7 @@ const Profile = () => {
                         Choose File
                       </Button>
                     </label>
-                    <Typography
-                      variant="body2"
-                      sx={{ marginLeft: '10px' }}
-                      color="text.secondary"
-                    >
+                    <Typography variant="body2" sx={{ marginLeft: '10px' }}>
                       (JPEG files only)
                     </Typography>
                   </Box>

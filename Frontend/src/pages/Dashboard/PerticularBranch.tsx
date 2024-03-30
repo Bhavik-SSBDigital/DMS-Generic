@@ -16,12 +16,14 @@ import {
   Typography,
 } from '@mui/material';
 import ChartFive from '../../components/Charts/ChartFive';
+import { useNavigate } from 'react-router-dom';
 
-const Overall = () => {
+const PerticularBranch = () => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const accessToken = localStorage.getItem('accessToken');
   // ------------------states-----------------------------
   const [branches, setBranches] = useState([]);
+  const [selectedProcess, setSelectedProcess] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   // const [mainChartLoading, setMainChartLoading] = useState(false);
   const [processNameList, setProcessNameList] = useState([]);
@@ -51,6 +53,9 @@ const Overall = () => {
   const handleMainChartType = (e) => {
     setSelectedMainChartType(e.target.value);
   };
+  const handleSelectProcess = (event) => {
+    setSelectedProcess(event.target.value);
+  };
   const closeFilterDialog = () => {
     setIsFilterOpen(false);
   };
@@ -59,7 +64,16 @@ const Overall = () => {
     const timestamp = new Date(value).getTime();
     setMainChartDateRange((prev) => ({ ...prev, [name]: timestamp }));
   };
-
+  // show timeline
+  const navigate = useNavigate();
+  const showPerticularProcessData = (process) => {
+    if (selectedProcess === null || selectedProcess === '') {
+      toast.info('please select process');
+      return;
+    } else {
+      navigate(`/dashboard/timeLine?data=${encodeURIComponent(process)}`);
+    }
+  };
   // get dashboard data
   const fetchBranches = async () => {
     const url = backendUrl + '/getBranchesWithDepartments';
@@ -588,140 +602,180 @@ const Overall = () => {
             getStepWisePendingProcesses();
           }}
         >
-          Get data
+          {mainChartLoading ? <CircularProgress size={30} /> : 'Get'}
         </Button>
-        {mainChartLoading && <CircularProgress color="inherit" size={30} />}
       </Stack>
-      {Object.keys(mainChartOption).length > 0 ? (
-        <Stack alignItems="flex-end">
-          <Button
-            variant="contained"
-            size="small"
-            sx={{ mb: 1 }}
-            onClick={() => setIsFilterOpen(true)}
-          >
-            filter
-          </Button>
-        </Stack>
-      ) : null}
-      {Object.keys(mainChartOption).length > 0 ? (
-        <Grid container spacing={2}>
-          <Grid item xs={12} lg={12}>
-            <ChartOne data={mainChartOption} loading={mainChartLoading} />
-          </Grid>
-          <Grid item xs={12} lg={6}>
-            <ChartTwo data={rejectedProcessChart} loading={mainChartLoading} />
-          </Grid>
-          <Grid item xs={12} lg={6}>
-            <ChartThree
-              data={documentsDetailsChart}
-              loading={mainChartLoading}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <ChartThree data={rejectedDocCatWise} loading={mainChartLoading} />
-          </Grid>
-          <Grid item xs={12}>
-            <ChartFive data={stepWiseChartOptions} loading={mainChartLoading} />
-          </Grid>
+      <>
+        {Object.keys(mainChartOption).length > 0 ? (
+          <Stack alignItems="flex-end">
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ mb: 1 }}
+              onClick={() => setIsFilterOpen(true)}
+            >
+              filter
+            </Button>
+          </Stack>
+        ) : null}
+        {Object.keys(mainChartOption).length > 0 ? (
+          <Grid container spacing={2}>
+            <Grid item xs={12} lg={12}>
+              <ChartOne data={mainChartOption} loading={mainChartLoading} />
+            </Grid>
+            <Grid item xs={12} lg={6}>
+              <ChartTwo
+                data={rejectedProcessChart}
+                loading={mainChartLoading}
+              />
+            </Grid>
+            <Grid item xs={12} lg={6}>
+              <ChartThree
+                data={documentsDetailsChart}
+                loading={mainChartLoading}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <ChartThree
+                data={rejectedDocCatWise}
+                loading={mainChartLoading}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <ChartFive
+                data={stepWiseChartOptions}
+                loading={mainChartLoading}
+              />
+            </Grid>
 
-          {/* <MapOne /> */}
-          {/* <div className="col-span-12 xl:col-span-8">
+            {/* <MapOne /> */}
+            {/* <div className="col-span-12 xl:col-span-8">
           <TableOne />
         </div>
         <ChatCard /> */}
-        </Grid>
-      ) : null}
-      <Dialog onClose={closeFilterDialog} open={isFilterOpen}>
-        <Stack
-          mx={2}
-          p={1}
-          justifyContent="center"
-          alignItems="center"
-          gap={1}
-          sx={{ minWidth: '200px', minHeight: '200px' }}
-        >
-          <Typography variant="h6" sx={{ textAlign: 'center' }}>
-            Apply filters
-          </Typography>
-          <select
-            id="mainChartOptions"
-            style={{ width: '100%', height: '40px', borderRadius: '8px' }}
-            value={selectedMainChartType}
-            onChange={handleMainChartType}
+          </Grid>
+        ) : null}
+        <Dialog onClose={closeFilterDialog} open={isFilterOpen}>
+          <Stack
+            mx={2}
+            p={1}
+            justifyContent="center"
+            alignItems="center"
+            gap={1}
+            sx={{ minWidth: '200px', minHeight: '200px' }}
           >
-            <option value="">select</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-            <option value="yearly">Yearly</option>
-            <option value="custom">Custom</option>
-          </select>
-          {selectedMainChartType === 'monthly' && (
+            <Typography variant="h6" sx={{ textAlign: 'center' }}>
+              Apply filters
+            </Typography>
             <select
-              id="yearOptions"
+              id="mainChartOptions"
               style={{ width: '100%', height: '40px', borderRadius: '8px' }}
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
+              value={selectedMainChartType}
+              onChange={handleMainChartType}
             >
-              <option value="" disabled>
-                select
-              </option>
-              {yearList.map((year) => (
-                <option value={year} key={year}>
-                  {year}
-                </option>
-              ))}
+              <option value="">select</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+              <option value="custom">Custom</option>
             </select>
-          )}
-          {selectedMainChartType === 'custom' && (
-            <Stack spacing={2} alignItems="center">
-              <Stack
-                direction="row"
-                spacing={1}
-                justifyContent="space-between"
-                width={300}
-                alignItems="center"
+            {selectedMainChartType === 'monthly' && (
+              <select
+                id="yearOptions"
+                style={{ width: '100%', height: '40px', borderRadius: '8px' }}
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
               >
-                <h4>Select Start Date:</h4>
-                <input
-                  type="date"
-                  name="startDate"
-                  // className={styles.dateInputs}
-                  onChange={handleMainChartDateChange}
-                />
+                <option value="" disabled>
+                  select
+                </option>
+                {yearList.map((year) => (
+                  <option value={year} key={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            )}
+            {selectedMainChartType === 'custom' && (
+              <Stack spacing={2} alignItems="center">
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  justifyContent="space-between"
+                  width={300}
+                  alignItems="center"
+                >
+                  <h4>Select Start Date:</h4>
+                  <input
+                    type="date"
+                    name="startDate"
+                    // className={styles.dateInputs}
+                    onChange={handleMainChartDateChange}
+                  />
+                </Stack>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  justifyContent="space-between"
+                  width={300}
+                  alignItems="center"
+                >
+                  <h4>Select End Date:</h4>
+                  <input
+                    type="date"
+                    name="endDate"
+                    // className={styles.dateInputs}
+                    onChange={handleMainChartDateChange}
+                  />
+                </Stack>
               </Stack>
-              <Stack
-                direction="row"
-                spacing={1}
-                justifyContent="space-between"
-                width={300}
-                alignItems="center"
-              >
-                <h4>Select End Date:</h4>
-                <input
-                  type="date"
-                  name="endDate"
-                  // className={styles.dateInputs}
-                  onChange={handleMainChartDateChange}
-                />
-              </Stack>
-            </Stack>
-          )}
-          <Button
-            size="small"
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={() => {
-              getMainChartData();
-              setIsFilterOpen(false);
+            )}
+            <Button
+              size="small"
+              variant="contained"
+              sx={{ mt: 2 }}
+              onClick={() => {
+                getMainChartData();
+                setIsFilterOpen(false);
+              }}
+            >
+              Get
+            </Button>
+          </Stack>
+        </Dialog>
+      </>
+      {processNameList.length ? (
+        <Stack justifyContent="center" flexDirection="row" gap={1} mt={1}>
+          <select
+            id="selectBranch"
+            style={{
+              width: '100%',
+              height: '50px',
+              borderRadius: '8px',
+              padding: '5px',
             }}
+            value={selectedProcess}
+            onChange={handleSelectProcess}
           >
-            Get
+            <option value="" selected disabled>
+              Select an option
+            </option>
+            {processNameList.map((item) => {
+              return <option value={item}>{item}</option>;
+            })}
+          </select>
+          <Button
+            variant="contained"
+            size="small"
+            sx={{ borderRadius: '10px', height: '50px' }}
+            onClick={() => showPerticularProcessData(selectedProcess)}
+          >
+            Show Timeline
           </Button>
         </Stack>
-      </Dialog>
+      ) : null}
     </DefaultLayout>
   );
 };
 
-export default Overall;
+export default PerticularBranch;

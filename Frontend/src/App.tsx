@@ -16,6 +16,7 @@ import Profile from './pages/Profile';
 // import Alerts from './pages/UiElements/Alerts';
 // import Buttons from './pages/UiElements/Buttons';
 import PerticularBranch from './pages/Dashboard/PerticularBranch';
+import Timeline from './pages/Dashboard/Timeline/index';
 import BranchList from './pages/Branches/List';
 import UserList from './pages/Users/List';
 import RolesList from './pages/Roles/List';
@@ -67,6 +68,15 @@ function App() {
             <>
               <PageTitle title="Dashboard | Perticular Branch" />
               <PerticularBranch />
+            </>
+          }
+        />
+        <Route
+          path="/dashboard/timeline"
+          element={
+            <>
+              <PageTitle title="Timeline" />
+              <Timeline />
             </>
           }
         />
