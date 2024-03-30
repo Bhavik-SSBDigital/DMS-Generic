@@ -6,7 +6,7 @@ import sessionData from '../../Store';
 const username = localStorage.getItem('username');
 
 const DropdownNotification = () => {
-  const { setWork } = sessionData();
+  const { setWork, setNotifications, notifications } = sessionData();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -39,7 +39,7 @@ const DropdownNotification = () => {
   // -------------------------------------------------------//
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const socketUrl = import.meta.env.VITE_SOCKET_URL;
-  const [notifications, setNotifications] = useState([]);
+  // const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
   const handleViewProcess = (id, workflow, forMonitoring) => {
     if (forMonitoring) {
@@ -92,7 +92,9 @@ const DropdownNotification = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      fetchNotifications();
+      if (notifications.length === 0) {
+        fetchNotifications();
+      }
     }, 200);
   }, []);
   useEffect(() => {

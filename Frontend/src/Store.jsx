@@ -5,7 +5,9 @@ const sessionData = create(
   persist(
     (set) => ({
       work: '',
+      notifications: [],
       setWork: (work) => set({ work }),
+      setNotifications: (notifications) => set({ notifications })
     }),
     {
       name: 'store-data',
