@@ -10,7 +10,7 @@ import PageTitle from './components/PageTitle';
 import ECommerce from './pages/Dashboard/Overall';
 // import FormElements from './pages/Form/FormElements';
 // import FormLayout from './pages/Form/FormLayout';
-// import Profile from './pages/Profile';
+import Profile from './pages/Profile';
 // import Settings from './pages/Settings';
 // import Tables from './pages/Tables';
 // import Alerts from './pages/UiElements/Alerts';
@@ -268,6 +268,15 @@ function App() {
             </>
           }
         />
+        <Route
+          path="/profile"
+          element={
+            <>
+              <PageTitle title="Profile" />
+              <Profile />
+            </>
+          }
+        />
         {/* <Route
           path="/calendar"
           element={
@@ -277,15 +286,7 @@ function App() {
             </>
           }
         />
-        <Route
-          path="/profile"
-          element={
-            <>
-              <PageTitle title="Profile" />
-              <Profile />
-            </>
-          }
-        /> */}
+         */}
         {/* <Route
           path="/tables"
           element={
