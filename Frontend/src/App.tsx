@@ -34,7 +34,9 @@ import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
 import ViewProcess from './pages/Processes/ViewProcess';
 import ViewLog from './pages/Logs/ViewLog';
+import MonitorView from './pages/Monitor/View';
 import InitiateForm from './pages/Processes/InitiateForm';
+import Monitor from './pages/Monitor/Monitor';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -77,6 +79,24 @@ function App() {
             <>
               <PageTitle title="Timeline" />
               <Timeline />
+            </>
+          }
+        />
+        <Route
+          path="/monitor"
+          element={
+            <>
+              <PageTitle title="Monitor Processes" />
+              <Monitor />
+            </>
+          }
+        />
+        <Route
+          path="/monitor/view"
+          element={
+            <>
+              <PageTitle title="View Process" />
+              <MonitorView />
             </>
           }
         />

@@ -67,9 +67,6 @@ export default function List() {
         ["pendingProcesses", page1],
         fetchProcesses,
         {
-            onSuccess: (data) => {
-                console.log("got work")
-            },
             onError: (error) => {
                 toast.error(error.message);
             },

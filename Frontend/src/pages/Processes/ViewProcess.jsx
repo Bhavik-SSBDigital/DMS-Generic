@@ -493,7 +493,7 @@ export default function ViewProcess(props) {
             if (response.status === 200) {
                 toast.success("Process is forwarded");
                 queryClient.removeQueries();
-                navigate("/Processes");
+                navigate("/processes");
             }
         } catch (error) {
             console.error("Error:", error);
@@ -531,7 +531,7 @@ export default function ViewProcess(props) {
             if (res.status === 200) {
                 toast.success("Process is rejected");
                 queryClient.removeQueries();
-                navigate("/Processes");
+                navigate("/processes");
             }
         } catch (error) {
             toast.error("unable to reject process");
@@ -835,7 +835,7 @@ export default function ViewProcess(props) {
                 setSendLoading(false);
                 queryClient.removeQueries();
                 setOpenC(false);
-                navigate("/Processes");
+                navigate("/processes");
             }
         } catch (error) {
             toast.error(error);
@@ -861,7 +861,7 @@ export default function ViewProcess(props) {
             if (res.status === 200) {
                 toast.success("Approved");
                 queryClient.removeQueries();
-                navigate("/Processes");
+                navigate("/processes");
             }
         } catch (error) {
             toast.error(error?.response?.data?.message || error.message);
@@ -890,7 +890,7 @@ export default function ViewProcess(props) {
             }
             setLoading(false);
             if (shouldNavigate) {
-                navigate("/Processes");
+                navigate("/processes");
                 toast.error("Unable to fetch process data");
             }
         };
@@ -976,7 +976,7 @@ export default function ViewProcess(props) {
             if (res.status === 200) {
                 toast.success("Process ended successfully");
                 queryClient.removeQueries();
-                navigate("/Processes");
+                navigate("/processes");
             }
         } catch (error) {
             toast.error(error.response.data.message);

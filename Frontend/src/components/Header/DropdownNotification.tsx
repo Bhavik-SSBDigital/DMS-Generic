@@ -6,7 +6,7 @@ import sessionData from '../../Store';
 const username = localStorage.getItem('username');
 
 const DropdownNotification = () => {
-  const { setWork, setNotifications, notifications } = sessionData();
+  const { setWork, notifications, setNotifications } = sessionData();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -39,9 +39,8 @@ const DropdownNotification = () => {
   // -------------------------------------------------------//
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const socketUrl = import.meta.env.VITE_SOCKET_URL;
-  // const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
-  const handleViewProcess = (id, workflow, forMonitoring) => {
+  const handleViewProcess = (id: any, workflow: any, forMonitoring: any) => {
     if (forMonitoring) {
       navigate(
         `/MonitorProcess/View?data=${encodeURIComponent(
@@ -56,7 +55,7 @@ const DropdownNotification = () => {
       );
     }
   };
-  const handleRemoveNotification = async (id) => {
+  const handleRemoveNotification = async (id: any) => {
     try {
       const url = backendUrl + `/removeProcessNotification/${id}`;
       const res = await axios.post(url, null, {
@@ -74,29 +73,6 @@ const DropdownNotification = () => {
       console.error('error', error);
     }
   };
-  const fetchNotifications = async () => {
-    try {
-      const url = backendUrl + '/getUserProcessNotifications';
-      const res = await axios.post(url, null, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      });
-      if (res.status === 200 && res.data.notifications) {
-        setNotifications(res.data.notifications);
-      }
-    } catch (error) {
-      console.error('error', error);
-    }
-  };
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (notifications.length === 0) {
-        fetchNotifications();
-      }
-    }, 200);
-  }, []);
   useEffect(() => {
     // const socket = io("http://localhost:8000");
     const socket = io(`${socketUrl}`);

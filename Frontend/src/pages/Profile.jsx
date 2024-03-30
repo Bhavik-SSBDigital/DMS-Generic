@@ -6,7 +6,9 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import sessionData from '../Store';
 import ComponentLoader from '../common/Loader/ComponentLoader';
+import styles from './Profile.module.css'
 
 const signatureModalStyle = {
   position: 'absolute',
@@ -20,6 +22,7 @@ const signatureModalStyle = {
 };
 
 const Profile = () => {
+  const { profileImage, setProfileImage } = sessionData();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [userDetails, setUserDetails] = useState({
     branch: '',
@@ -35,7 +38,31 @@ const Profile = () => {
   const closeSignatureViewModal = () => {
     setSignatureViewModalOpen(false);
   };
-  const fileInputRef: any = useRef();
+  const fileInputRef = useRef();
+  const fetchProfilePic = async () => {
+    try {
+      const url = backendUrl + '/getUserProfilePic';
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await axios.post(url, null, {
+        headers: {
+          Authorization: ` Bearer ${accessToken}`,
+        },
+        responseType: 'blob',
+      });
+
+      if (response.status === 200) {
+        const blob = new Blob([response.data], {
+          type: response.headers['content-type'],
+        });
+        const objectURL = URL.createObjectURL(blob);
+        setProfileImage(objectURL);
+      } else {
+        console.error('Error fetching profile picture:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching profile picture:', error.message);
+    }
+  };
   const handleUpload = async (purpose, e) => {
     const file = e.target.files[0];
 
@@ -103,32 +130,7 @@ const Profile = () => {
     setUserDetails(res.data.userdata);
     setLoading(false);
   };
-  const [profilePic, setProfilePic] = useState('');
   const [signatureImage, setSignatureImage] = useState('');
-  const fetchProfilePic = async () => {
-    try {
-      const url = backendUrl + '/getUserProfilePic';
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.post(url, null, {
-        headers: {
-          Authorization: ` Bearer ${accessToken}`,
-        },
-        responseType: 'blob',
-      });
-
-      if (response.status === 200) {
-        const blob = new Blob([response.data], {
-          type: response.headers['content-type'],
-        });
-        const objectURL = URL.createObjectURL(blob);
-        setProfilePic(objectURL);
-      } else {
-        console.error('Error fetching profile picture:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error fetching profile picture:', error.message);
-    }
-  };
   const fetchSingature = async () => {
     try {
       const url = backendUrl + '/getUserSignature';
@@ -156,7 +158,6 @@ const Profile = () => {
   useEffect(() => {
     getProfileData();
     fetchSingature();
-    fetchProfilePic();
   }, []);
   return (
     <DefaultLayout>
@@ -174,15 +175,35 @@ const Profile = () => {
           <div className="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
             <div className="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
               <div className="relative drop-shadow-2">
-                <img
-                  src={profilePic}
-                  alt="profile"
-                  style={{
-                    width: '200px',
-                    height: '150px',
-                    borderRadius: '50%',
-                  }}
-                />
+                {profileImage ? (
+                  <img
+                    src={profileImage}
+                    alt="profile"
+                    className={styles.profileImage}
+                    style={{
+                      width: '200px',
+                      height: '150px',
+                      borderRadius: '50%',
+                    }}
+                  />
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={styles.noProfileImage}
+                    style={{
+                      width: '150px',
+                      height: '150px',
+                      borderRadius: '50%',
+                      color: 'black',
+                    }}
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" />
+                    <path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" />
+                  </svg>
+                )}
                 <label
                   htmlFor="profile"
                   className="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
@@ -256,8 +277,8 @@ const Profile = () => {
                     <br />{' '}
                     {userDetails?.departmentsInvolvedIn.length
                       ? userDetails?.departmentsInvolvedIn
-                          ?.map((item) => item.departmentName)
-                          .join(', ')
+                        ?.map((item) => item.departmentName)
+                        .join(', ')
                       : '---'}
                   </Typography>
                 </Stack>

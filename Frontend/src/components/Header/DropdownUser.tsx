@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import UserOne from '../../images/user/user-05.png';
 import { backButtonPath } from '../../Slices/PathSlice';
 import { useDispatch } from 'react-redux';
+import sessionData from '../../Store';
+import axios from 'axios';
 
 const DropdownUser = () => {
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const { profileImage, setProfileImage } = sessionData();
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
 
@@ -45,6 +47,33 @@ const DropdownUser = () => {
     dispatch(backButtonPath('/'));
     navigate('/auth/signin');
   };
+  const fetchProfilePic = async () => {
+    try {
+      const url = backendUrl + '/getUserProfilePic';
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await axios.post(url, null, {
+        headers: {
+          Authorization: ` Bearer ${accessToken}`,
+        },
+        responseType: 'blob',
+      });
+
+      if (response.status === 200) {
+        const blob = new Blob([response.data], {
+          type: response.headers['content-type'],
+        });
+        const objectURL = URL.createObjectURL(blob);
+        setProfileImage(objectURL);
+      } else {
+        console.error('Error fetching profile picture:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching profile picture:', error.message);
+    }
+  };
+  useEffect(() => {
+    fetchProfilePic();
+  }, []);
   return (
     <div className="relative">
       <Link
@@ -60,7 +89,31 @@ const DropdownUser = () => {
         </span>
 
         <span className="h-12 w-12 rounded-full">
-          <img src={UserOne} alt="User" />
+          {profileImage ? (
+            <img
+              src={profileImage}
+              alt="User"
+              style={{
+                height: '50px',
+                width: '50px',
+                borderRadius: '50%',
+                border: '1px solid lightgray',
+              }}
+            />
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="43"
+              height="43"
+              viewBox="0 0 24 24"
+              style={{ border: '1px solid lightgray', borderRadius: '50%' }}
+              fill="currentColor"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" />
+              <path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" />
+            </svg>
+          )}
         </span>
 
         <svg

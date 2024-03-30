@@ -3,12 +3,54 @@ import DropdownMessage from './DropdownMessage';
 import DropdownNotification from './DropdownNotification';
 import DropdownUser from './DropdownUser';
 import LogoIcon from '../../images/logo/logo-icon.svg';
-import DarkModeSwitcher from './DarkModeSwitcher';
+import sessionData from '../../Store';
+import { useEffect } from 'react';
+import axios from 'axios';
+// import DarkModeSwitcher from './DarkModeSwitcher';
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
+  const { setNotifications, notifications, setAlerts } = sessionData();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const fetchNotifications = async () => {
+    try {
+      const url = backendUrl + '/getUserProcessNotifications';
+      const res = await axios.post(url, null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+      if (res.status === 200 && res.data.notifications) {
+        // setNotifications(res.data.notifications);
+        const uniqueNotifications = [
+          ...new Map(
+            res?.data?.notifications?.map((item: any) => [item._id, item]),
+          ).values(),
+        ]?.filter((item: any) => !item.isAlert);
+
+        const alerts = [
+          ...new Map(
+            notifications?.map((item: any) => [item._id, item]),
+          ).values(),
+        ]?.filter((item: any) => item.isAlert);
+
+        setNotifications(uniqueNotifications);
+        setAlerts(alerts);
+      }
+    } catch (error) {
+      console.error('error', error);
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (notifications.length === 0) {
+        fetchNotifications();
+      }
+    }, 200);
+  }, []);
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
       <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
@@ -100,7 +142,7 @@ const Header = (props: {
         <div className="flex items-center gap-3 2xsm:gap-7">
           <ul className="flex items-center gap-2 2xsm:gap-4">
             {/* <!-- Dark Mode Toggler --> */}
-            <DarkModeSwitcher />
+            {/* <DarkModeSwitcher /> */}
             {/* <!-- Dark Mode Toggler --> */}
 
             {/* <!-- Notification Menu Area --> */}
