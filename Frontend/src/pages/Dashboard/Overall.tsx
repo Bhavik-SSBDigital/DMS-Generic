@@ -24,6 +24,17 @@ const Overall = () => {
         data: [0, 0, 0, 0, 0, 0, 0],
       },
     ],
+    title: {
+      text: 'Pending & Completed Processes',
+      align: 'center',
+      margin: 5,
+      offsetY: 20,
+      style: {
+        fontSize: '15px',
+        fontWeight: 'bold',
+        color: '#333',
+      },
+    },
     chart: {
       type: 'bar',
       height: 350,
@@ -63,6 +74,17 @@ const Overall = () => {
         data: [0, 0, 0, 0, 0, 0, 0],
       },
     ],
+    title: {
+      text: 'Rejected Processes Numbers',
+      align: 'center',
+      margin: 5,
+      offsetY: 20,
+      style: {
+        fontSize: '15px',
+        fontWeight: 'bold',
+        color: '#333',
+      },
+    },
     chart: {
       type: 'bar',
       height: 350,
@@ -85,6 +107,17 @@ const Overall = () => {
     chart: {
       type: 'bar',
       height: 350,
+    },
+    title: {
+      text: 'Documents Category Wise',
+      align: 'center',
+      margin: 5,
+      offsetY: 20,
+      style: {
+        fontSize: '15px',
+        fontWeight: 'bold',
+        color: '#333',
+      },
     },
     plotOptions: {
       bar: {
@@ -120,6 +153,17 @@ const Overall = () => {
     chart: {
       type: 'bar',
       height: 350,
+    },
+    title: {
+      text: 'Rejected Documents Category Wise',
+      align: 'center',
+      margin: 5,
+      offsetY: 20,
+      style: {
+        fontSize: '15px',
+        fontWeight: 'bold',
+        color: '#333',
+      },
     },
     plotOptions: {
       bar: {
@@ -243,6 +287,17 @@ const Overall = () => {
               ),
             },
           ],
+          title: {
+            text: 'Pending & Completed Processes',
+            align: 'center',
+            margin: 5,
+            offsetY: 20,
+            style: {
+              fontSize: '15px',
+              fontWeight: 'bold',
+              color: '#333',
+            },
+          },
           chart: {
             type: 'bar',
             height: 350,
@@ -289,6 +344,17 @@ const Overall = () => {
                 ) || [],
             },
           ],
+          title: {
+            text: 'Reject Processes Numbers',
+            align: 'center',
+            margin: 5,
+            offsetY: 20,
+            style: {
+              fontSize: '15px',
+              fontWeight: 'bold',
+              color: '#333',
+            },
+          },
           chart: {
             type: 'bar',
             height: 350,
@@ -335,7 +401,17 @@ const Overall = () => {
               );
             }),
           })),
-
+          title: {
+            text: 'Documents Category Wise',
+            align: 'center',
+            margin: 5,
+            offsetY: 20,
+            style: {
+              fontSize: '15px',
+              fontWeight: 'bold',
+              color: '#333',
+            },
+          },
           chart: {
             type: 'bar',
             height: 350,
@@ -398,7 +474,17 @@ const Overall = () => {
               );
             }),
           })),
-
+          title: {
+            text: 'Rejected Documents Category Wise',
+            align: 'center',
+            margin: 5,
+            offsetY: 20,
+            style: {
+              fontSize: '15px',
+              fontWeight: 'bold',
+              color: '#333',
+            },
+          },
           chart: {
             type: 'bar',
             height: 350,

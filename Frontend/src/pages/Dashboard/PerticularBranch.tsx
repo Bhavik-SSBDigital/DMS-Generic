@@ -269,6 +269,17 @@ const PerticularBranch = () => {
               ),
             },
           ],
+          title: {
+            text: 'Pending & Completed Processes',
+            align: 'center',
+            margin: 5,
+            offsetY: 20,
+            style: {
+              fontSize: '15px',
+              fontWeight: 'bold',
+              color: '#333',
+            },
+          },
           chart: {
             type: 'bar',
             height: 350,
@@ -320,6 +331,17 @@ const PerticularBranch = () => {
                 ) || [],
             },
           ],
+          title: {
+            text: 'Rejected Processes Numbers',
+            align: 'center',
+            margin: 5,
+            offsetY: 20,
+            style: {
+              fontSize: '15px',
+              fontWeight: 'bold',
+              color: '#333',
+            },
+          },
           chart: {
             type: 'bar',
             height: 350,
@@ -366,7 +388,17 @@ const PerticularBranch = () => {
               );
             }),
           })),
-
+          title: {
+            text: 'Documents Category Wise',
+            align: 'center',
+            margin: 5,
+            offsetY: 20,
+            style: {
+              fontSize: '15px',
+              fontWeight: 'bold',
+              color: '#333',
+            },
+          },
           chart: {
             type: 'bar',
             height: 350,
@@ -429,7 +461,17 @@ const PerticularBranch = () => {
               );
             }),
           })),
-
+          title: {
+            text: 'Rejected Documents Category Wise',
+            align: 'center',
+            margin: 5,
+            offsetY: 20,
+            style: {
+              fontSize: '15px',
+              fontWeight: 'bold',
+              color: '#333',
+            },
+          },
           chart: {
             type: 'bar',
             height: 350,
@@ -477,67 +519,9 @@ const PerticularBranch = () => {
     } catch (error) {
       toast.error('unable to fetch perticular branch data!!!');
     }
-    // getStepWisePendingProcesses(id);
     setMainChartLoading(false);
-  };
-  const getMainChartData = async () => {
-    setMainChartLoading(true);
-    // setRejectedProcessesLoading(true);
-    try {
-      let sendData: any = {};
-      if (
-        selectedMainChartType === 'weekly' ||
-        selectedMainChartType === 'yearly'
-      ) {
-        sendData = {
-          duration: selectedMainChartType,
-        };
-      } else if (mainChartDateRange.startDate && mainChartDateRange.endDate) {
-        sendData = {
-          duration: selectedMainChartType,
-          customDuration: {
-            startDate: mainChartDateRange.startDate,
-            endDate: mainChartDateRange.endDate,
-          },
-        };
-      } else if (selectedMainChartType === 'monthly') {
-        if (!selectedYear) {
-          toast.info('Please select a year');
-          setMainChartLoading(false);
-          // setRejectedProcessesLoading(false);
-          return;
-        }
-        sendData = {
-          duration: selectedMainChartType,
-          year: selectedYear,
-        };
-      } else {
-        toast.error('Invalid selection');
-        setMainChartLoading(false);
-        // setRejectedProcessesLoading(false);
-        return;
-      }
-      const dateUrl: string = backendUrl + '/getProcessNumber';
-      const res = await axios.post(
-        dateUrl,
-        { ...sendData },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          },
-        },
-      );
-      if (res.status === 200) {
-      }
-    } catch (error: any) {
-      toast.error('something is wrong');
-    }
-    // setSelectedMainChartType("");
-    setMainChartLoading(false);
-    // setRejectedProcessesLoading(false);
   };
   useEffect(() => {
-    // getMainChartData();
     fetchBranches();
   }, []);
   return (
@@ -735,7 +719,8 @@ const PerticularBranch = () => {
               variant="contained"
               sx={{ mt: 2 }}
               onClick={() => {
-                getMainChartData();
+                getPerticularBranchData();
+                getStepWisePendingProcesses();
                 setIsFilterOpen(false);
               }}
             >
