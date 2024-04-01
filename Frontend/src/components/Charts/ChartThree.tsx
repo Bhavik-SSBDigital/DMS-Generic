@@ -2,13 +2,14 @@ import { Card } from '@mui/material';
 import ReactApexChart from 'react-apexcharts';
 
 const ChartThree = ({ data, loading }) => {
+  console.log(data);
   return (
     <Card sx={{ height: '450px', p: 2 }}>
       {!loading ? (
         <ReactApexChart
           options={data}
           series={data?.series}
-          type="bar"
+          type="line"
           height={'100%'}
         />
       ) : (

@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import ChartFive from '../../components/Charts/ChartFive';
 import { useNavigate } from 'react-router-dom';
+import ChartFour from '../../components/Charts/ChartFour';
 
 const PerticularBranch = () => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -32,8 +33,100 @@ const PerticularBranch = () => {
   const [mainChartOption, setMainChartOption] = useState({});
   const [stepWiseChartOptions, setStepWiseChartOptions] = useState({});
   const [rejectedProcessChart, setRejectedProocessChart] = useState({});
-  const [documentsDetailsChart, setDocumentDetailsChart] = useState({});
-  const [rejectedDocCatWise, setRejectedDocCatWise] = useState({});
+  const [documentsDetailsChart, setDocumentDetailsChart] = useState({
+    series: [],
+    chart: {
+      height: 350,
+      type: 'line',
+      dropShadow: {
+        enabled: true,
+        color: '#000',
+        top: 18,
+        left: 7,
+        blur: 10,
+        opacity: 0.2,
+      },
+      toolbar: {
+        show: false,
+      },
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    stroke: {
+      curve: 'smooth',
+    },
+    title: {
+      text: 'Documents Count Category Wise',
+      align: 'center',
+      margin: 5,
+      offsetY: 20,
+      style: {
+        fontSize: '14px',
+        fontWeight: 'bold',
+        color: '#333',
+      },
+    },
+    grid: {
+      borderColor: '#e7e7e7',
+      row: {
+        colors: ['#f3f3f3', 'transparent'],
+        opacity: 0.5,
+      },
+    },
+    markers: {
+      size: 1,
+    },
+    xaxis: {
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+    },
+    yaxis: {
+      title: {
+        text: 'Temperature',
+      },
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'right',
+      floating: true,
+      offsetY: -25,
+      offsetX: -5,
+    },
+  });
+  const [rejectedDocCatWise, setRejectedDocCatWise] = useState({
+    title: {
+      text: 'Rejected Documents Category Wise',
+      left: 'center', // align center
+      top: 5, // margin from top
+      textStyle: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#333',
+      },
+    },
+    tooltip: {
+      trigger: 'axis',
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true,
+    },
+    toolbox: {
+      feature: {
+        saveAsImage: {},
+      },
+    },
+    xAxis: {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: [],
+  });
   // inputs
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedMainChartType, setSelectedMainChartType] = useState('weekly');
@@ -373,8 +466,8 @@ const PerticularBranch = () => {
           series: Array.from(
             new Set(
               res.data.processNumberWithDuration
-                .flatMap((item) =>
-                  item.documentDetails.map((doc) => doc.workName),
+                .flatMap((item: any) =>
+                  item.documentDetails.map((doc: any) => doc.workName),
                 )
                 .filter(Boolean), // Remove any falsy values
             ),
@@ -388,35 +481,47 @@ const PerticularBranch = () => {
               );
             }),
           })),
+          chart: {
+            height: 350,
+            type: 'line',
+            dropShadow: {
+              enabled: true,
+              color: '#000',
+              top: 18,
+              left: 7,
+              blur: 10,
+              opacity: 0.2,
+            },
+            toolbar: {
+              show: false,
+            },
+          },
+          dataLabels: {
+            enabled: true,
+          },
+          stroke: {
+            curve: 'smooth',
+          },
           title: {
-            text: 'Documents Category Wise',
+            text: 'Documents Counts Category Wise',
             align: 'center',
             margin: 5,
-            offsetY: 20,
+            offsetY: -3,
             style: {
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: 'bold',
               color: '#333',
             },
           },
-          chart: {
-            type: 'bar',
-            height: 350,
-          },
-          plotOptions: {
-            bar: {
-              horizontal: false,
-              columnWidth: '55%',
-              endingShape: 'rounded',
+          grid: {
+            borderColor: '#e7e7e7',
+            row: {
+              colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+              opacity: 0.5,
             },
           },
-          dataLabels: {
-            enabled: false,
-          },
-          stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent'],
+          markers: {
+            size: 1,
           },
           xaxis: {
             categories:
@@ -431,25 +536,63 @@ const PerticularBranch = () => {
                   : item.time;
               }) || [],
           },
-          fill: {
-            opacity: 1,
-          },
-          tooltip: {
-            y: {
-              formatter: function (val: any) {
-                return val;
-              },
+          yaxis: {
+            title: {
+              text: 'Documents Count',
             },
+          },
+          legend: {
+            position: 'top',
+            horizontalAlign: 'center',
+            floating: true,
+            offsetY: -15,
+            offsetX: -5,
           },
         });
         setRejectedDocCatWise({
+          title: {
+            text: 'Rejected Documents Category Wise',
+            left: 'center', // align center
+            top: 5, // margin from top
+            textStyle: {
+              fontSize: 14,
+              fontWeight: 'bold',
+              color: '#333',
+            },
+          },
+          tooltip: {
+            trigger: 'axis',
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
+          },
+          toolbox: {
+            feature: {
+              saveAsImage: {},
+            },
+          },
+          xAxis: {
+            type: 'category',
+            data: res.data.processNumberWithDuration.map((item: any) => {
+              const isDate = moment(item.time, moment.ISO_8601, true).isValid();
+              return isDate && selectedMainChartType !== 'yearly'
+                ? moment(item.time).format('DD-MM-YYYY')
+                : item.time;
+            }),
+          },
+          yAxis: {
+            type: 'value',
+          },
           series: Array.from(
             new Set(
               res.data.processNumberWithDuration
                 .flatMap((item) =>
                   item.documentDetails.map((doc) => doc.workName),
                 )
-                .filter(Boolean), // Remove any falsy values
+                .filter(Boolean),
             ),
           ).map((docName) => ({
             name: docName,
@@ -461,59 +604,6 @@ const PerticularBranch = () => {
               );
             }),
           })),
-          title: {
-            text: 'Rejected Documents Category Wise',
-            align: 'center',
-            margin: 5,
-            offsetY: 20,
-            style: {
-              fontSize: '15px',
-              fontWeight: 'bold',
-              color: '#333',
-            },
-          },
-          chart: {
-            type: 'bar',
-            height: 350,
-          },
-          plotOptions: {
-            bar: {
-              horizontal: false,
-              columnWidth: '55%',
-              endingShape: 'rounded',
-            },
-          },
-          dataLabels: {
-            enabled: false,
-          },
-          stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent'],
-          },
-          xaxis: {
-            categories:
-              res.data.processNumberWithDuration?.map((item: any) => {
-                const isDate = moment(
-                  item.time,
-                  moment.ISO_8601,
-                  true,
-                ).isValid();
-                return isDate && selectedMainChartType !== 'yearly'
-                  ? moment(item.time).format('DD-MM-YYYY')
-                  : item.time;
-              }) || [],
-          },
-          fill: {
-            opacity: 1,
-          },
-          tooltip: {
-            y: {
-              formatter: function (val: any) {
-                return val;
-              },
-            },
-          },
         });
       }
     } catch (error) {
@@ -620,10 +710,7 @@ const PerticularBranch = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <ChartThree
-                data={rejectedDocCatWise}
-                loading={mainChartLoading}
-              />
+              <ChartFour data={rejectedDocCatWise} loading={mainChartLoading} />
             </Grid>
             <Grid item xs={12}>
               <ChartFive

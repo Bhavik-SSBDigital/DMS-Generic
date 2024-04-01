@@ -65,7 +65,7 @@ const DropdownNotification = () => {
       });
       if (res.status === 200) {
         const updatedNotifications = notifications?.filter(
-          (item : any) => item.processId !== id,
+          (item: any) => item.processId !== id,
         );
         setNotifications(updatedNotifications);
       }
@@ -144,9 +144,9 @@ const DropdownNotification = () => {
 
         <ul className="flex h-auto flex-col overflow-y-auto">
           {notifications?.length ? (
-            notifications?.map((item : any) => {
+            notifications?.map((item: any) => {
               return (
-                <li>
+                <li key={item?.processId}>
                   <div
                     style={{ cursor: 'pointer' }}
                     className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"

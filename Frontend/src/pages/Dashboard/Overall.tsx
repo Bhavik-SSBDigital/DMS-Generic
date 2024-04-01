@@ -8,6 +8,7 @@ import moment from 'moment';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { Button, Dialog, DialogTitle, Grid, Stack } from '@mui/material';
+import ChartFour from '../../components/Charts/ChartFour';
 
 const Overall = () => {
   // ------------------states-----------------------------
@@ -30,7 +31,7 @@ const Overall = () => {
       margin: 5,
       offsetY: 20,
       style: {
-        fontSize: '15px',
+        fontSize: '14px',
         fontWeight: 'bold',
         color: '#333',
       },
@@ -75,12 +76,12 @@ const Overall = () => {
       },
     ],
     title: {
-      text: 'Rejected Processes Numbers',
+      text: 'Reject Processes Numbers',
       align: 'center',
       margin: 5,
       offsetY: 20,
       style: {
-        fontSize: '15px',
+        fontSize: '14px',
         fontWeight: 'bold',
         color: '#333',
       },
@@ -101,98 +102,107 @@ const Overall = () => {
     xaxis: {
       categories: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
     },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'right',
+      floating: true,
+      offsetY: -25,
+      offsetX: -5,
+    },
   });
   const [documentsDetailsChart, setDocumentDetailsChart] = useState({
-    series: [{}],
+    series: [],
     chart: {
-      type: 'bar',
       height: 350,
+      type: 'line',
+      dropShadow: {
+        enabled: true,
+        color: '#000',
+        top: 18,
+        left: 7,
+        blur: 10,
+        opacity: 0.2,
+      },
+      toolbar: {
+        show: false,
+      },
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    stroke: {
+      curve: 'smooth',
     },
     title: {
-      text: 'Documents Category Wise',
+      text: 'Documents Count Category Wise',
       align: 'center',
       margin: 5,
       offsetY: 20,
       style: {
-        fontSize: '15px',
+        fontSize: '14px',
         fontWeight: 'bold',
         color: '#333',
       },
     },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: '55%',
-        endingShape: 'rounded',
+    grid: {
+      borderColor: '#e7e7e7',
+      row: {
+        colors: ['#f3f3f3', 'transparent'],
+        opacity: 0.5,
       },
     },
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ['transparent'],
+    markers: {
+      size: 1,
     },
     xaxis: {
-      categories: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
     },
-    fill: {
-      opacity: 1,
-    },
-    tooltip: {
-      y: {
-        formatter: function (val: any) {
-          return val;
-        },
+    yaxis: {
+      title: {
+        text: 'Temperature',
       },
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'right',
+      floating: true,
+      offsetY: -25,
+      offsetX: -5,
     },
   });
   const [rejectedDocCatWise, setRejectedDocCatWise] = useState({
-    series: [{}],
-    chart: {
-      type: 'bar',
-      height: 350,
-    },
     title: {
       text: 'Rejected Documents Category Wise',
-      align: 'center',
-      margin: 5,
-      offsetY: 20,
-      style: {
-        fontSize: '15px',
+      left: 'center', // align center
+      top: 5, // margin from top
+      textStyle: {
+        fontSize: 14,
         fontWeight: 'bold',
         color: '#333',
       },
     },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: '55%',
-        endingShape: 'rounded',
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ['transparent'],
-    },
-    xaxis: {
-      categories: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
-    },
-    fill: {
-      opacity: 1,
-    },
     tooltip: {
-      y: {
-        formatter: function (val: any) {
-          return val;
-        },
+      trigger: 'axis',
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true,
+    },
+    toolbox: {
+      feature: {
+        saveAsImage: {},
       },
     },
+    xAxis: {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: [],
   });
   // inputs
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -293,7 +303,7 @@ const Overall = () => {
             margin: 5,
             offsetY: 20,
             style: {
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: 'bold',
               color: '#333',
             },
@@ -350,7 +360,7 @@ const Overall = () => {
             margin: 5,
             offsetY: 20,
             style: {
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: 'bold',
               color: '#333',
             },
@@ -381,6 +391,13 @@ const Overall = () => {
                   : item.time;
               }) || [],
           },
+          legend: {
+            position: 'top',
+            horizontalAlign: 'right',
+            floating: true,
+            offsetY: -25,
+            offsetX: -5,
+          },
         });
         setDocumentDetailsChart({
           series: Array.from(
@@ -401,35 +418,47 @@ const Overall = () => {
               );
             }),
           })),
+          chart: {
+            height: 350,
+            type: 'line',
+            dropShadow: {
+              enabled: true,
+              color: '#000',
+              top: 18,
+              left: 7,
+              blur: 10,
+              opacity: 0.2,
+            },
+            toolbar: {
+              show: false,
+            },
+          },
+          dataLabels: {
+            enabled: true,
+          },
+          stroke: {
+            curve: 'smooth',
+          },
           title: {
-            text: 'Documents Category Wise',
+            text: 'Documents Counts Category Wise',
             align: 'center',
             margin: 5,
-            offsetY: 20,
+            offsetY: -3,
             style: {
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: 'bold',
               color: '#333',
             },
           },
-          chart: {
-            type: 'bar',
-            height: 350,
-          },
-          plotOptions: {
-            bar: {
-              horizontal: false,
-              columnWidth: '55%',
-              endingShape: 'rounded',
+          grid: {
+            borderColor: '#e7e7e7',
+            row: {
+              colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+              opacity: 0.5,
             },
           },
-          dataLabels: {
-            enabled: false,
-          },
-          stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent'],
+          markers: {
+            size: 1,
           },
           xaxis: {
             categories:
@@ -444,25 +473,63 @@ const Overall = () => {
                   : item.time;
               }) || [],
           },
-          fill: {
-            opacity: 1,
-          },
-          tooltip: {
-            y: {
-              formatter: function (val: any) {
-                return val;
-              },
+          yaxis: {
+            title: {
+              text: 'Documents Count',
             },
+          },
+          legend: {
+            position: 'top',
+            horizontalAlign: 'center',
+            floating: true,
+            offsetY: -15,
+            offsetX: -5,
           },
         });
         setRejectedDocCatWise({
+          title: {
+            text: 'Rejected Documents Category Wise',
+            left: 'center', // align center
+            top: 5, // margin from top
+            textStyle: {
+              fontSize: 14,
+              fontWeight: 'bold',
+              color: '#333',
+            },
+          },
+          tooltip: {
+            trigger: 'axis',
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
+          },
+          toolbox: {
+            feature: {
+              saveAsImage: {},
+            },
+          },
+          xAxis: {
+            type: 'category',
+            data: res.data.processNumberWithDuration.map((item: any) => {
+              const isDate = moment(item.time, moment.ISO_8601, true).isValid();
+              return isDate && selectedMainChartType !== 'yearly'
+                ? moment(item.time).format('DD-MM-YYYY')
+                : item.time;
+            }),
+          },
+          yAxis: {
+            type: 'value',
+          },
           series: Array.from(
             new Set(
               res.data.processNumberWithDuration
                 .flatMap((item) =>
                   item.documentDetails.map((doc) => doc.workName),
                 )
-                .filter(Boolean), // Remove any falsy values
+                .filter(Boolean),
             ),
           ).map((docName) => ({
             name: docName,
@@ -474,59 +541,6 @@ const Overall = () => {
               );
             }),
           })),
-          title: {
-            text: 'Rejected Documents Category Wise',
-            align: 'center',
-            margin: 5,
-            offsetY: 20,
-            style: {
-              fontSize: '15px',
-              fontWeight: 'bold',
-              color: '#333',
-            },
-          },
-          chart: {
-            type: 'bar',
-            height: 350,
-          },
-          plotOptions: {
-            bar: {
-              horizontal: false,
-              columnWidth: '55%',
-              endingShape: 'rounded',
-            },
-          },
-          dataLabels: {
-            enabled: false,
-          },
-          stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent'],
-          },
-          xaxis: {
-            categories:
-              res.data.processNumberWithDuration?.map((item: any) => {
-                const isDate = moment(
-                  item.time,
-                  moment.ISO_8601,
-                  true,
-                ).isValid();
-                return isDate && selectedMainChartType !== 'yearly'
-                  ? moment(item.time).format('DD-MM-YYYY')
-                  : item.time;
-              }) || [],
-          },
-          fill: {
-            opacity: 1,
-          },
-          tooltip: {
-            y: {
-              formatter: function (val: any) {
-                return val;
-              },
-            },
-          },
         });
       }
     } catch (error: any) {
@@ -561,7 +575,7 @@ const Overall = () => {
           <ChartThree data={documentsDetailsChart} loading={mainChartLoading} />
         </Grid>
         <Grid item xs={12}>
-          <ChartThree data={rejectedDocCatWise} loading={mainChartLoading} />
+          <ChartFour data={rejectedDocCatWise} loading={mainChartLoading} />
         </Grid>
 
         {/* <MapOne /> */}
