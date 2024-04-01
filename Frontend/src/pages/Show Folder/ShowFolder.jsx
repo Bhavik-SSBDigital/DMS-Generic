@@ -698,6 +698,7 @@ export default function ShowFolder(props) {
                                                             }}
                                                             variant='text'
                                                             color='primary'
+                                                            onDoubleClick={() => handleView(pathValue, item.name)}
                                                             size='medium'
                                                         >
                                                             <div>
