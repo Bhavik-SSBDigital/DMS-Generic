@@ -5,11 +5,19 @@ import { backButtonPath } from '../../Slices/PathSlice';
 import { useDispatch } from 'react-redux';
 import sessionData from '../../Store';
 import axios from 'axios';
+import { useQueryClient } from 'react-query';
 
 const DropdownUser = () => {
+  const queryClient = useQueryClient();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { profileImage, setProfileImage } = sessionData();
+  const {
+    profileImage,
+    setProfileImage,
+    setAlerts,
+    setNotifications,
+    setWork,
+  } = sessionData();
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
 
@@ -44,6 +52,12 @@ const DropdownUser = () => {
   const handleLogout = () => {
     localStorage.clear();
     sessionStorage.clear();
+    queryClient.clear();
+    setNotifications([]);
+    setAlerts([]);
+    setProfileImage('');
+    setWork('');
+
     dispatch(backButtonPath('/'));
     navigate('/auth/signin');
   };

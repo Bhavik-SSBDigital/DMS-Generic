@@ -1,48 +1,50 @@
-import axios from "axios";
+import axios from 'axios';
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 export function getContentTypeFromExtension(extension) {
   const mimeTypes = {
-    txt: "text/plain",
-    pdf: "application/pdf",
-    doc: "application/msword",
-    docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    xls: "application/vnd.ms-excel",
-    xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    ppt: "application/vnd.ms-powerpoint",
-    pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    png: "image/png",
-    jpg: "image/jpeg",
-    jpeg: "image/jpeg",
-    gif: "image/gif",
-    bmp: "image/bmp",
-    svg: "image/svg+xml",
-    mp3: "audio/mpeg",
-    wav: "audio/wav",
-    mp4: "video/mp4",
-    avi: "video/x-msvideo",
-    mkv: "video/x-matroska",
-    zip: "application/zip",
-    rar: "application/x-rar-compressed",
-    tar: "application/x-tar",
+    txt: 'text/plain',
+    pdf: 'application/pdf',
+    doc: 'application/msword',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    xls: 'application/vnd.ms-excel',
+    xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    ppt: 'application/vnd.ms-powerpoint',
+    pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    png: 'image/png',
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
+    gif: 'image/gif',
+    bmp: 'image/bmp',
+    svg: 'image/svg+xml',
+    mp3: 'audio/mpeg',
+    wav: 'audio/wav',
+    mp4: 'video/mp4',
+    avi: 'video/x-msvideo',
+    mkv: 'video/x-matroska',
+    zip: 'application/zip',
+    rar: 'application/x-rar-compressed',
+    tar: 'application/x-tar',
     // Add more mappings for other file types as needed
   };
 
-  return mimeTypes[extension] || "application/octet-stream"; // Default to generic binary if extension not found
+  return mimeTypes[extension] || 'application/octet-stream'; // Default to generic binary if extension not found
 }
 
 export const getFileSize = async (fileName, path, token) => {
+
   // console.log('getfilesize is called with', fileName);
   let response;
   try {
-    const url = process.env.REACT_APP_BACKEND_URL + "/download";
+    const url = backendUrl + '/download';
     // console.log('url is', url);
     response = await axios.post(url, null, {
       headers: {
         Range: `bytes=0-0`,
-        "X-File-name": encodeURIComponent(fileName),
-        "X-File-path": encodeURIComponent(path),
-        "x-authorization": `Bearer ${token}`,
-        "Content-Type": getContentTypeFromExtension(fileName.split(".").pop()),
+        'X-File-name': encodeURIComponent(fileName),
+        'X-File-path': encodeURIComponent(path),
+        'x-authorization': `Bearer ${token}`,
+        'Content-Type': getContentTypeFromExtension(fileName.split('.').pop()),
       },
     });
     // console.log(response);
@@ -70,8 +72,8 @@ export const getFileSize = async (fileName, path, token) => {
 
 //     try {
 //         while (start < fileSize) {
-//             // console.log('url--', process.env.REACT_APP_BACKEND_URL);
-//             const url = process.env.REACT_APP_BACKEND_URL + '/download';
+//             // console.log('url--', backendUrl);
+//             const url = backendUrl + '/download';
 //             // console.log('start is', start);
 //             // console.log('end is', end);
 //             // console.log({
@@ -146,15 +148,15 @@ export const getFileSize = async (fileName, path, token) => {
 // };
 export const download = async (fileName, path, view) => {
   let chunks = [];
-  const token = localStorage.getItem("accessToken");
+  const token = localStorage.getItem('accessToken');
   let start = 0;
   let chunkSize = 100 * 1024 * 1024;
   let end = chunkSize - 1;
-  const fileExtension = fileName.split(".").pop();
+  const fileExtension = fileName.split('.').pop();
   let fileSize = await getFileSize(fileName, path, token);
 
   if (fileSize === undefined) {
-    console.log("File does not exist");
+    console.log('File does not exist');
     // alert("File does not exist, please check file name");
     return null; // Return null if the file doesn't exist
   }
@@ -163,17 +165,17 @@ export const download = async (fileName, path, view) => {
 
   try {
     while (start < fileSize) {
-      const url = process.env.REACT_APP_BACKEND_URL + "/download";
+      const url = backendUrl + '/download';
       const config = {
         headers: {
           Range: `bytes=${start}-${end}`,
-          "x-file-name": encodeURIComponent(fileName),
-          "x-file-path": encodeURIComponent(path),
-          "content-type": getContentTypeFromExtension(fileExtension),
-          "x-authorization": `Bearer ${token}`,
-          "access-control-expose-headers": "Content-Range",
+          'x-file-name': encodeURIComponent(fileName),
+          'x-file-path': encodeURIComponent(path),
+          'content-type': getContentTypeFromExtension(fileExtension),
+          'x-authorization': `Bearer ${token}`,
+          'access-control-expose-headers': 'Content-Range',
         },
-        responseType: "arraybuffer",
+        responseType: 'arraybuffer',
       };
 
       const response = await axios.post(url, null, config);
@@ -206,7 +208,7 @@ export const download = async (fileName, path, view) => {
     }
 
     // Create a new anchor element
-    const anchor = document.createElement("a");
+    const anchor = document.createElement('a');
     anchor.href = blobUrl;
     anchor.download = `${fileName}`;
 
@@ -224,7 +226,7 @@ export const download = async (fileName, path, view) => {
     start = 0;
   } catch (error) {
     alert(`Download failed for ${fileName}`);
-    console.error("Error downloading file:", error);
+    console.error('Error downloading file:', error);
   }
 };
 
@@ -232,7 +234,7 @@ export async function uploadFileWithChunks(
   file,
   path,
   customName,
-  isInvolvedInProcess
+  isInvolvedInProcess,
 ) {
   // console.log('file chunks', path)
   try {
@@ -247,34 +249,34 @@ export async function uploadFileWithChunks(
       // console.log(typeof file);
       // console.log('file name is', file.name);
       const contentType = getContentTypeFromExtension(
-        file.name.split(".").pop()
+        file.name.split('.').pop(),
       );
-      console.log("content type", contentType);
+      console.log('content type', contentType);
 
       const headers = {
-        "X-File-Name":
+        'X-File-Name':
           customName !== undefined
             ? encodeURIComponent(customName)
             : encodeURIComponent(file.name),
-        "X-Total-Chunks": totalChunks,
-        "X-Current-Chunk": chunkNumber,
-        "X-Chunk-Size": chunkSize,
-        "Content-Type": contentType,
-        "X-file-path": path,
-        "X-Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+        'X-Total-Chunks': totalChunks,
+        'X-Current-Chunk': chunkNumber,
+        'X-Chunk-Size': chunkSize,
+        'Content-Type': contentType,
+        'X-file-path': path,
+        'X-Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
         Range: `bytes=${start}-${end}`,
       };
 
       if (chunkNumber === 0) {
-        headers["x-involved-in-process"] = isInvolvedInProcess;
+        headers['x-involved-in-process'] = isInvolvedInProcess;
       }
 
       const chunk = file.slice(start, end + 1);
 
-      const url = process.env.REACT_APP_BACKEND_URL + "/upload";
+      const url = backendUrl + '/upload';
       // console.log('url is', url);
       const response = await fetch(url, {
-        method: "POST",
+        method: 'POST',
         body: chunk,
         headers: headers,
       });
@@ -289,6 +291,7 @@ export async function uploadFileWithChunks(
       }
     }
   } catch (error) {
+    console.log(error.message);
     return error;
   }
 }
@@ -298,18 +301,18 @@ export async function upload(
   path,
   getData,
   customName,
-  isInvolvedInProcess
+  isInvolvedInProcess,
 ) {
-  console.log("path in upload", path);
-  console.log("function we need is called");
-  console.log("filelist length is", fileList);
+  console.log('path in upload', path);
+  console.log('function we need is called');
+  console.log('filelist length is', fileList);
   if (fileList.length === 0) {
     return;
   }
   try {
     let documentIds = [];
     for (let i = 0; i < fileList.length; i++) {
-      console.log("in loop");
+      console.log('in loop');
       const file = fileList[i];
       let res =
         customName !== undefined
@@ -317,20 +320,20 @@ export async function upload(
               file,
               path,
               customName,
-              isInvolvedInProcess
+              isInvolvedInProcess,
             )
           : await uploadFileWithChunks(
               file,
               path,
               undefined,
-              isInvolvedInProcess
+              isInvolvedInProcess,
             );
       documentIds.push(res.documentId);
       // console.log(path)
       getData();
       return documentIds;
     }
-    console.log("document ids", documentIds);
+    console.log('document ids', documentIds);
   } catch (error) {
     throw error;
   }

@@ -113,8 +113,10 @@ const Roles = ({ setIsLoading, isLoading, roles, setRoles }) => {
             }
         } catch (error) {
             toast.error("Error deleting role");
+        } finally {
+            setDeleteLoading(false);
+            deleteModalClose();
         }
-        setDeleteLoading(false);
     };
 
 

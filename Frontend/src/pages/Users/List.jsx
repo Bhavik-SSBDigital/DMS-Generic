@@ -31,6 +31,7 @@ import ComponentLoader from "../../common/Loader/ComponentLoader";
 // import useStoreData, { sessionData } from "../../Store";
 
 const Users = ({ data, setData, searchTerm, setSearchTerm }) => {
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const styles = {}
     // const { setEditObject } = sessionData();
     const [page, setPage] = useState(0);

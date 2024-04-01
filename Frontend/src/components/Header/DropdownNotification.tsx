@@ -64,8 +64,8 @@ const DropdownNotification = () => {
         },
       });
       if (res.status === 200) {
-        const updatedNotifications = notifications.filter(
-          (item) => item.processId !== id,
+        const updatedNotifications = notifications?.filter(
+          (item : any) => item.processId !== id,
         );
         setNotifications(updatedNotifications);
       }
@@ -143,8 +143,8 @@ const DropdownNotification = () => {
         <hr style={{ color: 'lightgray' }} />
 
         <ul className="flex h-auto flex-col overflow-y-auto">
-          {notifications.length ? (
-            notifications.map((item) => {
+          {notifications?.length ? (
+            notifications?.map((item : any) => {
               return (
                 <li>
                   <div

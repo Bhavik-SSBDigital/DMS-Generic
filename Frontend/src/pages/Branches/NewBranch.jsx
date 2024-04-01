@@ -50,7 +50,7 @@ const NewBranch = () => {
     // ...
     const [loading, setLoading] = useState(false);
     async function handleSubmit(editId) {
-        if (!formData.code >= 0 || !formData.name || !formData.status) {
+        if (!formData.code > 0 || !formData.name || !formData.status) {
             toast.info("Please fill all details");
             return;
         }
@@ -58,7 +58,7 @@ const NewBranch = () => {
         console.log(editId + "id");
         try {
             const url =
-                process.env.REACT_APP_BACKEND_URL +
+                backendUrl +
                 (Object.keys(editObject).length > 0
                     ? `/editBranch/${editId}`
                     : "/createBranch");
@@ -75,7 +75,7 @@ const NewBranch = () => {
                     : toast.success("Branch is created");
                 setEditObject({});
                 setLoading(false);
-                navigate("/Branches");
+                navigate("/branches/list");
                 setFormData({
                     code: 0,
                     name: "",

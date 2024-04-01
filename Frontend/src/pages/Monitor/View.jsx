@@ -297,7 +297,7 @@ export default function View() {
       setSendLoading(false);
     } finally {
       setSendToClerkMenu(false);
-      navigate("/MonitorProcess");
+      navigate("/monitor");
     }
   };
   const rejectProcess = async (processId) => {

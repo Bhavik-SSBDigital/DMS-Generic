@@ -119,7 +119,7 @@ export default function NewUser() {
                     ? toast.success("User edited")
                     : toast.success("User created");
                 setEditObject({});
-                navigate("/ManageUsers");
+                navigate("/users/list");
                 setLoading(false);
                 setFormData({ ...initialUser });
             }
@@ -330,7 +330,8 @@ export default function NewUser() {
                                 }
                                 sx={{ margin: "5px" }}
                             >
-                                {Object.keys(editObject).length > 0 ? "update" : "Save"}
+                                {loading ? <CircularProgress size={20} /> : Object.keys(editObject).length > 0 ? "update" : "Save"}
+
                             </Button>
                             <Link to="/users/list">
                                 <Button
@@ -344,15 +345,6 @@ export default function NewUser() {
                             </Link>
                         </Grid>
                     </Grid>
-                    {loading && (
-                        <Stack
-                            justifyContent="center"
-                            alignItems="center"
-                            sx={{ width: "100%", m: 1 }}
-                        >
-                            <CircularProgress color="inherit" size={30} />
-                        </Stack>
-                    )}
                     {/* </Paper> */}
                     {/* </Box> */}
                 </div>

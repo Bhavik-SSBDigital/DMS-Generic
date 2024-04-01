@@ -84,7 +84,7 @@ export default function NewRole() {
                 Object.keys(editObject).length > 0
                     ? toast.success("Role edited")
                     : toast.success("Role created");
-                navigate("/ManageRoles");
+                navigate("/roles/list");
                 setLoading(false);
                 setFormData({ ...initialUser });
             }

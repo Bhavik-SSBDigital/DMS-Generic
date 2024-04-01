@@ -29,6 +29,7 @@ import ComponentLoader from "../../common/Loader/ComponentLoader";
 // import useStoreData, { sessionData } from "../../Store";
 
 const MyTable = ({ data, props, setData, searchTerm, setSearchTerm }) => {
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [order, setOrder] = useState("asc");
@@ -97,6 +98,7 @@ const MyTable = ({ data, props, setData, searchTerm, setSearchTerm }) => {
         setDeleteLoading(true);
         const url = backendUrl + `/deleteBranch/${id}`;
         const accessToken = localStorage.getItem("accessToken");
+        console.log('heyyy')
         try {
             const response = await axios.post(url, null, {
                 headers: {
