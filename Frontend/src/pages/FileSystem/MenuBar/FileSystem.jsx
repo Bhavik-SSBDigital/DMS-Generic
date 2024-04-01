@@ -213,7 +213,7 @@ const FileSystem = (props) => {
                             {!error && <Stack spacing={{ xs: 2, sm: 4 }} direction='row' useFlexGap flexWrap='wrap' overflow="auto" maxHeight="65vh">
                                 <Stack flexWrap='wrap' alignContent='center' width='100%' flexDirection="row" gap={1}>
                                     {fileFolders.map((item, index) => (
-                                        <Link to={item.name} style={{ width: '130px', height: "130px" }}> {/* Adjust width based on the number of items you want to display horizontally */}
+                                        <Link to={item.name} key={index} style={{ width: '130px', height: "130px" }}> {/* Adjust width based on the number of items you want to display horizontally */}
                                             <Button
                                                 onClick={() => handleFolderClick(item.name)}
                                                 sx={{

@@ -37,13 +37,20 @@ import ViewLog from './pages/Logs/ViewLog';
 import MonitorView from './pages/Monitor/View';
 import InitiateForm from './pages/Processes/InitiateForm';
 import Monitor from './pages/Monitor/Monitor';
+import { useDispatch } from 'react-redux';
+import { onReload } from './Slices/PathSlice';
 
 function App() {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(true);
   const { pathname } = useLocation();
+  console.log(pathname + 'pathname');
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    if (!pathname.includes('files')) {
+      dispatch(onReload('..'));
+    }
   }, [pathname]);
 
   useEffect(() => {

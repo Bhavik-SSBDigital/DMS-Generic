@@ -1,8 +1,8 @@
 import { Box, Button, Stack } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { useDispatch, useSelector } from "react-redux";
-import { backButtonPath } from "../../Slices/PathSlice";
+import { backButtonPath, onReload } from "../../Slices/PathSlice";
 import folderIcon from "../../assets/images/folder.png";
 import { useNavigate } from "react-router-dom";
 

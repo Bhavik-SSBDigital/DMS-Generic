@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { backButtonPath } from '../../Slices/PathSlice';
+import { backButtonPath, setPath } from '../../Slices/PathSlice';
 import { useDispatch } from 'react-redux';
 import sessionData from '../../Store';
 import axios from 'axios';
@@ -57,8 +57,9 @@ const DropdownUser = () => {
     setAlerts([]);
     setProfileImage('');
     setWork('');
+    dispatch(setPath('..'));
 
-    dispatch(backButtonPath('/'));
+    dispatch(backButtonPath('..'));
     navigate('/auth/signin');
   };
   const fetchProfilePic = async () => {

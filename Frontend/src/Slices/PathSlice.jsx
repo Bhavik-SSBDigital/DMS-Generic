@@ -12,39 +12,39 @@ export const pathSlice = createSlice({
   initialState,
   reducers: {
     setPath: (state, action) => {
-        state.value = `${state.value}/${action.payload}`;
-        // localStorage.setItem('path', state.value);
+      state.value = `${state.value}/${action.payload}`;
+      // localStorage.setItem('path', state.value);
     },
-    backButtonPath: (state, action) =>{
+    backButtonPath: (state, action) => {
       state.value = action.payload;
       // localStorage.setItem('path', state.value);
     },
-    sideBarPath : (state, action) =>{
-      localStorage.setItem('path',action.payload);
+    sideBarPath: (state, action) => {
+      localStorage.setItem('path', action.payload);
       state.value = action.payload;
     },
-    defaultPath : (state) =>{
+    defaultPath: (state) => {
       state.value = "..";
       // localStorage.setItem('path', state.value);
     },
-    copy : (state, action) =>{
-      const {name, pathValue, method} = action.payload
+    copy: (state, action) => {
+      const { name, pathValue, method } = action.payload
       state.fileName = name;
       state.sourcePath = `${pathValue}/${name}`;
       state.method = `${method}`
     },
-    cut : (state, action) =>{
-      const {name, pathValue, method} = action.payload
+    cut: (state, action) => {
+      const { name, pathValue, method } = action.payload
       state.fileName = name;
       state.sourcePath = `${pathValue}/${name}`;
       state.method = `${method}`
     },
-    onReload : (state, action) =>{
+    onReload: (state, action) => {
       state.value = action.payload;
     }
   },
 });
 
-export const { setPath, backButtonPath, sideBarPath, defaultPath, copy, cut, onReload} = pathSlice.actions;
+export const { setPath, backButtonPath, sideBarPath, defaultPath, copy, cut, onReload } = pathSlice.actions;
 
 export default pathSlice.reducer;
