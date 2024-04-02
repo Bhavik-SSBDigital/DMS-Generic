@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Button, Stack, TextField, Modal, CircularProgress, Breadcrumbs, Typography } from '@mui/material';
+import { Box, Button, Stack, TextField, Modal, CircularProgress, Breadcrumbs, Typography, Tooltip } from '@mui/material';
 // import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import './MenuBar.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -78,6 +78,14 @@ const FileSystem = (props) => {
     };
     const handlePlus = () => {
         setShowButtons(!showButtons)
+    }
+    function truncateFileName(fileName, maxLength = 7) {
+        if (fileName.length <= maxLength) {
+            return fileName;
+        } else {
+            const truncatedName = fileName.substring(0, maxLength - 3); // Subtracting 3 for the ellipsis
+            return truncatedName + "...";
+        }
     }
     const createFolder = async () => {
         try {
@@ -214,30 +222,32 @@ const FileSystem = (props) => {
                                 <Stack flexWrap='wrap' alignContent='center' width='100%' flexDirection="row" gap={1}>
                                     {fileFolders.map((item, index) => (
                                         <Link to={item.name} key={index} style={{ width: '130px', height: "130px" }}> {/* Adjust width based on the number of items you want to display horizontally */}
-                                            <Button
-                                                onClick={() => handleFolderClick(item.name)}
-                                                sx={{
-                                                    flexDirection: 'column',
-                                                    backgroundColor: "white",
-                                                    borderRadius: "15px",
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    textTransform: 'none',
-                                                }}
-                                                variant='text'
-                                                color='primary'
-                                                size='medium'
-                                            >
-                                                <Box
+                                            <Tooltip title={item.name}>
+                                                <Button
+                                                    onClick={() => handleFolderClick(item.name)}
                                                     sx={{
-                                                        height: '60px',
-                                                        width: '60px',
+                                                        flexDirection: 'column',
+                                                        backgroundColor: "white",
+                                                        borderRadius: "15px",
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        textTransform: 'none',
                                                     }}
+                                                    variant='text'
+                                                    color='primary'
+                                                    size='medium'
                                                 >
-                                                    <img style={{ height: '100%', width: '100%' }} src={imageSrc} alt="im" />
-                                                </Box>
-                                                <p style={{ color: 'black', textAlign: 'center', margin: 0 }}>{item.name}</p>
-                                            </Button>
+                                                    <Box
+                                                        sx={{
+                                                            height: '60px',
+                                                            width: '60px',
+                                                        }}
+                                                    >
+                                                        <img style={{ height: '100%', width: '100%' }} src={imageSrc} alt="im" />
+                                                    </Box>
+                                                    <p style={{ color: 'black', textAlign: 'center', margin: 0 }}>{truncateFileName(item.name)}</p>
+                                                </Button>
+                                            </Tooltip>
                                         </Link>
                                     ))}
                                 </Stack>
