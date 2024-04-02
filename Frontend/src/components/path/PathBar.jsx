@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, Tooltip } from "@mui/material";
 import React, { useEffect } from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,6 +26,14 @@ export default function PathBar() {
       console.error("Invalid index:", index);
     }
   };
+  function truncateFileName(fileName, maxLength = 10) {
+    if (fileName.length <= maxLength) {
+      return fileName;
+    } else {
+      const truncatedName = fileName.substring(0, maxLength - 3); // Subtracting 3 for the ellipsis
+      return truncatedName + "...";
+    }
+  }
   return (
     <Stack
       padding="4px"
@@ -57,16 +65,19 @@ export default function PathBar() {
             {index > 0 && (
               <NavigateNextIcon fontSize="small" style={{ margin: "0 5px" }} />
             )}
-            <Button
-              variant="text"
-              sx={{
-                textTransform: "none",
-                minWidth: { xs: "100px", sm: "120px", md: "150px" },
-              }}
-              onClick={() => handlePathClick(index)}
-            >
-              {item === ".." ? "/" : item}
-            </Button>
+            <Tooltip title={item === ".." ? "/" : item}>
+              <Button
+                variant="text"
+                sx={{
+                  textTransform: "none",
+                  minWidth: { xs: "110px" },
+                }}
+                onClick={() => handlePathClick(index)}
+              >
+
+                {item === ".." ? "/" : truncateFileName(item)}
+              </Button>
+            </Tooltip>
           </React.Fragment>
         ))}
       </Box>

@@ -222,21 +222,22 @@ const FileSystem = (props) => {
                                 <Stack flexWrap='wrap' alignContent='center' width='100%' flexDirection="row" gap={1}>
                                     {fileFolders.map((item, index) => (
                                         <Link to={item.name} key={index} style={{ width: '130px', height: "130px" }}> {/* Adjust width based on the number of items you want to display horizontally */}
-                                            <Tooltip title={item.name}>
-                                                <Button
-                                                    onClick={() => handleFolderClick(item.name)}
-                                                    sx={{
-                                                        flexDirection: 'column',
-                                                        backgroundColor: "white",
-                                                        borderRadius: "15px",
-                                                        width: '100%',
-                                                        height: '100%',
-                                                        textTransform: 'none',
-                                                    }}
-                                                    variant='text'
-                                                    color='primary'
-                                                    size='medium'
-                                                >
+                                            <Button
+                                                onClick={() => handleFolderClick(item.name)}
+                                                sx={{
+                                                    flexDirection: 'column',
+                                                    backgroundColor: "white",
+                                                    borderRadius: "15px",
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    textTransform: 'none',
+                                                }}
+                                                variant='text'
+                                                color='primary'
+                                                size='medium'
+                                            >
+                                                <Tooltip title={item.name}>
+
                                                     <Box
                                                         sx={{
                                                             height: '60px',
@@ -246,8 +247,9 @@ const FileSystem = (props) => {
                                                         <img style={{ height: '100%', width: '100%' }} src={imageSrc} alt="im" />
                                                     </Box>
                                                     <p style={{ color: 'black', textAlign: 'center', margin: 0 }}>{truncateFileName(item.name)}</p>
-                                                </Button>
-                                            </Tooltip>
+                                                </Tooltip>
+
+                                            </Button>
                                         </Link>
                                     ))}
                                 </Stack>
