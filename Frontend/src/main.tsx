@@ -12,6 +12,7 @@ import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 const store = configureStore({
   reducer: {
@@ -40,5 +41,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </Provider>
       </Router>
     </React.StrictMode>
+    <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>,
 );

@@ -1,142 +1,134 @@
 import React, { useEffect, useState } from "react";
-import styles from "./List.module.css";
-import { useQuery, useQueryClient } from "react-query";
+import { useInfiniteQuery, useQueryClient } from "react-query";
+import {
+    Box,
+    CircularProgress,
+    Fab,
+    Paper,
+    Stack,
+    TextField,
+} from "@mui/material";
+import styles from './List.module.css';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Button from "@mui/material/Button";
+import moment from "moment";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AddIcon from "@mui/icons-material/Add";
+import sessionData from "../../Store";
 import { toast } from "react-toastify";
 import DefaultLayout from "../../layout/DefaultLayout";
-import sessionData from "../../Store";
-import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import ComponentLoader from "../../common/Loader/ComponentLoader";
 
-export default function Works(props) {
-    const queryClient = new useQueryClient();
+export default function List() {
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
-    const { setWork } = sessionData();
+    const [departments, setDepartments] = useState([]);
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState("");
     const [page, setPage] = useState(0);
 
-    // Fetching published processes
-    const [enablePublishedFetch, setEnablePublishedFetch] = useState(true);
-
-    const fetchPublishedProcesses = async () => {
-        try {
-            const url = backendUrl + "/getProcessesForUser";
-            const res = await axios.post(
-                url,
-                {
-                    startingIndex: page * 10,
-                    pageSize: 10,
-                    forPublishedProcesses: true,
+    const fetchProcesses = async ({ pageParam = 0 }) => {
+        const url = backendUrl + "/getProcessesForUser";
+        const res = await axios.post(
+            url,
+            {
+                startingIndex: pageParam * 10,
+                pageSize: 10,
+                forPublishedProcesses: true,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
                 },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                    },
-                }
-            );
-            if (res.status === 200) {
-                return res.data;
-            } else {
-                throw new Error("Unable to fetch published processes");
             }
-        } catch (error) {
-            throw new Error("Network error");
+        );
+
+        if (res.status === 200) {
+            return res.data;
+        } else {
+            throw new Error("Unable to fetch process for user");
         }
     };
 
-    const { data, error, isLoading, isFetching } = useQuery(["publishedProcesses", "true", page], fetchPublishedProcesses, {
-        onSuccess: (data) => {
-            console.log("got published processes")
-        },
-        onError: (error) => {
-            toast.error(error.message);
-        },
-        retry: 1,
-        enabled: enablePublishedFetch,
-        initialData: { processes: [], remaining: false },
-        staleTime: 60000,
-        cacheTime: 60000,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-    });
+    const {
+        data,
+        error,
+        isLoading,
+        isFetching,
+        fetchNextPage,
+        hasNextPage,
+    } = useInfiniteQuery(
+        "publishedProcesses",
+        fetchProcesses,
+        {
+            getNextPageParam: (lastPage, allPages) => {
+                return lastPage.remaining ? allPages.length : undefined;
+            },
+            onError: (error) => {
+                toast.error(error.message);
+            },
+            cacheTime: 12000,
+            staleTime: 12000,
+        }
+    );
 
-    const [filteredMessages, setFilteredMessages] = useState([]);
-    const navigate = useNavigate();
+    const filteredData = data?.pages.flatMap(page => page.processes).filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    const handleChangePage = (newPage) => {
+        setPage(newPage);
+        fetchNextPage();
+    };
 
     useEffect(() => {
-        const filteredMessagesResult = data?.processes?.filter((item) =>
-            item.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        setFilteredMessages(filteredMessagesResult);
+        setPage(0); // Reset page number when search term changes
     }, [searchTerm]);
-
-    const handleChangePage = async (event, newPage) => {
-        setPage(newPage);
-    };
 
     return (
         <DefaultLayout>
-            {isFetching || isLoading ? <ComponentLoader /> : <>
-                <TableContainer
-                    component={Paper}
-                    className={styles.tableContainer}
-                >
-                    <Table className={styles.table}>
-                        <TableHead className={styles.tableHeader}>
-                            <TableRow>
-                                <TableCell sx={{ fontWeight: 700 }}>Serial No</TableCell>
-                                <TableCell sx={{ fontWeight: 700 }}>Process Name</TableCell>
-                                <TableCell sx={{ fontWeight: 700 }}>Create Time</TableCell>
-                                <TableCell sx={{ fontWeight: 700 }}>Action</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {filteredMessages
-                                ?.filter((row) => row.isPending === true)
-                                ?.map((row, index) => (
-                                    <TableRow key={index} className={styles.tableRow}>
-                                        <TableCell className={styles.cell}>
-                                            {index + 1}
-                                        </TableCell>
-                                        <TableCell className={styles.cell}>
-                                            {row.name}
-                                        </TableCell>
-                                        <TableCell className={styles.cell}>
-                                            {moment(row.createdAt).format(
-                                                "DD-MMM-YYYY hh:mm A"
-                                            )}
-                                        </TableCell>
-                                        <TableCell className={styles.cell}>
-                                            <Button
-                                                onClick={() => {
-                                                    handleView(row._id);
-                                                }}
-                                            >
-                                                View
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-
-                            {filteredMessages?.filter((row) => row.isPending === true)
-                                ?.length === 0 && (
-                                    <TableRow className={styles.tableRow}>
-                                        <TableCell colSpan={4} className={styles.cell}>
-                                            No received published processes
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <Stack justifyContent="flex-end" gap={1} flexDirection="row" alignItems="center">
-                    <Button disabled={page === 0} onClick={() => setPage(page - 1)}>Prev</Button>
-                    <h3>{page + 1}</h3>
-                    <Button disabled={!data?.remaining} onClick={() => setPage(page + 1)}>Next</Button>
-                </Stack></>}
+            {isFetching || isLoading ? <ComponentLoader /> : (
+                <>
+                    <TextField
+                        label="Search"
+                        variant="outlined"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        sx={{ backgroundColor: "white", mb: '2px' }}
+                    />
+                    <TableContainer component={Paper} className={styles.tableContainer}>
+                        <Table className={styles.table}>
+                            <TableHead className={styles.tableHeader}>
+                                <TableRow>
+                                    <TableCell sx={{ fontWeight: 700 }}>Serial No</TableCell>
+                                    <TableCell sx={{ fontWeight: 700 }}>Process Name</TableCell>
+                                    <TableCell sx={{ fontWeight: 700 }}>Create Time</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {filteredData.length ? filteredData
+                                    ?.slice(page * 10, (page + 1) * 10)
+                                    ?.map((row, index) => (
+                                        <TableRow key={index} className={styles.tableRow}>
+                                            <TableCell className={styles.cell}>{index + 1 + page * 10}</TableCell>
+                                            <TableCell className={styles.cell}>{row.name}</TableCell>
+                                            <TableCell className={styles.cell}>{moment(row.createdAt).format("DD-MMM-YYYY hh:mm A")}</TableCell>
+                                        </TableRow>
+                                    )) : <TableRow><TableCell rowSpan={4}>No Data</TableCell></TableRow>}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <Stack justifyContent="flex-end" gap={1} flexDirection="row" alignItems="center">
+                        <Button disabled={page === 0 || isFetching} onClick={() => handleChangePage(page - 1)}>Prev</Button>
+                        <h3>{page + 1}</h3>
+                        <Button disabled={!data?.pages[page]?.remaining || isFetching} onClick={() => handleChangePage(page + 1)}>Next</Button>
+                    </Stack>
+                </>
+            )}
         </DefaultLayout>
     );
 }

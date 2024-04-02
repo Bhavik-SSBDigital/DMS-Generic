@@ -50,7 +50,7 @@ const NewBranch = () => {
     // ...
     const [loading, setLoading] = useState(false);
     async function handleSubmit(editId) {
-        if (!formData.code > 0 || !formData.name || !formData.status) {
+        if (!formData.name || !formData.status) {
             toast.info("Please fill all details");
             return;
         }

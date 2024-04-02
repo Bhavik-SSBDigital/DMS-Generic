@@ -492,7 +492,7 @@ export default function ViewProcess(props) {
 
             if (response.status === 200) {
                 toast.success("Process is forwarded");
-                queryClient.removeQueries();
+                queryClient.removeQueries("pendingProcesses");
                 navigate("/processes/work");
             }
         } catch (error) {
@@ -530,7 +530,7 @@ export default function ViewProcess(props) {
             setLoading(false);
             if (res.status === 200) {
                 toast.success("Process is rejected");
-                queryClient.removeQueries();
+                queryClient.removeQueries("pendingProcesses");
                 navigate("/processes/work");
             }
         } catch (error) {
@@ -833,7 +833,7 @@ export default function ViewProcess(props) {
                 toast.success("Sent to clerk");
                 setWork("");
                 setSendLoading(false);
-                queryClient.removeQueries();
+                queryClient.removeQueries("pendingProcesses");
                 setOpenC(false);
                 navigate("/processes/work");
             }
@@ -860,7 +860,7 @@ export default function ViewProcess(props) {
             );
             if (res.status === 200) {
                 toast.success("Approved");
-                queryClient.removeQueries();
+                queryClient.removeQueries("pendingProcesses");
                 navigate("/processes/work");
             }
         } catch (error) {
@@ -975,7 +975,7 @@ export default function ViewProcess(props) {
             );
             if (res.status === 200) {
                 toast.success("Process ended successfully");
-                queryClient.removeQueries();
+                queryClient.removeQueries("pendingProcesses");
                 navigate("/processes/work");
             }
         } catch (error) {
