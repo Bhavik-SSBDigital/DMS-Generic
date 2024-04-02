@@ -7,7 +7,6 @@ interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
 }
-
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
   const { pathname } = location;
@@ -55,6 +54,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     }
   }, [sidebarExpanded]);
 
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const user = localStorage.getItem('username');
+    if (user === 'admin') {
+      setShow(true);
+    } else {
+      setShow(false);
+    }
+  }, []);
   return (
     <aside
       ref={sidebar}
@@ -251,382 +259,403 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </svg>
                 Monitor Processes
               </NavLink>
-              <SidebarLinkGroup
-                activeCondition={
-                  pathname === '/branches' || pathname.includes('branches')
-                }
-              >
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <NavLink
-                        to="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === '/branches' ||
-                            pathname.includes('branches')) &&
-                          'bg-graydark dark:bg-meta-4'
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
-                        }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M6 20a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" />
-                          <path d="M16 4a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" />
-                          <path d="M16 20a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" />
-                          <path d="M11 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" />
-                          <path d="M21 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" />
-                          <path d="M5.058 18.306l2.88 -4.606" />
-                          <path d="M10.061 10.303l2.877 -4.604" />
-                          <path d="M10.065 13.705l2.876 4.6" />
-                          <path d="M15.063 5.7l2.881 4.61" />
-                        </svg>
-                        Branches
-                        <svg
-                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
-                            open && 'rotate-180'
-                          }`}
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
-                            fill=""
-                          />
-                        </svg>
-                      </NavLink>
-                      {/* <!-- Dropdown Menu Start --> */}
-                      <div
-                        className={`translate transform overflow-hidden ${
-                          !open && 'hidden'
-                        }`}
-                      >
-                        <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                          <li>
-                            <NavLink
-                              to="/branches/list"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
+              {show && (
+                <>
+                  <SidebarLinkGroup
+                    activeCondition={
+                      pathname === '/branches' || pathname.includes('branches')
+                    }
+                  >
+                    {(handleClick, open) => {
+                      return (
+                        <React.Fragment>
+                          <NavLink
+                            to="#"
+                            className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                              (pathname === '/branches' ||
+                                pathname.includes('branches')) &&
+                              'bg-graydark dark:bg-meta-4'
+                            }`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              sidebarExpanded
+                                ? handleClick()
+                                : setSidebarExpanded(true);
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                             >
-                              List Branches
-                            </NavLink>
-                          </li>
-                          <li>
-                            <NavLink
-                              to="/branches/createNew"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
+                              <path
+                                stroke="none"
+                                d="M0 0h24v24H0z"
+                                fill="none"
+                              />
+                              <path d="M6 20a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" />
+                              <path d="M16 4a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" />
+                              <path d="M16 20a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" />
+                              <path d="M11 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" />
+                              <path d="M21 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z" />
+                              <path d="M5.058 18.306l2.88 -4.606" />
+                              <path d="M10.061 10.303l2.877 -4.604" />
+                              <path d="M10.065 13.705l2.876 4.6" />
+                              <path d="M15.063 5.7l2.881 4.61" />
+                            </svg>
+                            Branches
+                            <svg
+                              className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
+                                open && 'rotate-180'
+                              }`}
+                              width="20"
+                              height="20"
+                              viewBox="0 0 20 20"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
                             >
-                              Create New Branch
-                            </NavLink>
-                          </li>
-                        </ul>
-                      </div>
-                      {/* <!-- Dropdown Menu End --> */}
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
-              <SidebarLinkGroup
-                activeCondition={
-                  pathname === '/users' || pathname.includes('users')
-                }
-              >
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <NavLink
-                        to="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === '/users' ||
-                            pathname.includes('users')) &&
-                          'bg-graydark dark:bg-meta-4'
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
-                        }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-                          <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                        </svg>
-                        Users
-                        <svg
-                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
-                            open && 'rotate-180'
-                          }`}
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
-                            fill=""
-                          />
-                        </svg>
-                      </NavLink>
-                      {/* <!-- Dropdown Menu Start --> */}
-                      <div
-                        className={`translate transform overflow-hidden ${
-                          !open && 'hidden'
-                        }`}
-                      >
-                        <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                          <li>
-                            <NavLink
-                              to="/users/list"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
+                              <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                                fill=""
+                              />
+                            </svg>
+                          </NavLink>
+                          {/* <!-- Dropdown Menu Start --> */}
+                          <div
+                            className={`translate transform overflow-hidden ${
+                              !open && 'hidden'
+                            }`}
+                          >
+                            <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                              <li>
+                                <NavLink
+                                  to="/branches/list"
+                                  className={({ isActive }) =>
+                                    'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                    (isActive && '!text-white')
+                                  }
+                                >
+                                  List Branches
+                                </NavLink>
+                              </li>
+                              <li>
+                                <NavLink
+                                  to="/branches/createNew"
+                                  className={({ isActive }) =>
+                                    'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                    (isActive && '!text-white')
+                                  }
+                                >
+                                  Create New Branch
+                                </NavLink>
+                              </li>
+                            </ul>
+                          </div>
+                          {/* <!-- Dropdown Menu End --> */}
+                        </React.Fragment>
+                      );
+                    }}
+                  </SidebarLinkGroup>
+                  <SidebarLinkGroup
+                    activeCondition={
+                      pathname === '/users' || pathname.includes('users')
+                    }
+                  >
+                    {(handleClick, open) => {
+                      return (
+                        <React.Fragment>
+                          <NavLink
+                            to="#"
+                            className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                              (pathname === '/users' ||
+                                pathname.includes('users')) &&
+                              'bg-graydark dark:bg-meta-4'
+                            }`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              sidebarExpanded
+                                ? handleClick()
+                                : setSidebarExpanded(true);
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                             >
-                              List Users
-                            </NavLink>
-                          </li>
-                          <li>
-                            <NavLink
-                              to="/users/createNew"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
+                              <path
+                                stroke="none"
+                                d="M0 0h24v24H0z"
+                                fill="none"
+                              />
+                              <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                              <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                            </svg>
+                            Users
+                            <svg
+                              className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
+                                open && 'rotate-180'
+                              }`}
+                              width="20"
+                              height="20"
+                              viewBox="0 0 20 20"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
                             >
-                              Create New User
-                            </NavLink>
-                          </li>
-                        </ul>
-                      </div>
-                      {/* <!-- Dropdown Menu End --> */}
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
-              <SidebarLinkGroup
-                activeCondition={
-                  pathname === '/roles' || pathname.includes('roles')
-                }
-              >
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <NavLink
-                        to="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === '/roles' ||
-                            pathname.includes('roles')) &&
-                          'bg-graydark dark:bg-meta-4'
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
-                        }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M9 10a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
-                          <path d="M6 21v-1a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v1" />
-                          <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
-                        </svg>
-                        Roles
-                        <svg
-                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
-                            open && 'rotate-180'
-                          }`}
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
-                            fill=""
-                          />
-                        </svg>
-                      </NavLink>
-                      {/* <!-- Dropdown Menu Start --> */}
-                      <div
-                        className={`translate transform overflow-hidden ${
-                          !open && 'hidden'
-                        }`}
-                      >
-                        <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                          <li>
-                            <NavLink
-                              to="/roles/list"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
+                              <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                                fill=""
+                              />
+                            </svg>
+                          </NavLink>
+                          {/* <!-- Dropdown Menu Start --> */}
+                          <div
+                            className={`translate transform overflow-hidden ${
+                              !open && 'hidden'
+                            }`}
+                          >
+                            <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                              <li>
+                                <NavLink
+                                  to="/users/list"
+                                  className={({ isActive }) =>
+                                    'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                    (isActive && '!text-white')
+                                  }
+                                >
+                                  List Users
+                                </NavLink>
+                              </li>
+                              <li>
+                                <NavLink
+                                  to="/users/createNew"
+                                  className={({ isActive }) =>
+                                    'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                    (isActive && '!text-white')
+                                  }
+                                >
+                                  Create New User
+                                </NavLink>
+                              </li>
+                            </ul>
+                          </div>
+                          {/* <!-- Dropdown Menu End --> */}
+                        </React.Fragment>
+                      );
+                    }}
+                  </SidebarLinkGroup>
+                  <SidebarLinkGroup
+                    activeCondition={
+                      pathname === '/roles' || pathname.includes('roles')
+                    }
+                  >
+                    {(handleClick, open) => {
+                      return (
+                        <React.Fragment>
+                          <NavLink
+                            to="#"
+                            className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                              (pathname === '/roles' ||
+                                pathname.includes('roles')) &&
+                              'bg-graydark dark:bg-meta-4'
+                            }`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              sidebarExpanded
+                                ? handleClick()
+                                : setSidebarExpanded(true);
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                             >
-                              List Roles
-                            </NavLink>
-                          </li>
-                          <li>
-                            <NavLink
-                              to="/roles/createNew"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
+                              <path
+                                stroke="none"
+                                d="M0 0h24v24H0z"
+                                fill="none"
+                              />
+                              <path d="M9 10a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                              <path d="M6 21v-1a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v1" />
+                              <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
+                            </svg>
+                            Roles
+                            <svg
+                              className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
+                                open && 'rotate-180'
+                              }`}
+                              width="20"
+                              height="20"
+                              viewBox="0 0 20 20"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
                             >
-                              Create New Role
-                            </NavLink>
-                          </li>
-                        </ul>
-                      </div>
-                      {/* <!-- Dropdown Menu End --> */}
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
-              <SidebarLinkGroup
-                activeCondition={
-                  pathname === '/department' || pathname.includes('department')
-                }
-              >
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <NavLink
-                        to="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === '/department' ||
-                            pathname.includes('department')) &&
-                          'bg-graydark dark:bg-meta-4'
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
-                        }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M7 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
-                          <path d="M17 17v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h2" />
-                        </svg>
-                        Deparments
-                        <svg
-                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
-                            open && 'rotate-180'
-                          }`}
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
-                            fill=""
-                          />
-                        </svg>
-                      </NavLink>
-                      {/* <!-- Dropdown Menu Start --> */}
-                      <div
-                        className={`translate transform overflow-hidden ${
-                          !open && 'hidden'
-                        }`}
-                      >
-                        <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                          <li>
-                            <NavLink
-                              to="/departments/list"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
+                              <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                                fill=""
+                              />
+                            </svg>
+                          </NavLink>
+                          {/* <!-- Dropdown Menu Start --> */}
+                          <div
+                            className={`translate transform overflow-hidden ${
+                              !open && 'hidden'
+                            }`}
+                          >
+                            <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                              <li>
+                                <NavLink
+                                  to="/roles/list"
+                                  className={({ isActive }) =>
+                                    'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                    (isActive && '!text-white')
+                                  }
+                                >
+                                  List Roles
+                                </NavLink>
+                              </li>
+                              <li>
+                                <NavLink
+                                  to="/roles/createNew"
+                                  className={({ isActive }) =>
+                                    'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                    (isActive && '!text-white')
+                                  }
+                                >
+                                  Create New Role
+                                </NavLink>
+                              </li>
+                            </ul>
+                          </div>
+                          {/* <!-- Dropdown Menu End --> */}
+                        </React.Fragment>
+                      );
+                    }}
+                  </SidebarLinkGroup>
+                  <SidebarLinkGroup
+                    activeCondition={
+                      pathname === '/department' ||
+                      pathname.includes('department')
+                    }
+                  >
+                    {(handleClick, open) => {
+                      return (
+                        <React.Fragment>
+                          <NavLink
+                            to="#"
+                            className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                              (pathname === '/department' ||
+                                pathname.includes('department')) &&
+                              'bg-graydark dark:bg-meta-4'
+                            }`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              sidebarExpanded
+                                ? handleClick()
+                                : setSidebarExpanded(true);
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                             >
-                              List Department
-                            </NavLink>
-                          </li>
-                          <li>
-                            <NavLink
-                              to="/departments/createNew"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
+                              <path
+                                stroke="none"
+                                d="M0 0h24v24H0z"
+                                fill="none"
+                              />
+                              <path d="M7 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+                              <path d="M17 17v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h2" />
+                            </svg>
+                            Deparments
+                            <svg
+                              className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
+                                open && 'rotate-180'
+                              }`}
+                              width="20"
+                              height="20"
+                              viewBox="0 0 20 20"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
                             >
-                              Create New Department
-                            </NavLink>
-                          </li>
-                        </ul>
-                      </div>
-                      {/* <!-- Dropdown Menu End --> */}
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
+                              <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                                fill=""
+                              />
+                            </svg>
+                          </NavLink>
+                          {/* <!-- Dropdown Menu Start --> */}
+                          <div
+                            className={`translate transform overflow-hidden ${
+                              !open && 'hidden'
+                            }`}
+                          >
+                            <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                              <li>
+                                <NavLink
+                                  to="/departments/list"
+                                  className={({ isActive }) =>
+                                    'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                    (isActive && '!text-white')
+                                  }
+                                >
+                                  List Department
+                                </NavLink>
+                              </li>
+                              <li>
+                                <NavLink
+                                  to="/departments/createNew"
+                                  className={({ isActive }) =>
+                                    'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                    (isActive && '!text-white')
+                                  }
+                                >
+                                  Create New Department
+                                </NavLink>
+                              </li>
+                            </ul>
+                          </div>
+                          {/* <!-- Dropdown Menu End --> */}
+                        </React.Fragment>
+                      );
+                    }}
+                  </SidebarLinkGroup>
+                </>
+              )}
               <SidebarLinkGroup
                 activeCondition={
                   pathname === '/processes' || pathname.includes('processes')

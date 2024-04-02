@@ -79,7 +79,7 @@ const FileSystem = (props) => {
     const handlePlus = () => {
         setShowButtons(!showButtons)
     }
-    function truncateFileName(fileName, maxLength = 7) {
+    function truncateFileName(fileName, maxLength = 10) {
         if (fileName.length <= maxLength) {
             return fileName;
         } else {
@@ -236,7 +236,7 @@ const FileSystem = (props) => {
                                                 color='primary'
                                                 size='medium'
                                             >
-                                                <Tooltip title={item.name}>
+                                                <Tooltip title={item.name.length >= 10 ? item.name : null}>
 
                                                     <Box
                                                         sx={{
@@ -246,7 +246,7 @@ const FileSystem = (props) => {
                                                     >
                                                         <img style={{ height: '100%', width: '100%' }} src={imageSrc} alt="im" />
                                                     </Box>
-                                                    <p style={{ color: 'black', textAlign: 'center', margin: 0 }}>{truncateFileName(item.name)}</p>
+                                                    <p style={{ color: 'black', textAlign: 'center', margin: 0 }}>{item.name.length >= 10 ? truncateFileName(item.name) : item.name}</p>
                                                 </Tooltip>
 
                                             </Button>

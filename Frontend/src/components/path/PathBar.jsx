@@ -65,7 +65,8 @@ export default function PathBar() {
             {index > 0 && (
               <NavigateNextIcon fontSize="small" style={{ margin: "0 5px" }} />
             )}
-            <Tooltip title={item === ".." ? "/" : item}>
+            <Tooltip title={item.length >= 10 ? item === ".." ? "/" : item : null}>
+
               <Button
                 variant="text"
                 sx={{
