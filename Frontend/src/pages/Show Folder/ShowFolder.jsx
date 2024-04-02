@@ -35,6 +35,7 @@ import { IconFolderPlus } from '@tabler/icons-react';
 import { toast } from 'react-toastify';
 import { IconUpload } from '@tabler/icons-react';
 import DefaultLayout from '../../layout/DefaultLayout';
+import ComponentLoader from '../../common/Loader/ComponentLoader';
 
 export default function ShowFolder(props) {
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -577,7 +578,7 @@ export default function ShowFolder(props) {
         });
     return (
         <DefaultLayout>
-            <Stack flexDirection='row'>
+            {loading ? <ComponentLoader /> : <Stack flexDirection='row'>
                 <div style={{ width: "100%" }}>
                     <Stack flexDirection='row' gap='10px' justifyContent='space-between' sx={{ marginBottom: '5px' }}>
                         <Box sx={{ display: { xs: 'none', sm: 'block', md: 'block', } }}>
@@ -796,7 +797,6 @@ export default function ShowFolder(props) {
                                     handlePaste={handlePaste}
                                 />
                             )}
-                            {(loading) && <div style={{ position: 'absolute', top: '50%', left: '50%', transform: "translate(-50%,-50%)" }}><CircularProgress color="inherit" size={30} /></div>}
                         </Stack>
                         {showProperties && <Stack flex={showProperties ? "25%" : "none"} sx={{ position: 'relative', padding: '10px', minHeight: '77vh', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', backgroundColor: "white", margin: '5px', border: "1px solid darkgray" }}>
                             <IconButton onClick={() => setShowProterties(false)} sx={{ top: '5px', right: '5px', height: '50px', width: '50px', position: 'absolute' }}>
@@ -818,7 +818,7 @@ export default function ShowFolder(props) {
                         </Stack>}
                     </Stack>
                 </div>
-            </Stack>
+            </Stack>}
             {/* color for plus background background: 'linear-gradient(to right, #3E5151 , #DECBA4)' */}
             {isUploadable && <Stack position='relative'>
                 <Fab color="primary" onClick={handlePlus} aria-label="add" sx={{ position: 'fixed', bottom: '5%', right: '5%' }}>
