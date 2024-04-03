@@ -141,14 +141,15 @@ export default function NewRole() {
     }, []);
     return (
         <DefaultLayout>
-            <Stack flexDirection="row">
-                <div
-                    style={{
-                        width: "100%",
-                    }}
-                >
-                    {/* <Paper elevation={2} sx={{ padding: 1, height: "100%" }}> */}
-                    {/* <Stack
+            <div
+                style={{
+                    width: "100%",
+                    backgroundColor: "white",
+                    padding: "20px"
+                }}
+            >
+                {/* <Paper elevation={2} sx={{ padding: 1, height: "100%" }}> */}
+                {/* <Stack
                         alignItems="center"
                         sx={{
                             borderRadius: "10px",
@@ -173,121 +174,120 @@ export default function NewRole() {
                             Role details
                         </Typography>
                     </Stack> */}
-                    <Grid container spacing={4} mt={1}>
-                        <Grid item xs={12} sm={6} md={6}>
-                            <Typography variant="body1" sx={{ mb: 1 }}>
-                                User Branch :
-                            </Typography>
-                            <FormControl fullWidth variant="outlined">
-                                {/* <InputLabel>User Branch</InputLabel> */}
-                                <Select
-                                    name="branch"
-                                    sx={{ backgroundColor: 'white' }}
-                                    value={formData.branch}
-                                    onChange={handleInputChange}
-                                // label="branch"
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    {/* <MenuItem value="Active">Active</MenuItem>
-                  <MenuItem value="Deactive">Deactive</MenuItem> */}
-                                    {branches?.map((data) => (
-                                        <MenuItem value={data.name}>{data.name}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6}>
-                            <Typography variant="body1" sx={{ mb: 1 }}>
-                                User Role:
-                            </Typography>
-                            <Autocomplete
-                                fullWidth
-                                id="role"
-                                sx={{ backgroundColor: "white" }}
-                                options={roles}
-                                freeSolo
-                                value={formData.role}
-                                onInputChange={(event, newValue) =>
-                                    handleInputChange({
-                                        target: { name: "role", value: newValue },
-                                    })
-                                }
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        variant="outlined"
-                                    // onChange={handleInputChange}
-                                    />
-                                )}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Box
-                                sx={{
-                                    padding: "10px",
-                                    maxHeight: "350px",
-                                    overflow: "auto",
-                                }}
+                <Grid container spacing={4} mt={1}>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <Typography variant="body1" sx={{ mb: 1 }}>
+                            User Branch :
+                        </Typography>
+                        <FormControl fullWidth variant="outlined">
+                            {/* <InputLabel>User Branch</InputLabel> */}
+                            <Select
+                                name="branch"
+                                sx={{ backgroundColor: 'whitesmoke' }}
+                                value={formData.branch}
+                                onChange={handleInputChange}
+                            // label="branch"
                             >
-                                <Typography variant="body1">select permissions :</Typography>
-                                {Object.keys(editObject).length > 0 ? (
-                                    <Filefolders
-                                        selection={selection}
-                                        setSelection={setSelection}
-                                        checkShow={true}
-                                        id={formData._id}
-                                    />
-                                ) : (
-                                    <Filefolders
-                                        selection={selection}
-                                        setSelection={setSelection}
-                                        checkShow={true}
-                                        id={null}
-                                    />
-                                )}
-                            </Box>
-                        </Grid>
-                        <Grid item xs={12} sx={{ textAlign: "center" }}>
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                {/* <MenuItem value="Active">Active</MenuItem>
+                  <MenuItem value="Deactive">Deactive</MenuItem> */}
+                                {branches?.map((data) => (
+                                    <MenuItem value={data.name}>{data.name}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <Typography variant="body1" sx={{ mb: 1 }}>
+                            User Role:
+                        </Typography>
+                        <Autocomplete
+                            fullWidth
+                            id="role"
+                            sx={{ backgroundColor: "whitesmoke" }}
+                            options={roles}
+                            freeSolo
+                            value={formData.role}
+                            onInputChange={(event, newValue) =>
+                                handleInputChange({
+                                    target: { name: "role", value: newValue },
+                                })
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    variant="outlined"
+                                // onChange={handleInputChange}
+                                />
+                            )}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Box
+                            sx={{
+                                padding: "10px",
+                                maxHeight: "350px",
+                                overflow: "auto",
+                            }}
+                        >
+                            <Typography variant="body1">select permissions :</Typography>
+                            {Object.keys(editObject).length > 0 ? (
+                                <Filefolders
+                                    selection={selection}
+                                    setSelection={setSelection}
+                                    checkShow={true}
+                                    id={formData._id}
+                                />
+                            ) : (
+                                <Filefolders
+                                    selection={selection}
+                                    setSelection={setSelection}
+                                    checkShow={true}
+                                    id={null}
+                                />
+                            )}
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} sx={{ textAlign: "center" }}>
+                        <Button
+                            variant="contained"
+                            color="success"
+                            disabled={loading}
+                            onClick={() =>
+                                Object.keys(editObject).length > 0
+                                    ? handleSubmit(editObject._id)
+                                    : handleSubmit()
+                            }
+                            sx={{ margin: "5px" }}
+                        >
+                            {Object.keys(editObject).length > 0 ? "update" : "Save"}
+                        </Button>
+                        <Link to="/ManageRoles">
                             <Button
                                 variant="contained"
-                                color="success"
+                                color="error"
                                 disabled={loading}
-                                onClick={() =>
-                                    Object.keys(editObject).length > 0
-                                        ? handleSubmit(editObject._id)
-                                        : handleSubmit()
-                                }
                                 sx={{ margin: "5px" }}
                             >
-                                {Object.keys(editObject).length > 0 ? "update" : "Save"}
+                                Cancel
                             </Button>
-                            <Link to="/ManageRoles">
-                                <Button
-                                    variant="contained"
-                                    color="error"
-                                    disabled={loading}
-                                    sx={{ margin: "5px" }}
-                                >
-                                    Cancel
-                                </Button>
-                            </Link>
-                        </Grid>
+                        </Link>
                     </Grid>
-                    {loading && (
-                        <Stack
-                            justifyContent="center"
-                            alignItems="center"
-                            sx={{ width: "100%", m: 1 }}
-                        >
-                            <CircularProgress color="inherit" size={30} />
-                        </Stack>
-                    )}
-                    {/* </Paper> */}
-                </div>
-            </Stack>
+                </Grid>
+                {loading && (
+                    <Stack
+                        justifyContent="center"
+                        alignItems="center"
+                        sx={{ width: "100%", m: 1 }}
+                    >
+                        <CircularProgress color="inherit" size={30} />
+                    </Stack>
+                )}
+                {/* </Paper> */}
+            </div>
         </DefaultLayout>
     );
 }

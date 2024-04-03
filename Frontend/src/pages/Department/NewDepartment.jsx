@@ -262,7 +262,7 @@ export default function NewDepartment(props) {
     }
     if (usersOnStep.length > 0) {
       toast.info(
-        'Multi user functionality is not working curretly please add step',
+        'Multi user functionality is not working currently please add step',
       );
       return;
     }
@@ -392,9 +392,8 @@ export default function NewDepartment(props) {
   return (
     <DefaultLayout
     >
-      <Stack flexDirection="row">
-        <div className={styles.formContainer}>
-          {/* <Stack
+      <div className={styles.formContainer}>
+        {/* <Stack
             alignItems="center"
             sx={{
               borderRadius: '10px',
@@ -417,15 +416,78 @@ export default function NewDepartment(props) {
               Department Details
             </Typography>
           </Stack> */}
-          <Grid container spacing={3} sx={{ marginBottom: '20px' }}>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="body1">Department Branch:</Typography>
+        <Grid container spacing={3} sx={{ marginBottom: '20px' }}>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="body1">Department Branch:</Typography>
+            <FormControl fullWidth variant="outlined">
+              <Select
+                name="branch"
+                value={formData.branch}
+                sx={{ backgroundColor: "whitesmoke" }}
+                onChange={handleInputChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {branches?.map((data) => (
+                  <MenuItem key={data.name} value={data.name}>
+                    {data.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="body1">Department Name:</Typography>
+            <TextField
+              fullWidth
+              sx={{ backgroundColor: "whitesmoke" }}
+              variant="outlined"
+              name="department"
+              value={formData.department}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="body1">Department Head:</Typography>
+            <TextField
+              fullWidth
+              sx={{ backgroundColor: "whitesmoke" }}
+              size="medium"
+              variant="outlined"
+              name="head"
+              disabled
+              value={formData.head}
+            />
+          </Grid>
+          <Grid
+            item
+            sm={12}
+            sx={{
+              marginBottom: '20px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Button onClick={() => setOpenH(true)}>
+              Select department head
+            </Button>
+          </Grid>
+          <Dialog onClose={handleClose} open={openH}>
+            <DialogTitle
+              textAlign="center"
+              sx={{ backgroundColor: '#86A7FC', margin: '5px' }}
+            >
+              SELECT HEAD
+            </DialogTitle>
+            <Box width={300} padding={1}>
+              <Typography variant="body1">Head Branch:</Typography>
               <FormControl fullWidth variant="outlined">
                 <Select
+                  size="medium"
                   name="branch"
-                  value={formData.branch}
-                  sx={{ backgroundColor: "white" }}
-                  onChange={handleInputChange}
+                  onChange={handleSelectHead}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -437,218 +499,11 @@ export default function NewDepartment(props) {
                   ))}
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="body1">Department Name:</Typography>
-              <TextField
-                fullWidth
-                sx={{ backgroundColor: "white" }}
-                variant="outlined"
-                name="department"
-                value={formData.department}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="body1">Department Head:</Typography>
-              <TextField
-                fullWidth
-                sx={{ backgroundColor: "white" }}
-                size="medium"
-                variant="outlined"
-                name="head"
-                disabled
-                value={formData.head}
-              />
-            </Grid>
-            <Grid
-              item
-              sm={12}
-              sx={{
-                marginBottom: '20px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Button onClick={() => setOpenH(true)}>
-                Select department head
-              </Button>
-            </Grid>
-            <Dialog onClose={handleClose} open={openH}>
-              <DialogTitle
-                textAlign="center"
-                sx={{ backgroundColor: '#86A7FC', margin: '5px' }}
-              >
-                SELECT HEAD
-              </DialogTitle>
-              <Box width={300} padding={1}>
-                <Typography variant="body1">Head Branch:</Typography>
-                <FormControl fullWidth variant="outlined">
-                  <Select
-                    size="medium"
-                    name="branch"
-                    onChange={handleSelectHead}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {branches?.map((data) => (
-                      <MenuItem key={data.name} value={data.name}>
-                        {data.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
-              <Box width={300} padding={1}>
-                <Typography variant="body1">Actor Role:</Typography>
-                <FormControl fullWidth variant="outlined">
-                  <Select name="role" onChange={handleSelectHead}>
-                    <MenuItem value="" disabled>
-                      <em>None</em>
-                    </MenuItem>
-                    {roles?.map((data) => (
-                      <MenuItem key={data.role} value={data.role}>
-                        {data.role}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
-              <Box width={300} padding={1}>
-                <Typography variant="body1">Head:</Typography>
-                <FormControl fullWidth variant="outlined">
-                  <Select name="head" onChange={handleSelectHead}>
-                    <MenuItem value="" disabled>
-                      <em>None</em>
-                    </MenuItem>
-                    {users?.map((data) => (
-                      <MenuItem key={data.username} value={data.username}>
-                        {data.username}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
-              <DialogActions
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Button
-                  variant="contained"
-                  onClick={() => setOpenH(false)}
-                  sx={{
-                    backgroundColor: '#65B741',
-                    ':hover': {
-                      backgroundColor: 'darkgreen',
-                    },
-                  }}
-                >
-                  Save
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </Grid>
-          <Typography
-            variant="h6"
-            sx={{ textAlign: 'center', mb: 4 }}
-            gutterBottom
-          >
-            Work Flow :
-          </Typography>
-
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="body1">
-                {/* {newWork ? "name of work" : "Work"}: */}
-                Work
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'row', gap: '3px' }}>
-                {newWork ? (
-                  <TextField fullWidth variant="outlined" name="workName" />
-                ) : (
-                  <FormControl fullWidth variant="outlined">
-                    <Select
-                      name="work"
-                      sx={{ backgroundColor: "white" }}
-                      fullWidth
-                      value={flow && flow.work}
-                      onChange={handleFlowChange}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {works?.map((data) => (
-                        <MenuItem key={data.name} value={data.name}>
-                          {data.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                )}
-                {/* <Button
-                  variant="contained"
-                  size="small"
-                  sx={{ borderRadius: "10px" }}
-                  onClick={() => (newWork ? handleAddWork() : setNewWork(true))}
-                >
-                  {newWork ? "ADD" : "ADD NEW?"}
-                </Button> */}
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="body1">Step No:</Typography>
-              <FormControl fullWidth variant="outlined">
-                <Select
-                  name="step"
-                  sx={{ backgroundColor: "white" }}
-                  onChange={handleFlowChange}
-                  value={+flow.step ? +flow.step : formData.workFlow.length + 1}
-                >
-                  {Array.from(
-                    { length: formData?.workFlow?.length + 1 },
-                    (_, index) => (
-                      <MenuItem key={index} value={index + 1}>
-                        {index + 1}
-                      </MenuItem>
-                    ),
-                  )}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="body1">User Branch:</Typography>
-              <FormControl fullWidth variant="outlined">
-                <Select
-                  name="userBranch"
-                  sx={{ backgroundColor: "white" }}
-                  value={userBranch}
-                  onChange={handleInputChange}
-                >
-                  <MenuItem value="" disabled>
-                    <em>None</em>
-                  </MenuItem>
-                  {branches?.map((data) => (
-                    <MenuItem key={data.name} value={data.name}>
-                      {data.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box width={300} padding={1}>
               <Typography variant="body1">Actor Role:</Typography>
               <FormControl fullWidth variant="outlined">
-                <Select
-                  name="role"
-                  sx={{ backgroundColor: "white" }}
-                  value={userSelection.role}
-                  onChange={handleUserSelection}
-                >
+                <Select name="role" onChange={handleSelectHead}>
                   <MenuItem value="" disabled>
                     <em>None</em>
                   </MenuItem>
@@ -659,16 +514,11 @@ export default function NewDepartment(props) {
                   ))}
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="body1">User:</Typography>
+            </Box>
+            <Box width={300} padding={1}>
+              <Typography variant="body1">Head:</Typography>
               <FormControl fullWidth variant="outlined">
-                <Select
-                  name="user"
-                  sx={{ backgroundColor: "white" }}
-                  value={userSelection.user}
-                  onChange={handleUserSelection}
-                >
+                <Select name="head" onChange={handleSelectHead}>
                   <MenuItem value="" disabled>
                     <em>None</em>
                   </MenuItem>
@@ -679,139 +529,287 @@ export default function NewDepartment(props) {
                   ))}
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              sx={{ display: 'flex', alignItems: 'center', mt: 3 }}
+            </Box>
+            <DialogActions
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
             >
               <Button
                 variant="contained"
-                onClick={handleUserAdd}
-                sx={{ backgroundColor: '#40A2E3', height: '50px' }}
+                onClick={() => setOpenH(false)}
+                sx={{
+                  backgroundColor: '#65B741',
+                  ':hover': {
+                    backgroundColor: 'darkgreen',
+                  },
+                }}
               >
-                Add User
+                Save
               </Button>
-            </Grid>
+            </DialogActions>
+          </Dialog>
+        </Grid>
+        <Typography
+          variant="h6"
+          sx={{ textAlign: 'center', mb: 4 }}
+          gutterBottom
+        >
+          Work Flow :
+        </Typography>
+
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="body1">
+              {/* {newWork ? "name of work" : "Work"}: */}
+              Work
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '3px' }}>
+              {newWork ? (
+                <TextField fullWidth variant="outlined" name="workName" />
+              ) : (
+                <FormControl fullWidth variant="outlined">
+                  <Select
+                    name="work"
+                    sx={{ backgroundColor: "whitesmoke" }}
+                    fullWidth
+                    value={flow && flow.work}
+                    onChange={handleFlowChange}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {works?.map((data) => (
+                      <MenuItem key={data.name} value={data.name}>
+                        {data.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+              {/* <Button
+                  variant="contained"
+                  size="small"
+                  sx={{ borderRadius: "10px" }}
+                  onClick={() => (newWork ? handleAddWork() : setNewWork(true))}
+                >
+                  {newWork ? "ADD" : "ADD NEW?"}
+                </Button> */}
+            </Box>
           </Grid>
-          {usersOnStep.length ? (
-            <div style={{ margin: '30px auto' }}>
-              <Typography variant="h6" textAlign="center">
-                This step users :
-              </Typography>
-              {/* {usersOnStep.map((obj, index) => (
+          <Grid item xs={12} sm={6}>
+            <Typography variant="body1">Step No:</Typography>
+            <FormControl fullWidth variant="outlined">
+              <Select
+                name="step"
+                sx={{ backgroundColor: "whitesmoke" }}
+                onChange={handleFlowChange}
+                value={+flow.step ? +flow.step : formData.workFlow.length + 1}
+              >
+                {Array.from(
+                  { length: formData?.workFlow?.length + 1 },
+                  (_, index) => (
+                    <MenuItem key={index} value={index + 1}>
+                      {index + 1}
+                    </MenuItem>
+                  ),
+                )}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="body1">User Branch:</Typography>
+            <FormControl fullWidth variant="outlined">
+              <Select
+                name="userBranch"
+                sx={{ backgroundColor: "whitesmoke" }}
+                value={userBranch}
+                onChange={handleInputChange}
+              >
+                <MenuItem value="" disabled>
+                  <em>None</em>
+                </MenuItem>
+                {branches?.map((data) => (
+                  <MenuItem key={data.name} value={data.name}>
+                    {data.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="body1">Actor Role:</Typography>
+            <FormControl fullWidth variant="outlined">
+              <Select
+                name="role"
+                sx={{ backgroundColor: "whitesmoke" }}
+                value={userSelection.role}
+                onChange={handleUserSelection}
+              >
+                <MenuItem value="" disabled>
+                  <em>None</em>
+                </MenuItem>
+                {roles?.map((data) => (
+                  <MenuItem key={data.role} value={data.role}>
+                    {data.role}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="body1">User:</Typography>
+            <FormControl fullWidth variant="outlined">
+              <Select
+                name="user"
+                sx={{ backgroundColor: "whitesmoke" }}
+                value={userSelection.user}
+                onChange={handleUserSelection}
+              >
+                <MenuItem value="" disabled>
+                  <em>None</em>
+                </MenuItem>
+                {users?.map((data) => (
+                  <MenuItem key={data.username} value={data.username}>
+                    {data.username}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            sx={{ display: 'flex', alignItems: 'center', mt: 3 }}
+          >
+            <Button
+              variant="contained"
+              onClick={handleUserAdd}
+              sx={{ backgroundColor: '#40A2E3', height: '50px' }}
+            >
+              Add User
+            </Button>
+          </Grid>
+        </Grid>
+        {usersOnStep.length ? (
+          <div style={{ margin: '30px auto' }}>
+            <Typography variant="h6" textAlign="center">
+              This step users :
+            </Typography>
+            {/* {usersOnStep.map((obj, index) => (
                 <p key={index} style={{ display: "inline" }}>
                   {obj.user}/{obj.role}
                   {index !== usersOnStep.length - 1 ? ", " : ""}
                 </p>
               ))} */}
-              <TableContainer
-                component={Paper}
-                sx={{ maxHeight: '200px', overflow: 'auto' }}
+            <TableContainer
+              component={Paper}
+              sx={{ maxHeight: '200px', overflow: 'auto' }}
+            >
+              <Table
+                sx={{ minWidth: '650px' }}
+                size="small"
+                aria-label="a dense table"
               >
-                <Table
-                  sx={{ minWidth: '650px' }}
-                  size="small"
-                  aria-label="a dense table"
-                >
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Sr No</TableCell>
-                      <TableCell>Username</TableCell>
-                      <TableCell>User Role</TableCell>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Sr No</TableCell>
+                    <TableCell>Username</TableCell>
+                    <TableCell>User Role</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {usersOnStep.map((row, index) => (
+                    <TableRow
+                      key={index}
+                    // sx={{
+                    //   "&:last-child td, &:last-child th": { border: 0 },
+                    // }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {index + 1}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.user}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.role}
+                      </TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {usersOnStep.map((row, index) => (
-                      <TableRow
-                        key={index}
-                      // sx={{
-                      //   "&:last-child td, &:last-child th": { border: 0 },
-                      // }}
-                      >
-                        <TableCell component="th" scope="row">
-                          {index + 1}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          {row.user}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          {row.role}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
-          ) : null}
-          {usersOnStep.length && flow.work && flow.step ? (
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        ) : null}
+        {usersOnStep.length && flow.work && flow.step ? (
+          <Stack
+            sx={{ marginTop: '20px' }}
+            gap={1}
+            flexDirection="row"
+            justifyContent="center"
+          >
+            <Box>
+              <Button
+                variant="contained"
+                onClick={handleWorkFlow}
+                sx={{ backgroundColor: '#40A2E3' }}
+              >
+                Add Step
+              </Button>
+            </Box>
+          </Stack>
+        ) : null}
+        {formData.workFlow.length > 0 && (
+          <Box>
+            <Typography variant="h6" sx={{ mb: 4, mt: 4 }} gutterBottom>
+              Work Flow :
+            </Typography>
+            {renderWorkFlow()}
+          </Box>
+        )}
+        {formData.branch &&
+          formData.head &&
+          formData.department &&
+          formData.workFlow.length > 0 && (
             <Stack
-              sx={{ marginTop: '20px' }}
-              gap={1}
               flexDirection="row"
+              gap={2}
               justifyContent="center"
+              sx={{ margin: 1 }}
             >
               <Box>
                 <Button
                   variant="contained"
-                  onClick={handleWorkFlow}
-                  sx={{ backgroundColor: '#40A2E3' }}
+                  disabled={loading}
+                  onClick={
+                    Object.keys(editObject).length > 0
+                      ? () => handleSubmit(formData._id)
+                      : () => handleSubmit()
+                  }
+                  sx={{
+                    backgroundColor: '#65B741',
+                    ':hover': {
+                      backgroundColor: 'darkgreen',
+                    },
+                    minWidth: '150px',
+                  }}
                 >
-                  Add Step
+                  {loading ? (
+                    <CircularProgress size={20} /> // Show this when loading is true
+                  ) : Object.keys(editObject).length > 0 ? (
+                    'Save'
+                  ) : (
+                    'ADD DEPARTMENT'
+                  )}
                 </Button>
               </Box>
             </Stack>
-          ) : null}
-          {formData.workFlow.length > 0 && (
-            <Box>
-              <Typography variant="h6" sx={{ mb: 4, mt: 4 }} gutterBottom>
-                Work Flow :
-              </Typography>
-              {renderWorkFlow()}
-            </Box>
           )}
-          {formData.branch &&
-            formData.head &&
-            formData.department &&
-            formData.workFlow.length > 0 && (
-              <Stack
-                flexDirection="row"
-                gap={2}
-                justifyContent="center"
-                sx={{ margin: 1 }}
-              >
-                <Box>
-                  <Button
-                    variant="contained"
-                    disabled={loading}
-                    onClick={
-                      Object.keys(editObject).length > 0
-                        ? () => handleSubmit(formData._id)
-                        : () => handleSubmit()
-                    }
-                    sx={{
-                      backgroundColor: '#65B741',
-                      ':hover': {
-                        backgroundColor: 'darkgreen',
-                      },
-                      minWidth: '150px',
-                    }}
-                  >
-                    {loading ? (
-                      <CircularProgress size={20} /> // Show this when loading is true
-                    ) : Object.keys(editObject).length > 0 ? (
-                      'Save'
-                    ) : (
-                      'ADD DEPARTMENT'
-                    )}
-                  </Button>
-                </Box>
-              </Stack>
-            )}
-        </div>
-      </Stack>
+      </div>
     </DefaultLayout>
   );
 }

@@ -170,14 +170,15 @@ export default function NewUser() {
     }, [])
     return (
         <DefaultLayout>
-            <Stack flexDirection="row">
-                <div
-                    style={{
-                        width: "100%",
-                        maxHeight: "fit-content",
-                    }}
-                >
-                    {/* <Stack
+            <div
+                style={{
+                    width: "100%",
+                    maxHeight: "fit-content",
+                    backgroundColor: "white",
+                    padding: "20px"
+                }}
+            >
+                {/* <Stack
                         alignItems="center"
                         sx={{
                             // mx: 1,
@@ -203,152 +204,151 @@ export default function NewUser() {
                             User details
                         </Typography>
                     </Stack> */}
-                    <Grid container spacing={4} mt={1}>
-                        <Grid item xs={12} sm={6} md={6}>
-                            <Typography variant="body1">User Name :</Typography>
-                            <TextField
-                                sx={{ background: "white" }}
-                                fullWidth
-                                // label="Name Of User"
-                                variant="outlined"
-                                name="username"
-                                value={formData.username}
+                <Grid container spacing={4} mt={1}>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <Typography variant="body1">User Name :</Typography>
+                        <TextField
+                            sx={{ background: "whitesmoke" }}
+                            fullWidth
+                            // label="Name Of User"
+                            variant="outlined"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleInputChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <Typography variant="body1">Normal Name :</Typography>
+                        <TextField
+                            sx={{ background: "whitesmoke" }}
+                            fullWidth
+                            variant="outlined"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <Typography variant="body1">Email :</Typography>
+                        <TextField
+                            sx={{ background: "whitesmoke" }}
+                            fullWidth
+                            // label="Email"
+                            variant="outlined"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <Typography variant="body1">User Branch :</Typography>
+                        <FormControl fullWidth variant="outlined">
+                            {/* <InputLabel>User Branch</InputLabel> */}
+                            <Select
+                                sx={{ background: "whitesmoke" }}
+                                name="branch"
+                                value={formData.branch}
                                 onChange={handleInputChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6}>
-                            <Typography variant="body1">Normal Name :</Typography>
-                            <TextField
-                                sx={{ background: "white" }}
-                                fullWidth
-                                variant="outlined"
-                                name="name"
-                                value={formData.name}
+                            // disabled={specialUserCheck}
+                            // label="branch"
+                            >
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                {branches?.map((data) => (
+                                    <MenuItem value={data.name}>{data.name}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <Typography variant="body1">User Role :</Typography>
+                        <FormControl fullWidth variant="outlined">
+                            {/* <InputLabel>User Role</InputLabel> */}
+                            <Select
+                                name="role"
+                                sx={{ background: "whitesmoke" }}
+                                value={formData.role}
                                 onChange={handleInputChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6}>
-                            <Typography variant="body1">Email :</Typography>
-                            <TextField
-                                sx={{ background: "white" }}
-                                fullWidth
-                                // label="Email"
-                                variant="outlined"
-                                name="email"
-                                value={formData.email}
+                            // label="Users role"
+                            >
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                {roles?.map((data) => (
+                                    <MenuItem value={data.role}>{data.role}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <Typography variant="body1">Status :</Typography>
+                        <FormControl fullWidth variant="outlined">
+                            {/* <InputLabel>User Status</InputLabel> */}
+                            <Select
+                                name="status"
+                                sx={{ background: "whitesmoke" }}
+                                value={formData.status}
                                 onChange={handleInputChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6}>
-                            <Typography variant="body1">User Branch :</Typography>
-                            <FormControl fullWidth variant="outlined">
-                                {/* <InputLabel>User Branch</InputLabel> */}
-                                <Select
-                                    sx={{ background: "white" }}
-                                    name="branch"
-                                    value={formData.branch}
-                                    onChange={handleInputChange}
-                                // disabled={specialUserCheck}
-                                // label="branch"
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    {branches?.map((data) => (
-                                        <MenuItem value={data.name}>{data.name}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6}>
-                            <Typography variant="body1">User Role :</Typography>
-                            <FormControl fullWidth variant="outlined">
-                                {/* <InputLabel>User Role</InputLabel> */}
-                                <Select
-                                    name="role"
-                                    sx={{ background: "white" }}
-                                    value={formData.role}
-                                    onChange={handleInputChange}
-                                // label="Users role"
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    {roles?.map((data) => (
-                                        <MenuItem value={data.role}>{data.role}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6}>
-                            <Typography variant="body1">Status :</Typography>
-                            <FormControl fullWidth variant="outlined">
-                                {/* <InputLabel>User Status</InputLabel> */}
-                                <Select
-                                    name="status"
-                                    sx={{ background: "white" }}
-                                    value={formData.status}
-                                    onChange={handleInputChange}
-                                // label="Status"
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value="Active">Active</MenuItem>
-                                    <MenuItem value="Inactive">Inactive</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6}>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={specialUserCheck}
-                                        disabled={formData.branch !== "headOffice"}
-                                        onChange={handleSelectSpecialUser}
-                                        name="specialUser"
-                                    />
-                                }
-                                label="SPECIAL USER?"
-                            />
-                        </Grid>
-                        {/* <Grid item xs={12}>
+                            // label="Status"
+                            >
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                <MenuItem value="Active">Active</MenuItem>
+                                <MenuItem value="Inactive">Inactive</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={specialUserCheck}
+                                    disabled={formData.branch !== "headOffice"}
+                                    onChange={handleSelectSpecialUser}
+                                    name="specialUser"
+                                />
+                            }
+                            label="SPECIAL USER?"
+                        />
+                    </Grid>
+                    {/* <Grid item xs={12}>
                 <Box sx={{ padding: '10px' }}>
                   <Typography variant="body1">select permissions :</Typography>
                   <Filefolders selection={selection} setSelection={setSelection}/>
                 </Box>
               </Grid> */}
-                        <Grid item xs={12} sx={{ textAlign: "center" }}>
+                    <Grid item xs={12} sx={{ textAlign: "center" }}>
+                        <Button
+                            variant="contained"
+                            color="success"
+                            disabled={loading}
+                            onClick={() =>
+                                Object.keys(editObject).length > 0
+                                    ? handleSubmit(editObject._id)
+                                    : handleSubmit()
+                            }
+                            sx={{ margin: "5px" }}
+                        >
+                            {loading ? <CircularProgress size={20} /> : Object.keys(editObject).length > 0 ? "update" : "Save"}
+
+                        </Button>
+                        <Link to="/users/list">
                             <Button
                                 variant="contained"
-                                color="success"
+                                color="error"
                                 disabled={loading}
-                                onClick={() =>
-                                    Object.keys(editObject).length > 0
-                                        ? handleSubmit(editObject._id)
-                                        : handleSubmit()
-                                }
                                 sx={{ margin: "5px" }}
                             >
-                                {loading ? <CircularProgress size={20} /> : Object.keys(editObject).length > 0 ? "update" : "Save"}
-
+                                Cancel
                             </Button>
-                            <Link to="/users/list">
-                                <Button
-                                    variant="contained"
-                                    color="error"
-                                    disabled={loading}
-                                    sx={{ margin: "5px" }}
-                                >
-                                    Cancel
-                                </Button>
-                            </Link>
-                        </Grid>
+                        </Link>
                     </Grid>
-                    {/* </Paper> */}
-                    {/* </Box> */}
-                </div>
-            </Stack>
+                </Grid>
+                {/* </Paper> */}
+                {/* </Box> */}
+            </div>
         </DefaultLayout>
     );
 }

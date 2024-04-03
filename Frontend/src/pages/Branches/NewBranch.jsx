@@ -120,14 +120,15 @@ const NewBranch = () => {
     }, [])
     return (
         <DefaultLayout>
-            <Stack flexDirection="row">
-                <div
-                    style={{
-                        width: "100%",
-                        maxHeight: "fit-content",
-                    }}
-                >
-                    {/* <Stack
+            <div
+                style={{
+                    width: "100%",
+                    maxHeight: "fit-content",
+                    backgroundColor: "white",
+                    padding: "20px"
+                }}
+            >
+                {/* <Stack
                         alignItems="center"
                         sx={{
                             // mx: 1,
@@ -153,84 +154,83 @@ const NewBranch = () => {
                             Branch Details
                         </Typography>
                     </Stack> */}
-                    <Stack alignItems="center" m="20px 0" gap={5}>
-                        <Box>
-                            <Typography variant="body1">Branch code :</Typography>
-                            <TextField
-                                variant="outlined"
-                                // label="Branch Code"
-                                type="number"
-                                name="code"
-                                inputProps={{ min: "0" }}
-                                value={formData?.code}
+                <Stack alignItems="center" m="20px 0" gap={5}>
+                    <Box>
+                        <Typography variant="body1">Branch code :</Typography>
+                        <TextField
+                            variant="outlined"
+                            // label="Branch Code"
+                            type="number"
+                            name="code"
+                            inputProps={{ min: "0" }}
+                            value={formData?.code}
+                            onChange={handleInputChange}
+                            sx={{ backgroundColor: "whitesmoke", width: "350px" }}
+                        />
+                    </Box>
+                    <Box>
+                        <Typography variant="body1">Brach Name :</Typography>
+                        <TextField
+                            variant="outlined"
+                            // label="Branch Name"
+                            name="name"
+                            value={formData?.name}
+                            onChange={handleInputChange}
+                            sx={{ backgroundColor: "whitesmoke", width: "350px" }}
+                        />
+                    </Box>
+                    <Box>
+                        <Typography variant="body1">status :</Typography>
+                        <FormControl fullWidth variant="outlined">
+                            <Select
+                                // label="Status"
+                                name="status"
+                                value={formData?.status}
                                 onChange={handleInputChange}
-                                sx={{ backgroundColor: "white", width: "350px" }}
-                            />
-                        </Box>
-                        <Box>
-                            <Typography variant="body1">Brach Name :</Typography>
-                            <TextField
-                                variant="outlined"
-                                // label="Branch Name"
-                                name="name"
-                                value={formData?.name}
-                                onChange={handleInputChange}
-                                sx={{ backgroundColor: "white", width: "350px" }}
-                            />
-                        </Box>
-                        <Box>
-                            <Typography variant="body1">status :</Typography>
-                            <FormControl fullWidth variant="outlined">
-                                <Select
-                                    // label="Status"
-                                    name="status"
-                                    value={formData?.status}
-                                    onChange={handleInputChange}
-                                    sx={{ backgroundColor: "white", width: "350px" }}
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value="Active">Active</MenuItem>
-                                    <MenuItem value="Deactive">Deactive</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-                        <Stack>
-                            <Stack spacing={2} direction="row" justifyContent="center">
-                                <Button
-                                    variant="contained"
-                                    color="success"
-                                    disabled={loading}
-                                    onClick={() =>
-                                        Object.keys(editObject).length > 0
-                                            ? handleSubmit(editObject._id)
-                                            : handleSubmit()
-                                    }
-                                >
-                                    {Object.keys(editObject).length > 0 ? "update" : "Save"}
+                                sx={{ backgroundColor: "whitesmoke", width: "350px" }}
+                            >
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                <MenuItem value="Active">Active</MenuItem>
+                                <MenuItem value="Deactive">Deactive</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Stack>
+                        <Stack spacing={2} direction="row" justifyContent="center">
+                            <Button
+                                variant="contained"
+                                color="success"
+                                disabled={loading}
+                                onClick={() =>
+                                    Object.keys(editObject).length > 0
+                                        ? handleSubmit(editObject._id)
+                                        : handleSubmit()
+                                }
+                            >
+                                {Object.keys(editObject).length > 0 ? "update" : "Save"}
+                            </Button>
+                            <Link to="/branches/list">
+                                <Button variant="contained" color="error" disabled={loading}>
+                                    Cancel
                                 </Button>
-                                <Link to="/branches/list">
-                                    <Button variant="contained" color="error" disabled={loading}>
-                                        Cancel
-                                    </Button>
-                                </Link>
-                            </Stack>
+                            </Link>
                         </Stack>
                     </Stack>
-                    {loading && (
-                        <Stack
-                            justifyContent="center"
-                            alignItems="center"
-                            sx={{ width: "100%", m: 1 }}
-                        >
-                            <CircularProgress color="inherit" size={30} />
-                        </Stack>
-                    )}
-                    {/* </Paper> */}
-                    {/* </Box> */}
-                </div>
-            </Stack>
+                </Stack>
+                {loading && (
+                    <Stack
+                        justifyContent="center"
+                        alignItems="center"
+                        sx={{ width: "100%", m: 1 }}
+                    >
+                        <CircularProgress color="inherit" size={30} />
+                    </Stack>
+                )}
+                {/* </Paper> */}
+                {/* </Box> */}
+            </div>
         </DefaultLayout>
     );
 };
