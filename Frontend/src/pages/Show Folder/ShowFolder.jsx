@@ -661,6 +661,9 @@ export default function ShowFolder(props) {
                                                                     padding: '5px',
                                                                     textDecoration: 'none',
                                                                     color: 'inherit',
+                                                                    "&:hover": {
+                                                                        border: "1px solid cyan",
+                                                                    }
                                                                 }}
                                                                 variant='text'
                                                                 color='primary'
@@ -696,6 +699,9 @@ export default function ShowFolder(props) {
                                                                 backgroundColor: properties?.id === item?.id && showProperties ? "lightblue" : "white",
                                                                 borderRadius: '15px',
                                                                 padding: '5px',
+                                                                "&:hover": {
+                                                                    border: "1px solid cyan",
+                                                                }
                                                             }}
                                                             variant='text'
                                                             color='primary'
@@ -798,27 +804,33 @@ export default function ShowFolder(props) {
                                 />
                             )}
                         </Stack>
-                        {showProperties && <Stack flex={showProperties ? "25%" : "none"} sx={{ position: 'relative', padding: '10px', minHeight: '77vh', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', backgroundColor: "white", margin: '5px', border: "1px solid darkgray" }}>
-                            <IconButton onClick={() => setShowProterties(false)} sx={{ top: '5px', right: '5px', height: '50px', width: '50px', position: 'absolute' }}>
-                                <CloseIcon />
-                            </IconButton>
-                            <h2 style={{ textAlign: 'center', marginBottom: '10px' }}>PROPERTIES</h2>
-                            <hr style={{ marginBottom: '20px' }} />
-                            <p> <b>Name:</b> {properties.name}</p>
-                            <br />
-                            {/* <p>type: {properties.type}</p> */}
-                            <p><b>Size:</b> {formatSize(properties.size)}</p>
-                            <br />
-                            {/* createdBY: {item.createdBy} */}
-                            <p><b>Created on: </b>{moment(properties.createdOn).format('DD-MM-YYYY HH:mm')}</p>
-                            <br />
-                            <p><b>Last Accessed:</b> {moment(properties.lastAccessed).format('DD-MM-YYYY HH:mm')}</p>
-                            <br />
-                            <p><b>Last Updated:</b> {moment(properties.lastUpdated).format('DD-MM-YYYY HH:mm')}</p>
-                        </Stack>}
                     </Stack>
                 </div>
             </Stack>}
+            {showProperties && (
+                <>
+                    <div style={{ position: 'fixed', top: 0, left: 0, height: '100vh', width: '100vw', backgroundColor: "rgba(1, 1, 2, 0.6)", zIndex: '9998' }}></div>
+                    <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '10px', minHeight: '400px', maxWidth: '80%', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', backgroundColor: "white", margin: '5px', border: "1px solid darkgray", zIndex: '9999' }}>
+                        <IconButton onClick={() => setShowProterties(false)} sx={{ top: '5px', right: '5px', height: '50px', width: '50px', position: 'absolute' }}>
+                            <CloseIcon />
+                        </IconButton>
+                        <h2 style={{ textAlign: 'center', marginBottom: '10px' }}>PROPERTIES</h2>
+                        <hr style={{ marginBottom: '20px' }} />
+                        <p><b>Name:</b> {properties.name}</p>
+                        <br />
+                        {/* <p>type: {properties.type}</p> */}
+                        <p><b>Size:</b> {formatSize(properties.size)}</p>
+                        <br />
+                        {/* createdBY: {item.createdBy} */}
+                        <p><b>Created on:</b> {moment(properties.createdOn).format('DD-MM-YYYY HH:mm')}</p>
+                        <br />
+                        <p><b>Last Accessed:</b> {moment(properties.lastAccessed).format('DD-MM-YYYY HH:mm')}</p>
+                        <br />
+                        <p><b>Last Updated:</b> {moment(properties.lastUpdated).format('DD-MM-YYYY HH:mm')}</p>
+                    </div>
+                </>
+            )}
+
             {/* color for plus background background: 'linear-gradient(to right, #3E5151 , #DECBA4)' */}
             {isUploadable && <Stack position='relative'>
                 <Fab color="primary" onClick={handlePlus} aria-label="add" sx={{ position: 'fixed', bottom: '5%', right: '5%' }}>

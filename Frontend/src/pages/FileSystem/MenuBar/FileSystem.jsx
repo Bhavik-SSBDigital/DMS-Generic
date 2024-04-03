@@ -231,6 +231,9 @@ const FileSystem = (props) => {
                                                     width: '100%',
                                                     height: '100%',
                                                     textTransform: 'none',
+                                                    "&:hover": {
+                                                        border: "1px solid cyan",
+                                                    }
                                                 }}
                                                 variant='text'
                                                 color='primary'
