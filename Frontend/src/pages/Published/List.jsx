@@ -97,6 +97,7 @@ export default function List() {
                         label="Search"
                         variant="outlined"
                         value={searchTerm}
+                        size="small"
                         onChange={(e) => setSearchTerm(e.target.value)}
                         sx={{ backgroundColor: "white", mb: '2px' }}
                     />

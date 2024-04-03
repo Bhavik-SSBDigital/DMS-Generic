@@ -582,7 +582,7 @@ export default function ShowFolder(props) {
                 <div style={{ width: "100%" }}>
                     <Stack flexDirection='row' gap='10px' justifyContent='space-between' sx={{ marginBottom: '5px' }}>
                         <Box sx={{ display: { xs: 'none', sm: 'block', md: 'block', } }}>
-                            <Button onClick={handleBackPress} sx={{ background: '#8B93FF' }} variant="contained">
+                            <Button onClick={handleBackPress} sx={{ background: '#378CE7' }} variant="contained">
                                 <ArrowBackIosIcon sx={{ height: '15px' }}></ArrowBackIosIcon>
                                 Back
                             </Button>
