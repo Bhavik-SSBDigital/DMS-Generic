@@ -89,18 +89,13 @@ const DropdownNotification = () => {
     });
 
     socket.on('processesUpdated', (data) => {
-      console.log(JSON.stringify(data) + 'notification updated');
-      const check = notifications.find(
-        (item: any) => item.processId === data?.newProcess?.processId,
-      );
-      console.log(check);
-      if (!check) {
-        setNotifications((prev: any) => [...prev, data.newProcess]);
-      }
-      console.log(notifications + 'notifications after update');
+      const updatedNotifications = [...notifications, data.newProcess];
+      console.log(updatedNotifications);
+      setNotifications(updatedNotifications);
     });
     socket.on('pickedProcess', (data) => {
       console.log('Received pciked process:', data);
+      handleRemoveNotification(data?.processId);
       setPickedProcess(data?.processId);
     });
     socket.emit('login', username);
