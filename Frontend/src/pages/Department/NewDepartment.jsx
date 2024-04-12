@@ -218,11 +218,11 @@ export default function NewDepartment(props) {
 
         if (flow.step > prev.workFlow.length) {
           // If step is greater than the length, insert at the end
-          updatedWorkFlow.push({ ...flow, users: usersOnStep[0] });
+          updatedWorkFlow.push({ ...flow, users: usersOnStep });
         } else {
           updatedWorkFlow.splice(flow.step - 1, 0, {
             ...flow,
-            users: usersOnStep[0],
+            users: usersOnStep,
           });
 
           // Update step numbers for all items after the insertion point
@@ -260,12 +260,12 @@ export default function NewDepartment(props) {
       toast.info('Please select user & role');
       return;
     }
-    if (usersOnStep.length > 0) {
-      toast.info(
-        'Multi user functionality is not working currently please add step',
-      );
-      return;
-    }
+    // if (usersOnStep.length > 0) {
+    //   toast.info(
+    //     'Multi user functionality is not working currently please add step',
+    //   );
+    //   return;
+    // }
     const newUser = {
       user: userSelection.user,
       role: userSelection.role,
@@ -278,7 +278,7 @@ export default function NewDepartment(props) {
   const handleDelete = (index) => {
     const updatedWorkFlow = [...formData.workFlow];
     updatedWorkFlow.splice(index, 1);
-    setFormData({
+    setFormData({ 
       ...formData,
       workFlow: updatedWorkFlow.map((step, i) => ({ ...step, step: i + 1 })),
     });
@@ -314,6 +314,15 @@ export default function NewDepartment(props) {
       }));
     }
   };
+  function formatUserNames(users) {
+    if (!users || users.length === 0) {
+      return "No users";
+    } else if (users.length === 1) {
+      return users[0].user;
+    } else {
+      return users[0].user + ", ...";
+    }
+  }
   const renderWorkFlow = () => {
     return (
       <Stack
@@ -354,7 +363,15 @@ export default function NewDepartment(props) {
                   <p style={{ width: '60px' }}>
                     <strong>Users :</strong>
                   </p>
-                  <p>{item?.users?.user}</p>
+                  <Tooltip
+                    title={
+                      item?.users?.length > 1
+                        ? item.users.map((user) => user.user).join(", ")
+                        : null
+                    }
+                  >
+                    <p>{formatUserNames(item?.users)}</p>
+                  </Tooltip>
                 </div>
               </div>
             </Paper>

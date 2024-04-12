@@ -6,7 +6,8 @@ import sessionData from '../../Store';
 const username = localStorage.getItem('username');
 
 const DropdownNotification = () => {
-  const { setWork, notifications, setNotifications } = sessionData();
+  const { setWork, notifications, setNotifications, setPickedProcess } =
+    sessionData();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -93,6 +94,10 @@ const DropdownNotification = () => {
       if (!check) {
         setNotifications((prev) => [...prev, data.newProcess]);
       }
+    });
+    socket.on('pickedProcess', (data) => {
+      console.log('Received pciked process:', data);
+      setPickedProcess(data?.processId);
     });
     socket.emit('login', username);
   }, []);

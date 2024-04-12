@@ -26,7 +26,7 @@ import DefaultLayout from "../../layout/DefaultLayout";
 import ComponentLoader from "../../common/Loader/ComponentLoader";
 
 export default function List() {
-    const { setWork } = sessionData();
+    const { setWork, pickedProcess } = sessionData();
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const [departments, setDepartments] = useState([]);
     const queryClient = useQueryClient();
@@ -131,6 +131,9 @@ export default function List() {
                 console.error("error", error);
             });
     }, []);
+    useEffect(() => {
+        queryClient.removeQueries('pendingProcesses');
+    }, [pickedProcess])
     return (
         <DefaultLayout>
             {isFetching || isLoading ? <ComponentLoader /> : (

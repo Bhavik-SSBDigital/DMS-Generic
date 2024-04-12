@@ -78,7 +78,7 @@ export default function ViewProcess(props) {
         boxShadow: 24,
         p: 3,
     };
-    const { work, setWork } = sessionData();
+    const { work, setWork, pickedProcess } = sessionData();
     const [processData, setProcessData] = useState();
     const { search } = useLocation();
     const params = new URLSearchParams(search);
@@ -90,6 +90,7 @@ export default function ViewProcess(props) {
     const publishCheck = processData?.workFlow[processData?.lastStepDone];
     const lastWork = processData?.workFlow[processData?.lastStepDone - 1];
     const username = localStorage.getItem("username");
+    console.log(processData?.workFlow[processData.workFlow.length - 1]?.users.some(userObj => userObj.user === username))
     const [operable, setOperable] = useState(true);
     const [fileView, setFileView] = useState();
     const [itemName, setItemName] = useState("");
@@ -363,7 +364,6 @@ export default function ViewProcess(props) {
             setSelectAllCheck(false);
         }
     };
-
     const handleRoleChange = (event) => {
         setSelectedRoles(event.target.value);
     };
@@ -1026,6 +1026,27 @@ export default function ViewProcess(props) {
             </Stack>
         </Box>
     );
+    const pickProcess = async () => {
+        const url = backendUrl + `/pickProcess/${processData._id}`
+        try {
+            const res = await axios.post(url, null, { headers: { Authorization: `bearer ${localStorage.getItem('accessToken')}` } })
+            setProcessData((prev) => {
+                return {
+                    ...prev,
+                    currentActorUser: username
+                };
+            });
+            // console.log(res);
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    useEffect(() => {
+        if (pickedProcess === processData._id) {
+            navigate('/processes/work');
+            toast.info('Process is picked by other user')
+        }
+    }, [pickedProcess])
     return (
         <DefaultLayout>
             {loading ? <ComponentLoader /> : <Stack flexDirection="row">
@@ -1581,158 +1602,6 @@ export default function ViewProcess(props) {
                                             </Stack>
                                         </Box>
                                     )}
-                                {/* <Stack
-                                    alignItems="center"
-                                    flexDirection="row"
-                                    gap={3}
-                                    justifyContent="center"
-                                    sx={{ marginX: "10px" }}
-                                >
-                                    {processData?.workFlow[0]?.user !== username &&
-                                        !(
-                                            processData.isHead &&
-                                            processData.isToBeSentToClerk &&
-                                            processData.isInterBranchProcess
-                                        ) &&
-                                        !processData.completed &&
-                                        processData?.workFlow
-                                            .map((item) => item.user)
-                                            .includes(username) && (
-                                            <Box>
-                                                <Button
-                                                    variant="contained"
-                                                    color="error"
-                                                    onClick={openRejectModal}
-                                                    disabled={
-                                                        processData.completed ||
-                                                        completeProcessLoading ||
-                                                        approveLoading
-                                                    }
-                                                >
-                                                    Reject
-                                                </Button>
-                                            </Box>
-                                        )}
-                                    <Box>
-                                        {processData?.workFlow[processData.workFlow.length - 1]
-                                            .user !== username &&
-                                            !processData?.isToBeSentToClerk &&
-                                            !processData?.isHead &&
-                                            work === "" &&
-                                            !processData.completed &&
-                                            processData?.workFlow
-                                                .map((step) => step.user)
-                                                .includes(username) &&
-                                            operable && (
-                                                <Button variant="contained" onClick={openModal}>
-                                                    Next
-                                                </Button>
-                                            )}
-                                        {processData?.workFlow[processData.workFlow.length - 1]
-                                            .user === username &&
-                                            work === "" &&
-                                            !processData.completed &&
-                                            (!processData.isInterBranchProcess ||
-                                                (processData.isInterBranchProcess &&
-                                                    processData?.processWorkFlow === workFlowToBeFollowed &&
-                                                    processData?.workFlow
-                                                        .map((item) => item.user)
-                                                        .includes(username))) && (
-                                                <Button
-                                                    variant="contained"
-                                                    color="success"
-                                                    disabled={completeProcessLoading}
-                                                    onClick={() => handleForward(false)}
-                                                >
-                                                    {completeProcessLoading ? (
-                                                        <CircularProgress size={20} />
-                                                    ) : (
-                                                        "Complete"
-                                                    )}
-                                                </Button>
-                                            )}
-                                    </Box>
-                                    <Box>
-                                        {processData.isInterBranchProcess &&
-                                            processData?.isHead &&
-                                            processData?.processWorkFlow !== workFlowToBeFollowed && (
-                                                <Stack
-                                                    gap={1}
-                                                    flexDirection="row"
-                                                    justifyContent="center"
-                                                >
-                                                    <Button
-                                                        disabled={
-                                                            processData.isToBeSentToClerk
-                                                                ? null
-                                                                : approveLoading
-                                                        }
-                                                        onClick={() =>
-                                                            processData.isToBeSentToClerk
-                                                                ? setOpenC(true)
-                                                                : handleApprove()
-                                                        }
-                                                        size="medium"
-                                                        variant="contained"
-                                                    >
-                                                        {processData.isToBeSentToClerk ? (
-                                                            "SEND TO CLERK"
-                                                        ) : approveLoading ? (
-                                                            <CircularProgress size={20} />
-                                                        ) : (
-                                                            "Approve"
-                                                        )}
-                                                    </Button>
-                                                </Stack>
-                                            )}
-                                    </Box>
-                                </Stack>
-                                {processData.processWorkFlow === workflowFollow ? (
-                                    <Stack alignItems="center" m={2}>
-                                        {processData?.workFlow[0].user !== username &&
-                                            !processData.completed &&
-                                            work === "" &&
-                                            processData?.workFlow[processData.workFlow.length - 1]
-                                                .user !== username &&
-                                            processData?.workFlow
-                                                .map((item) => item.user)
-                                                .includes(username) && (
-                                                <Button
-                                                    variant="outlined"
-                                                    color="success"
-                                                    onClick={() => setIsCompleteModalOpen(true)}
-                                                >
-                                                    complete this process here
-                                                </Button>
-                                            )}
-                                    </Stack>
-                                ) : null}
-                                {currentUserData &&
-                                    processData?.completed &&
-                                    processData.isHead ? (
-                                    <Stack alignItems="center" m={2}>
-                                        <Button
-                                            onClick={() => setOpenC(true)}
-                                            size="medium"
-                                            variant="contained"
-                                        >
-                                            SEND TO CLERK
-                                        </Button>
-                                    </Stack>
-                                ) : null}
-                                {processData?.completed &&
-                                    processData?.workFlow[0]?.user === username ? (
-                                    <Stack alignItems="center" m={2}>
-                                        <Button
-                                            onClick={() => setOpenE(true)}
-                                            size="medium"
-                                            variant="contained"
-                                            color="error"
-                                        >
-                                            END PROCESS
-                                        </Button>
-                                    </Stack>
-                                ) : null} */}
                                 <Modal open={isCompleteModalOpen} className="create-folder-modal">
                                     <div
                                         style={{ gap: "10px", position: "relative" }}
@@ -2345,7 +2214,7 @@ export default function ViewProcess(props) {
                                         <IconDownload />
                                         Download
                                     </MenuItem>
-                                    {operable && username !== "admin" && (
+                                    {operable && username !== "admin" && (processData.isMultiUserStep && processData.currentActorUser === username) && (
                                         <>
                                             <MenuItem
                                                 sx={{ gap: "5px" }}
@@ -2490,7 +2359,8 @@ export default function ViewProcess(props) {
                     />
                 )}
             </Stack>}
-            {processData ? <div style={{
+            {/* button section */}
+            {processData && <div style={{
                 position: 'sticky',
                 bottom: 5,
                 right: -10,
@@ -2501,7 +2371,7 @@ export default function ViewProcess(props) {
                 border: "1px solid",
                 backgroundColor: "rgba(255, 255, 255, 0.5)",
                 // boxShadow: "0px -2px 5px rgba(0, 0, 0, 0.2)"
-            }}>
+            }}>{(processData.isMultiUserStep && processData.currentActorUser === username) ?
                 <Stack
                     alignItems="center"
                     flexDirection="row"
@@ -2509,57 +2379,45 @@ export default function ViewProcess(props) {
                     justifyContent="center"
                     sx={{ marginX: "10px" }}
                 >
-                    {processData?.workFlow[0]?.user !== username &&
-                        !(
-                            processData?.isHead &&
+                    {processData?.workFlow[0]?.users.some(userObj => userObj.user !== username) &&
+                        !(processData?.isHead &&
                             processData?.isToBeSentToClerk &&
-                            processData?.isInterBranchProcess
-                        ) &&
-                        !processData?.completed &&
-                        processData?.workFlow
-                            .map((item) => item.user)
-                            .includes(username) && (
+                            processData?.isInterBranchProcess) &&
+                        !processData?.completed && (
                             <Box>
                                 <Button
                                     variant="contained"
                                     color="error"
                                     sx={{ width: "110px" }}
                                     onClick={openRejectModal}
-                                    disabled={
-                                        processData.completed ||
-                                        completeProcessLoading ||
-                                        approveLoading
-                                    }
+                                    disabled={processData.completed || completeProcessLoading || approveLoading}
                                 >
                                     Reject
                                 </Button>
                             </Box>
                         )}
                     <Box>
-                        {processData?.workFlow[processData.workFlow.length - 1]
-                            .user !== username &&
+                        {processData?.workFlow[processData.workFlow.length - 1]?.users.some(userObj => userObj.user !== username) &&
                             !processData?.isToBeSentToClerk &&
-                            !processData?.isHead &&
+                            (processData.isInterBranchProcess ? !processData.isHead : true) &&
                             work === "" &&
-                            !processData.completed &&
-                            processData?.workFlow
-                                .map((step) => step.user)
-                                .includes(username) &&
-                            operable && (
-                                <Button variant="contained" sx={{ width: "110px" }} onClick={openModal}>
+                            !processData.completed && (
+                                <Button
+                                    variant="contained"
+                                    sx={{ width: "110px" }}
+                                    onClick={openModal}
+                                >
                                     Next
                                 </Button>
                             )}
-                        {processData?.workFlow[processData.workFlow.length - 1]
-                            .user === username &&
+                        {processData?.workFlow[processData.workFlow.length - 1]?.users.some(userObj => userObj.user === username) &&
                             work === "" &&
                             !processData.completed &&
                             (!processData.isInterBranchProcess ||
                                 (processData.isInterBranchProcess &&
                                     processData?.processWorkFlow === workFlowToBeFollowed &&
                                     processData?.workFlow
-                                        .map((item) => item.user)
-                                        .includes(username))) && (
+                                        .some(step => step.users.some(userObj => userObj.user === username)))) && (
                                 <Button
                                     variant="contained"
                                     color="success"
@@ -2584,15 +2442,9 @@ export default function ViewProcess(props) {
                                 justifyContent="center"
                             >
                                 <Button
-                                    disabled={
-                                        processData.isToBeSentToClerk
-                                            ? null
-                                            : approveLoading
-                                    }
+                                    disabled={processData.isToBeSentToClerk ? null : approveLoading}
                                     onClick={() =>
-                                        processData.isToBeSentToClerk
-                                            ? setOpenC(true)
-                                            : handleApprove()
+                                        processData.isToBeSentToClerk ? setOpenC(true) : handleApprove()
                                     }
                                     size="medium"
                                     variant="contained"
@@ -2609,14 +2461,12 @@ export default function ViewProcess(props) {
                         )}
                     {processData.processWorkFlow === workflowFollow ? (
                         <>
-                            {processData?.workFlow[0].user !== username &&
+                            {processData?.workFlow[0]?.users.some(userObj => userObj.user !== username) &&
                                 !processData.completed &&
                                 work === "" &&
-                                processData?.workFlow[processData.workFlow.length - 1]
-                                    .user !== username &&
-                                processData?.workFlow
-                                    .map((item) => item.user)
-                                    .includes(username) && (
+                                processData?.workFlow[processData.workFlow.length - 1]?.users.some(userObj => userObj.user !== username) &&
+                                processData?.workFlow.some(step =>
+                                    step.users.some(userObj => userObj.user === username)) && (
                                     <Button
                                         variant="contained"
                                         color="success"
@@ -2641,7 +2491,7 @@ export default function ViewProcess(props) {
                         </Stack>
                     ) : null}
                     {processData?.completed &&
-                        processData?.workFlow[0]?.user === username ? (
+                        processData?.workFlow[0]?.users.some(userObj => userObj.user === username) ? (
                         <Stack alignItems="center" m={2}>
                             <Button
                                 onClick={() => setOpenE(true)}
@@ -2653,8 +2503,11 @@ export default function ViewProcess(props) {
                             </Button>
                         </Stack>
                     ) : null}
-                </Stack>
-            </div> : null}
-        </DefaultLayout>
+                </Stack> :
+                <Stack alignItems="center">
+                    <Button variant="text" sx={{ width: 'fit-content' }} onClick={pickProcess}>Pick This Process</Button>
+                </Stack>}
+            </div>}
+        </DefaultLayout >
     );
 }

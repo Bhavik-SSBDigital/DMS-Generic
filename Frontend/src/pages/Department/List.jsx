@@ -9,6 +9,7 @@ import {
   Stack,
   TextField,
   Typography,
+  Tooltip
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 // import Sidedrawer from "../drawer/Sidedrawer";
@@ -141,6 +142,15 @@ export default function List(props) {
   const filteredData = departments.filter((item) =>
     item.department.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  function formatUserNames(users) {
+    if (!users || users.length === 0) {
+      return "No users";
+    } else if (users.length === 1) {
+      return users[0].user(users[0].role);
+    } else {
+      return users[0].user + ", ...";
+    }
+  }
   const renderWorkFlow = () => {
     return (
       <div className={styles.DocList}>
@@ -210,24 +220,24 @@ export default function List(props) {
                         <div className={styles.workflowContent}>
                           <div className={styles.workFlowElements}>
                             <p style={{ width: "57px" }}>
-                              <strong>Role :</strong>
-                            </p>
-                            {/* <p style={{ margin: "0 6px" }}>:</p> */}
-                            <p>{item.role}</p>
-                          </div>
-                          <div className={styles.workFlowElements}>
-                            <p style={{ width: "57px" }}>
                               <strong>Work :</strong>
                             </p>
                             {/* <p style={{ margin: "0 6px" }}>:</p> */}
                             <p>{item.work}</p>
                           </div>
                           <div className={styles.workFlowElements}>
-                            <p style={{ width: "57px" }}>
-                              <strong>User :</strong>
+                            <p style={{ width: "60px" }}>
+                              <strong>Users :</strong>
                             </p>
-                            {/* <p style={{ margin: "0 6px" }}>:</p> */}
-                            <p>{item.user}</p>
+                            <Tooltip
+                              title={
+                                item?.users
+                                  ?.map((user) => `${user.user} (${user.role})`)
+                                  .join(", ") // Format user names with roles
+                              }
+                            >
+                              <p>{formatUserNames(item?.users)}</p>
+                            </Tooltip>
                           </div>
                         </div>
                       </Paper>
