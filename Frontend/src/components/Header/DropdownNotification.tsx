@@ -93,6 +93,7 @@ const DropdownNotification = () => {
       const check = notifications.find(
         (item: any) => item.processId === data?.newProcess?.processId,
       );
+      console.log(check);
       if (!check) {
         setNotifications((prev: any) => [...prev, data.newProcess]);
       }
