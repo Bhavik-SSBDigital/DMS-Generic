@@ -8,6 +8,7 @@ const username = localStorage.getItem('username');
 const DropdownNotification = () => {
   const { setWork, notifications, setNotifications, setPickedProcess } =
     sessionData();
+  console.log(notifications);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -88,12 +89,14 @@ const DropdownNotification = () => {
     });
 
     socket.on('processesUpdated', (data) => {
+      console.log(JSON.stringify(data) + 'notification updated');
       const check = notifications.find(
-        (item) => item._id === data.newProcess._id,
+        (item: any) => item.processId === data?.newProcess?.processId,
       );
       if (!check) {
-        setNotifications((prev) => [...prev, data.newProcess]);
+        setNotifications((prev: any) => [...prev, data.newProcess]);
       }
+      console.log(notifications + 'notifications after update');
     });
     socket.on('pickedProcess', (data) => {
       console.log('Received pciked process:', data);

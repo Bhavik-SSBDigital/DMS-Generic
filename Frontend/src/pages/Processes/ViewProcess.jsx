@@ -1042,9 +1042,11 @@ export default function ViewProcess(props) {
         }
     }
     useEffect(() => {
+        console.log('heyyyyyyyy')
         if (pickedProcess === processData?._id) {
             navigate('/processes/work');
             toast.info('Process is picked by other user')
+            console.log('picked and navigate');
         }
     }, [pickedProcess])
     return (

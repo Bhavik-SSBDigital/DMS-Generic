@@ -76,6 +76,8 @@ export default function List() {
             },
             cacheTime: 12000,
             staleTime: 12000,
+            refetchOnMount: false,
+            refetchOnWindowFocus: false,
         }
     );
 

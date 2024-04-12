@@ -23,6 +23,7 @@ const Header = (props: {
         },
       });
       if (res.status === 200 && res.data.notifications) {
+        console.log(res.data.notifications);
         // setNotifications(res.data.notifications);
         const uniqueNotifications = [
           ...new Map(
