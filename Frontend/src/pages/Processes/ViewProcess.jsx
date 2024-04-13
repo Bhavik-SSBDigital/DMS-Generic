@@ -78,7 +78,7 @@ export default function ViewProcess(props) {
         boxShadow: 24,
         p: 3,
     };
-    const { work, setWork, pickedProcess } = sessionData();
+    const { work, setWork, pickedProcesses } = sessionData();
     const [processData, setProcessData] = useState();
     const { search } = useLocation();
     const params = new URLSearchParams(search);
@@ -504,9 +504,10 @@ export default function ViewProcess(props) {
             setForwardProcessLoading(false);
         }
     };
-    const currentUserData = processData?.workFlow.find(
+    const currentUserData = processData?.workflow?.users?.find(
         (item) => item?.user === username
     );
+
     const rejectProcess = async () => {
         setRejectProcessLoading(true);
         try {
@@ -1043,12 +1044,12 @@ export default function ViewProcess(props) {
     }
     useEffect(() => {
         console.log('heyyyyyyyy')
-        if (pickedProcess === processData?._id) {
+        if (pickedProcesses.includes(processData?._id)) {
             navigate('/processes/work');
             toast.info('Process is picked by other user')
             console.log('picked and navigate');
         }
-    }, [pickedProcess])
+    }, [pickedProcesses])
     return (
         <DefaultLayout>
             {loading ? <ComponentLoader /> : <Stack flexDirection="row">
@@ -1667,8 +1668,9 @@ export default function ViewProcess(props) {
                                                 variant="contained"
                                                 color="error"
                                                 disabled={rejectFileLoading}
-                                                onClick={() =>
-                                                    handleRejectFile(processData._id, rejectFileId)
+                                                onClick={() => reasonOfRejection ?
+                                                    handleRejectFile(processData._id, rejectFileId) :
+                                                    toast.warning('Provide remarks')
                                                 }
                                             >
                                                 {rejectFileLoading ? (
@@ -1872,7 +1874,13 @@ export default function ViewProcess(props) {
                                             <Button
                                                 variant="contained"
                                                 color={rejectProcessLoading ? "inherit" : "error"}
-                                                onClick={rejectProcess}
+                                                onClick={() => {
+                                                    if (remarks) {
+                                                        rejectProcess();
+                                                    } else {
+                                                        toast.warning('Provide remarks');
+                                                    }
+                                                }}
                                             >
                                                 {rejectProcessLoading ? (
                                                     <CircularProgress size={20} />
@@ -2367,7 +2375,8 @@ export default function ViewProcess(props) {
                 bottom: 5,
                 right: -10,
                 zIndex: 999,
-                height: "70px",
+                minHeight: "70px",
+                maxHeight: "fit-content",
                 width: '100%',
                 padding: '15px',
                 border: "1px solid",
@@ -2378,6 +2387,7 @@ export default function ViewProcess(props) {
                     alignItems="center"
                     flexDirection="row"
                     gap={3}
+                    flexWrap="wrap"
                     justifyContent="center"
                     sx={{ marginX: "10px" }}
                 >
