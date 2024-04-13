@@ -143,14 +143,16 @@ export default function List(props) {
     item.department.toLowerCase().includes(searchTerm.toLowerCase())
   );
   function formatUserNames(users) {
-    if (!users || users.length === 0) {
+    console.log(users);
+    if (users.length === 0) {
       return "No users";
     } else if (users.length === 1) {
-      return users[0].user(users[0].role);
+      return users[0].user;
     } else {
-      return users[0].user + ", ...";
+      return `${users[0].user}, ...`;
     }
   }
+
   const renderWorkFlow = () => {
     return (
       <div className={styles.DocList}>
@@ -236,7 +238,7 @@ export default function List(props) {
                                   .join(", ") // Format user names with roles
                               }
                             >
-                              <p>{formatUserNames(item?.users)}</p>
+                              <p>{formatUserNames(item?.users || [])}</p>
                             </Tooltip>
                           </div>
                         </div>
