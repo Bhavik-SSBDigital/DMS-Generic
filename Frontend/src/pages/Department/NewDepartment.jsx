@@ -210,12 +210,7 @@ export default function NewDepartment(props) {
           : toast.success('Department created');
         setLoading(false);
         setFormData({ ...initialUser });
-        if (Object.keys(editObject).length > 0) {
-          alert('edited sucessfully');
-        } else {
-          alert('department created sucessfully');
-        }
-        navigate('/getDepartments');
+        navigate('/departments/list');
       }
     } catch (error) {
       setLoading(false);

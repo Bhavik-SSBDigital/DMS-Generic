@@ -257,6 +257,8 @@ export default function InitiateForm() {
         <div
           style={{
             width: "100%",
+            backgroundColor: 'white',
+            padding: '5px'
           }}
         >
           <Stepper activeStep={activeStep} alternativeLabel>
