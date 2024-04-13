@@ -20,8 +20,10 @@ import {
   Tooltip,
 } from '@mui/material';
 import axios from 'axios';
+import { FaRegTrashAlt } from "react-icons/fa";
+
 import CloseIcon from '@mui/icons-material/Close';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 // import Sidedrawer from '../drawer/Sidedrawer';
 import styles from './NewDepartment.module.css';
 import { IconArrowRight } from '@tabler/icons-react';
@@ -35,8 +37,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import DefaultLayout from '../../layout/DefaultLayout';
+import ComponentLoader from "../../common/Loader/ComponentLoader";
+
 export default function NewDepartment(props) {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const { id } = useParams();
 
   const [editObject, setEditObject] = useState({});
   const initialUser = {
@@ -45,7 +50,6 @@ export default function NewDepartment(props) {
     head: '',
     workFlow: [],
   };
-  // const { editObject, setEditObject } = sessionData();
   const [formData, setFormData] = useState({ ...initialUser });
   const [flow, setFlow] = useState({ work: '', step: '' });
   const [usersOnStep, setUsersOnStep] = useState([]);
@@ -67,6 +71,11 @@ export default function NewDepartment(props) {
       [name]: value,
     }));
   };
+  const deleteStepUser = (index) => {
+    const updatedUsersOnStep = usersOnStep.filter((_, i) => i !== index);
+    setUsersOnStep(updatedUsersOnStep);
+  };
+
   const getBranches = async () => {
     try {
       const url = backendUrl + '/getAllBranches';
@@ -82,16 +91,24 @@ export default function NewDepartment(props) {
       console.error('unable to fetch branches');
     }
   };
+  const [fieldsLoading, setFieldsLoading] = useState(false);
   const getRoles = async (id) => {
+    setFieldsLoading(true)
     const urlRole = backendUrl + '/getRolesInBranch/';
+    try {
 
-    const accessToken = localStorage.getItem('accessToken');
-    const { data } = await axios.post(urlRole + `${id}`, null, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    setRoles(data.roles);
+      const accessToken = localStorage.getItem('accessToken');
+      const { data } = await axios.post(urlRole + `${id}`, null, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setRoles(data.roles);
+    } catch {
+      console.error("Error getting roles for selected branch");
+    } finally {
+      setFieldsLoading(false);
+    }
   };
   const getWorks = async () => {
     try {
@@ -110,6 +127,7 @@ export default function NewDepartment(props) {
   const getUsers = async (branchValue, roleValue) => {
     // const branchValue = value ? headInfo.branch : userBranch;
     // const roleValue = value ? headInfo.role : flow.role;
+    setFieldsLoading(true);
     try {
       const url = backendUrl + '/getUsersByRoleInBranch';
       const accessToken = localStorage.getItem('accessToken');
@@ -130,6 +148,8 @@ export default function NewDepartment(props) {
       setUsers(data.users);
     } catch (error) {
       alert(error);
+    } finally {
+      setFieldsLoading(false);
     }
   };
   const handleInputChange = (event) => {
@@ -278,7 +298,7 @@ export default function NewDepartment(props) {
   const handleDelete = (index) => {
     const updatedWorkFlow = [...formData.workFlow];
     updatedWorkFlow.splice(index, 1);
-    setFormData({ 
+    setFormData({
       ...formData,
       workFlow: updatedWorkFlow.map((step, i) => ({ ...step, step: i + 1 })),
     });
@@ -380,10 +400,31 @@ export default function NewDepartment(props) {
       </Stack>
     );
   };
-
+  const getEditDetails = async () => {
+    setLoading(true);
+    try {
+      const url = backendUrl + `/getDepartment/${id}`
+      const res = await axios.post(url, null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        }
+      })
+      if (res.status === 200) {
+        setEditObject(res.data.department[0]);
+        setFormData(res.data.department[0]);
+      }
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
   useEffect(() => {
     getBranches();
     getWorks();
+    if (id) {
+      getEditDetails();
+    }
     const fetchData = async () => {
       const branch = await getBranches();
       if (Object.keys(editObject).length > 0) {
@@ -402,44 +443,20 @@ export default function NewDepartment(props) {
   useEffect(() => {
     setFlow((prevFlow) => ({
       ...prevFlow,
-      step: formData.workFlow.length + 1,
+      step: formData?.workFlow?.length + 1,
     }));
-  }, [formData.workFlow]);
+  }, [formData?.workFlow]);
 
   return (
-    <DefaultLayout
-    >
-      <div className={styles.formContainer}>
-        {/* <Stack
-            alignItems="center"
-            sx={{
-              borderRadius: '10px',
-              mx: 'auto',
-              mb: '10px',
-            }}
-          >
-            <Typography
-              variant="h4"
-              gutterBottom
-              sx={{
-                textAlign: 'center',
-                height: 35,
-                fontWeight: 700,
-                borderRadius: '10px',
-                m: '5px',
-                // color: "lightblue",
-              }}
-            >
-              Department Details
-            </Typography>
-          </Stack> */}
+    <DefaultLayout>
+      {loading ? <ComponentLoader /> : <div className={styles.formContainer}>
         <Grid container spacing={3} sx={{ marginBottom: '20px' }}>
           <Grid item xs={12} sm={6}>
             <Typography variant="body1">Department Branch:</Typography>
             <FormControl fullWidth variant="outlined">
               <Select
                 name="branch"
-                value={formData.branch}
+                value={formData?.branch}
                 sx={{ backgroundColor: "whitesmoke" }}
                 onChange={handleInputChange}
               >
@@ -461,7 +478,7 @@ export default function NewDepartment(props) {
               sx={{ backgroundColor: "whitesmoke" }}
               variant="outlined"
               name="department"
-              value={formData.department}
+              value={formData?.department}
               onChange={handleInputChange}
             />
           </Grid>
@@ -661,6 +678,7 @@ export default function NewDepartment(props) {
             <FormControl fullWidth variant="outlined">
               <Select
                 name="role"
+                disabled={fieldsLoading}
                 sx={{ backgroundColor: "whitesmoke" }}
                 value={userSelection.role}
                 onChange={handleUserSelection}
@@ -683,6 +701,7 @@ export default function NewDepartment(props) {
                 name="user"
                 sx={{ backgroundColor: "whitesmoke" }}
                 value={userSelection.user}
+                disabled={fieldsLoading}
                 onChange={handleUserSelection}
               >
                 <MenuItem value="" disabled>
@@ -736,6 +755,7 @@ export default function NewDepartment(props) {
                     <TableCell>Sr No</TableCell>
                     <TableCell>Username</TableCell>
                     <TableCell>User Role</TableCell>
+                    <TableCell>Delete</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -754,6 +774,9 @@ export default function NewDepartment(props) {
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {row.role}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        <Button onClick={() => deleteStepUser(index)}><FaRegTrashAlt /> </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -780,7 +803,7 @@ export default function NewDepartment(props) {
             </Box>
           </Stack>
         ) : null}
-        {formData.workFlow.length > 0 && (
+        {formData?.workFlow?.length > 0 && (
           <Box>
             <Typography variant="h6" sx={{ mb: 4, mt: 4 }} gutterBottom>
               Work Flow :
@@ -788,10 +811,10 @@ export default function NewDepartment(props) {
             {renderWorkFlow()}
           </Box>
         )}
-        {formData.branch &&
-          formData.head &&
-          formData.department &&
-          formData.workFlow.length > 0 && (
+        {formData?.branch &&
+          formData?.head &&
+          formData?.department &&
+          formData?.workFlow?.length > 0 && (
             <Stack
               flexDirection="row"
               gap={2}
@@ -826,7 +849,7 @@ export default function NewDepartment(props) {
               </Box>
             </Stack>
           )}
-      </div>
+      </div>}
     </DefaultLayout>
   );
 }

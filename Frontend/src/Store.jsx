@@ -8,9 +8,9 @@ const sessionData = create(
       profileImage: "",
       notifications: [],
       alerts: [],
-      pickedProcess: "",
+      pickedProcesses: "",
       setWork: (work) => set({ work }),
-      setPickedProcess: (pickedProcess) => set({ pickedProcess }),
+      setPickedProcesses: (pickedProcesses) => set({ pickedProcesses }),
       setNotifications: (notifications) => set({ notifications }),
       setProfileImage: (profileImage) => set({ profileImage }),
       setAlerts: (alerts) => set({ alerts })

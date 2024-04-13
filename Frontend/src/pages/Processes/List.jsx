@@ -26,7 +26,7 @@ import DefaultLayout from "../../layout/DefaultLayout";
 import ComponentLoader from "../../common/Loader/ComponentLoader";
 
 export default function List() {
-    const { setWork, pickedProcess } = sessionData();
+    const { setWork, pickedProcesses } = sessionData();
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const [departments, setDepartments] = useState([]);
     const queryClient = useQueryClient();
@@ -135,7 +135,7 @@ export default function List() {
     }, []);
     useEffect(() => {
         queryClient.removeQueries('pendingProcesses');
-    }, [pickedProcess])
+    }, [pickedProcesses])
     return (
         <DefaultLayout>
             {isFetching || isLoading ? <ComponentLoader /> : (
@@ -160,6 +160,7 @@ export default function List() {
                             </TableHead>
                             <TableBody>
                                 {filteredData.length ? filteredData
+                                    ?.filter(item => !pickedProcesses?.includes(item?._id))
                                     ?.slice(page * 10, (page + 1) * 10)
                                     ?.map((row, index) => (
                                         <TableRow key={index} className={styles.tableRow}>
