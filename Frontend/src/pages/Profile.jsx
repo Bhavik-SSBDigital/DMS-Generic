@@ -65,7 +65,12 @@ const Profile = () => {
   };
   const handleUpload = async (purpose, e) => {
     const file = e.target.files[0];
-
+    const filename = e.target.files[0].name;
+    const fileExtension = filename.split(".").pop();
+    if (purpose === 'signature' && fileExtension.toLowerCase() !== "jpeg") {
+      toast.warning('Only jpeg is allowed')
+      return;
+    }
     // Create a promise
     const uploadPromise = new Promise(async (resolve, reject) => {
       if (file) {
