@@ -511,13 +511,12 @@ export default function ViewProcess(props) {
     const rejectProcess = async () => {
         setRejectProcessLoading(true);
         try {
-            setLoading(true);
             const url = backendUrl + "/revertProcess";
             const res = await axios.post(
                 url,
                 {
                     processId: viewId,
-                    currentStep: [processData?.currentStepNumber],
+                    currentStep: processData?.currentStepNumber,
                     remarks: remarks,
                     workFlowToBeFollowed: workFlowToBeFollowed,
                     isInterBranchProcess: processData.isInterBranchProcess,
@@ -528,7 +527,6 @@ export default function ViewProcess(props) {
                     },
                 }
             );
-            setLoading(false);
             if (res.status === 200) {
                 toast.success("Process is rejected");
                 queryClient.removeQueries("pendingProcesses");
@@ -536,7 +534,6 @@ export default function ViewProcess(props) {
             }
         } catch (error) {
             toast.error("unable to reject process");
-            setLoading(false);
         } finally {
             setRejectProcessLoading(false);
             setRejectModalOpen(false);
@@ -1768,11 +1765,11 @@ export default function ViewProcess(props) {
                                                     sx={{ minWidth: "150px", color: "#333" }}
                                                 >
                                                     {processData?.workFlow
-                                                        .filter((item) => item.user !== username)
+                                                        .filter((item) => !item.users.some(user => user.user === username))
                                                         .filter((item) => item.step > publishCheck.step)
                                                         .map((item) => (
                                                             <MenuItem key={item.step} value={item.step}>
-                                                                forward to {item.user} for {item.work}
+                                                                forward for work {item.work} to step no {item.step}
                                                             </MenuItem>
                                                         ))}
                                                 </Select>

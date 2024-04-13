@@ -591,10 +591,10 @@ export default function LabelBottomNavigation(props) {
                       sx={{ minWidth: "150px", color: "#333" }}
                     >
                       {props.selectedDepartment.workFlow
-                        .filter((item) => item.user !== username)
+                        .filter((item) => !item.users.some(user => user.user === username))
                         .map((item) => (
                           <MenuItem key={item.step} value={item.step}>
-                            forward to {item.user} for {item.work}
+                            forward for work {item.work} to step no {item.step}
                           </MenuItem>
                         ))}
                     </Select>
