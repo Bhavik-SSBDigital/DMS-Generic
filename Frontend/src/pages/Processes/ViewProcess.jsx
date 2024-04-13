@@ -517,7 +517,7 @@ export default function ViewProcess(props) {
                 url,
                 {
                     processId: viewId,
-                    currentStep: currentUserData?.step,
+                    currentStep: [processData?.currentStepNumber],
                     remarks: remarks,
                     workFlowToBeFollowed: workFlowToBeFollowed,
                     isInterBranchProcess: processData.isInterBranchProcess,
