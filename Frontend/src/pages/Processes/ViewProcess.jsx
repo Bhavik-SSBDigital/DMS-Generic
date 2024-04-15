@@ -1051,6 +1051,7 @@ export default function ViewProcess(props) {
     // condition variables
     const userNotFirstInWorkflow = processData?.workFlow[0]?.users.some(userObj => userObj.user !== username);
     const userNotLastInWorkflow = processData?.workFlow[processData.workFlow.length - 1]?.users.some(userObj => userObj.user !== username);
+    const userIsLastInWorkflow = processData?.workFlow[processData.workFlow.length - 1]?.users.some(userObj => userObj.user === username);
     return (
         <DefaultLayout>
             {loading ? <ComponentLoader /> : <Stack flexDirection="row">
@@ -2392,22 +2393,24 @@ export default function ViewProcess(props) {
                     justifyContent="center"
                     sx={{ marginX: "10px" }}
                 >
-                    {userNotFirstInWorkflow &&
-                        !(processData?.isHead &&
-                            processData?.isToBeSentToClerk) &&
-                        !processData?.completed && (
-                            <Box>
-                                <Button
-                                    variant="contained"
-                                    color="error"
-                                    sx={{ width: "110px" }}
-                                    onClick={openRejectModal}
-                                    disabled={processData.completed || completeProcessLoading || approveLoading}
-                                >
-                                    Reject
-                                </Button>
-                            </Box>
-                        )}
+                    <Box>
+                        {userNotFirstInWorkflow &&
+                            !(processData?.isHead &&
+                                processData?.isToBeSentToClerk) &&
+                            !processData?.completed && (
+                                <Box>
+                                    <Button
+                                        variant="contained"
+                                        color="error"
+                                        sx={{ width: "110px" }}
+                                        onClick={openRejectModal}
+                                        disabled={processData.completed || completeProcessLoading || approveLoading}
+                                    >
+                                        Reject
+                                    </Button>
+                                </Box>
+                            )}
+                    </Box>
                     <Box>
                         {userNotLastInWorkflow &&
                             !processData?.isToBeSentToClerk &&
@@ -2424,7 +2427,7 @@ export default function ViewProcess(props) {
                             )}
                     </Box>
                     <Box>
-                        {userNotLastInWorkflow && userNotFirstInWorkflow &&
+                        {userIsLastInWorkflow &&
                             work === "" &&
                             !processData.completed &&
                             (!processData.isInterBranchProcess ||
@@ -2447,76 +2450,84 @@ export default function ViewProcess(props) {
                                 </Button>
                             )}
                     </Box>
-                    {processData.isInterBranchProcess &&
-                        processData?.isHead &&
-                        processData?.processWorkFlow !== workFlowToBeFollowed && (
-                            <Stack
-                                gap={1}
-                                flexDirection="row"
-                                justifyContent="center"
-                            >
+                    <Box>
+                        {processData.isInterBranchProcess &&
+                            processData?.isHead &&
+                            processData?.processWorkFlow !== workFlowToBeFollowed && (
+                                <Stack
+                                    gap={1}
+                                    flexDirection="row"
+                                    justifyContent="center"
+                                >
+                                    <Button
+                                        disabled={processData.isToBeSentToClerk ? null : approveLoading}
+                                        onClick={() =>
+                                            processData.isToBeSentToClerk ? setOpenC(true) : handleApprove()
+                                        }
+                                        size="medium"
+                                        variant="contained"
+                                    >
+                                        {processData.isToBeSentToClerk ? (
+                                            "SEND TO CLERK"
+                                        ) : approveLoading ? (
+                                            <CircularProgress size={20} />
+                                        ) : (
+                                            "Approve"
+                                        )}
+                                    </Button>
+                                </Stack>
+                            )}
+                    </Box>
+                    <Box>
+                        {processData.processWorkFlow === workflowFollow ? (
+                            <>
+                                {userNotFirstInWorkflow &&
+                                    !processData.completed &&
+                                    work === "" &&
+                                    userNotLastInWorkflow &&
+                                    processData?.workFlow.some(step =>
+                                        step.users.some(userObj => userObj.user === username)) && (
+                                        <Button
+                                            variant="contained"
+                                            color="success"
+                                            onClick={() => setIsCompleteModalOpen(true)}
+                                        >
+                                            complete process
+                                        </Button>
+                                    )}
+                            </>
+                        ) : null}
+                    </Box>
+                    <Box>
+                        {currentUserData &&
+                            processData?.completed &&
+                            processData.isHead ? (
+                            <Stack alignItems="center" m={2}>
                                 <Button
-                                    disabled={processData.isToBeSentToClerk ? null : approveLoading}
-                                    onClick={() =>
-                                        processData.isToBeSentToClerk ? setOpenC(true) : handleApprove()
-                                    }
+                                    onClick={() => setOpenC(true)}
                                     size="medium"
                                     variant="contained"
                                 >
-                                    {processData.isToBeSentToClerk ? (
-                                        "SEND TO CLERK"
-                                    ) : approveLoading ? (
-                                        <CircularProgress size={20} />
-                                    ) : (
-                                        "Approve"
-                                    )}
+                                    SEND TO CLERK
                                 </Button>
                             </Stack>
-                        )}
-                    {processData.processWorkFlow === workflowFollow ? (
-                        <>
-                            {userNotFirstInWorkflow &&
-                                !processData.completed &&
-                                work === "" &&
-                                userNotLastInWorkflow &&
-                                processData?.workFlow.some(step =>
-                                    step.users.some(userObj => userObj.user === username)) && (
-                                    <Button
-                                        variant="contained"
-                                        color="success"
-                                        onClick={() => setIsCompleteModalOpen(true)}
-                                    >
-                                        complete process
-                                    </Button>
-                                )}
-                        </>
-                    ) : null}
-                    {currentUserData &&
-                        processData?.completed &&
-                        processData.isHead ? (
-                        <Stack alignItems="center" m={2}>
-                            <Button
-                                onClick={() => setOpenC(true)}
-                                size="medium"
-                                variant="contained"
-                            >
-                                SEND TO CLERK
-                            </Button>
-                        </Stack>
-                    ) : null}
-                    {processData?.completed &&
-                        userNotFirstInWorkflow ? (
-                        <Stack alignItems="center" m={2}>
-                            <Button
-                                onClick={() => setOpenE(true)}
-                                size="medium"
-                                variant="contained"
-                                color="error"
-                            >
-                                END PROCESS
-                            </Button>
-                        </Stack>
-                    ) : null}
+                        ) : null}
+                    </Box>
+                    <Box>
+                        {processData?.completed &&
+                            userNotFirstInWorkflow ? (
+                            <Stack alignItems="center" m={2}>
+                                <Button
+                                    onClick={() => setOpenE(true)}
+                                    size="medium"
+                                    variant="contained"
+                                    color="error"
+                                >
+                                    END PROCESS
+                                </Button>
+                            </Stack>
+                        ) : null}
+                    </Box>
                 </Stack> :
                 <Stack alignItems="center">
                     <Button variant="text" sx={{ width: 'fit-content' }} onClick={pickProcess}>Pick This Process</Button>
