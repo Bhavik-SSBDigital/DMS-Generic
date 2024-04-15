@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import DropdownMessage from './DropdownMessage';
 import DropdownNotification from './DropdownNotification';
 import DropdownUser from './DropdownUser';
-import LogoIcon from '../../images/logo/logo-icon.svg';
+import LogoIcon from '../../images/logo/Logo.jpg';
 import sessionData from '../../Store';
 import { useEffect } from 'react';
 import axios from 'axios';
@@ -100,7 +100,7 @@ const Header = (props: {
           {/* <!-- Hamburger Toggle BTN --> */}
 
           <Link className="block flex-shrink-0 lg:hidden" to="/">
-            <img src={LogoIcon} alt="Logo" />
+            {/* <img height={30} src={LogoIcon} alt="Logo" /> */}
           </Link>
         </div>
 

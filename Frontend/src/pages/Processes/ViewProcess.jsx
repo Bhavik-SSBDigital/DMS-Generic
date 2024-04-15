@@ -1047,6 +1047,10 @@ export default function ViewProcess(props) {
             console.log('picked and navigate');
         }
     }, [pickedProcesses])
+
+    // condition variables
+    const userNotFirstInWorkflow = !processData?.workFlow[0]?.users.some(userObj => userObj.user !== username);
+    const userNotLastInWorkflow = processData?.workFlow[processData.workFlow.length - 1]?.users.some(userObj => userObj.user !== username);
     return (
         <DefaultLayout>
             {loading ? <ComponentLoader /> : <Stack flexDirection="row">
@@ -2379,7 +2383,7 @@ export default function ViewProcess(props) {
                 border: "1px solid",
                 backgroundColor: "rgba(255, 255, 255, 0.5)",
                 // boxShadow: "0px -2px 5px rgba(0, 0, 0, 0.2)"
-            }}>{(processData.isMultiUserStep && processData.currentActorUser === username) ?
+            }}>{(processData.currentActorUser === username) ?
                 <Stack
                     alignItems="center"
                     flexDirection="row"
@@ -2388,7 +2392,7 @@ export default function ViewProcess(props) {
                     justifyContent="center"
                     sx={{ marginX: "10px" }}
                 >
-                    {processData?.workFlow[0]?.users.some(userObj => userObj.user !== username) &&
+                    {userNotFirstInWorkflow &&
                         !(processData?.isHead &&
                             processData?.isToBeSentToClerk &&
                             processData?.isInterBranchProcess) &&
@@ -2406,7 +2410,7 @@ export default function ViewProcess(props) {
                             </Box>
                         )}
                     <Box>
-                        {processData?.workFlow[processData.workFlow.length - 1]?.users.some(userObj => userObj.user !== username) &&
+                        {userNotLastInWorkflow &&
                             !processData?.isToBeSentToClerk &&
                             (processData.isInterBranchProcess ? !processData.isHead : true) &&
                             work === "" &&
@@ -2419,7 +2423,7 @@ export default function ViewProcess(props) {
                                     Next
                                 </Button>
                             )}
-                        {processData?.workFlow[processData.workFlow.length - 1]?.users.some(userObj => userObj.user === username) &&
+                        {userNotLastInWorkflow &&
                             work === "" &&
                             !processData.completed &&
                             (!processData.isInterBranchProcess ||
@@ -2470,10 +2474,10 @@ export default function ViewProcess(props) {
                         )}
                     {processData.processWorkFlow === workflowFollow ? (
                         <>
-                            {processData?.workFlow[0]?.users.some(userObj => userObj.user !== username) &&
+                            {userNotFirstInWorkflow &&
                                 !processData.completed &&
                                 work === "" &&
-                                processData?.workFlow[processData.workFlow.length - 1]?.users.some(userObj => userObj.user !== username) &&
+                                userNotLastInWorkflow &&
                                 processData?.workFlow.some(step =>
                                     step.users.some(userObj => userObj.user === username)) && (
                                     <Button
@@ -2500,7 +2504,7 @@ export default function ViewProcess(props) {
                         </Stack>
                     ) : null}
                     {processData?.completed &&
-                        processData?.workFlow[0]?.users.some(userObj => userObj.user === username) ? (
+                        userNotFirstInWorkflow ? (
                         <Stack alignItems="center" m={2}>
                             <Button
                                 onClick={() => setOpenE(true)}
