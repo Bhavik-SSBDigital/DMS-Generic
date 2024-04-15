@@ -2226,7 +2226,7 @@ export default function ViewProcess(props) {
                                         <IconDownload />
                                         Download
                                     </MenuItem>
-                                    {operable && username !== "admin" && (processData.isMultiUserStep && processData.currentActorUser === username) && (
+                                    {operable && username !== "admin" && processData.currentActorUser === username && (
                                         <>
                                             <MenuItem
                                                 sx={{ gap: "5px" }}
@@ -2464,7 +2464,6 @@ export default function ViewProcess(props) {
                                         onClick={() =>
                                             processData.isToBeSentToClerk ? setOpenC(true) : handleApprove()
                                         }
-                                        size="medium"
                                         variant="contained"
                                     >
                                         {processData.isToBeSentToClerk ? (
@@ -2502,7 +2501,7 @@ export default function ViewProcess(props) {
                         {currentUserData &&
                             processData?.completed &&
                             processData.isHead ? (
-                            <Stack alignItems="center" m={2}>
+                            <Stack alignItems="center">
                                 <Button
                                     onClick={() => setOpenC(true)}
                                     size="medium"
