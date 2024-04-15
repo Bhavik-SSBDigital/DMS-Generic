@@ -1049,7 +1049,7 @@ export default function ViewProcess(props) {
     }, [pickedProcesses])
 
     // condition variables
-    const userNotFirstInWorkflow = !processData?.workFlow[0]?.users.some(userObj => userObj.user !== username);
+    const userNotFirstInWorkflow = processData?.workFlow[0]?.users.some(userObj => userObj.user !== username);
     const userNotLastInWorkflow = processData?.workFlow[processData.workFlow.length - 1]?.users.some(userObj => userObj.user !== username);
     return (
         <DefaultLayout>
@@ -2394,8 +2394,7 @@ export default function ViewProcess(props) {
                 >
                     {userNotFirstInWorkflow &&
                         !(processData?.isHead &&
-                            processData?.isToBeSentToClerk &&
-                            processData?.isInterBranchProcess) &&
+                            processData?.isToBeSentToClerk) &&
                         !processData?.completed && (
                             <Box>
                                 <Button
@@ -2423,7 +2422,9 @@ export default function ViewProcess(props) {
                                     Next
                                 </Button>
                             )}
-                        {userNotLastInWorkflow &&
+                    </Box>
+                    <Box>
+                        {userNotLastInWorkflow && userNotFirstInWorkflow &&
                             work === "" &&
                             !processData.completed &&
                             (!processData.isInterBranchProcess ||
