@@ -2314,11 +2314,13 @@ export default function ViewProcess(props) {
                                     <MenuItem value="">
                                         <em>None</em>
                                     </MenuItem>
-                                    {works?.map((data) => (
-                                        <MenuItem key={data.name} value={data.name}>
-                                            {data.name}
-                                        </MenuItem>
-                                    ))}
+                                    {works
+                                        ?.filter(item => item.name !== "e-sign")
+                                        ?.map((data) => (
+                                            <MenuItem key={data.name} value={data.name}>
+                                                {data.name}
+                                            </MenuItem>
+                                        ))}
                                 </Select>
                             </FormControl>
                         </Box>
@@ -2384,7 +2386,7 @@ export default function ViewProcess(props) {
                 border: "1px solid",
                 backgroundColor: "rgba(255, 255, 255, 0.5)",
                 // boxShadow: "0px -2px 5px rgba(0, 0, 0, 0.2)"
-            }}>{(processData.currentActorUser === username) && !process.isToBeSentToClerk ?
+            }}>{(processData.currentActorUser === username) || processData?.isToBeSentToClerk ?
                 <Stack
                     alignItems="center"
                     flexDirection="row"
